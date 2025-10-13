@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-// BusinessEntity: pure data for domain layer
+/// BusinessEntity: pure data for domain layer
 class BusinessEntity extends Equatable{
   final int? id;
   final String? businessName;

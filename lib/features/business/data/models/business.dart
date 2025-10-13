@@ -1,4 +1,4 @@
-import 'package:my_quotation_generator/features/bussiness/domain/entities/business.dart';
+import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 
 
 // BusinessModel: handles SQLite conversions

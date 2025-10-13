@@ -2,7 +2,12 @@ class AppStrings {
   //App
 
   // Add Business Screen
+  static const String addBusinessAppBarTitle = "Add Business Info";
   static const String addBusiness = "Add Business";
+  static const String businessDetails = "Business Details";
+  static const String selectCategory = "Select Category";
+  static const String contactDetails = "Contact Details";
+  static const String bankDetails = "Bank Details";
   static const String businessName = "BusinessName";
   static const String contactName = "ContactName";
   static const String mobileNumber = "Mobile Number";
@@ -17,4 +22,8 @@ class AppStrings {
   static const String accountName = "Account name";
   static const String bankName = "Bank name";
   static const String upiId = "UPI ID";
+  static const String addDetails = "Add Details";
+
+  //Add Business Form Fields
+
 }

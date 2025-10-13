@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
-import 'package:my_quotation_generator/features/bussiness/data/models/business.dart';
-import 'package:my_quotation_generator/features/bussiness/domain/entities/business.dart';
-import 'package:my_quotation_generator/features/bussiness/domain/repository/business_repository.dart';
+import 'package:my_quotation_generator/features/business/data/models/business.dart';
+import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
+import 'package:my_quotation_generator/features/business/domain/repository/business_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
 
