@@ -65,25 +65,5 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
     }
   }
 
-
-  void printBusinessData() {
-    if (kDebugMode) {
-      print("Business Name: ${businessNameController.text}");
-      print("Category: ${selectCategoryController.text}");
-      print("GST IN: ${gstInController.text}");
-      print("State: ${stateController.text}");
-      print("Other Info: ${otherInfoController.text}");
-      print("Contact Name: ${contactNameController.text}");
-      print("Mobile: ${mobileNumberController.text}");
-      print("Email: ${emailController.text}");
-      print("Address1: ${address1Controller.text}");
-      print("Address2: ${address2Controller.text}");
-      print("Account Name: ${accountNameController.text}");
-      print("Account Number: ${accountNumberController.text}");
-      print("Bank Name: ${bankNameController.text}");
-      print("UPI ID: ${upiIdController.text}");
-    }
-
-  }
 }
 

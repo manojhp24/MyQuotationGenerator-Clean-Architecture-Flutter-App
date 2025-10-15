@@ -1,20 +1,29 @@
 import 'package:get_it/get_it.dart';
 import 'package:my_quotation_generator/core/database/app_database.dart';
-import 'package:my_quotation_generator/features/business/data/repository/business_repository_impl.dart';
-import 'package:my_quotation_generator/features/business/domain/repository/business_repository.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
-import 'package:sqflite/sqflite.dart';
 
+import '../../features/business/data/data_sources/business_local_database.dart';
+import '../../features/business/data/repository/business_repository_impl.dart';
+import '../../features/business/domain/repository/business_repository.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  final db = await AppDatabase.database;
-  sl.registerLazySingleton<Database>(() => db);
+  // Ensure database initialized
+  await AppDatabase.database;
 
-  sl.registerLazySingleton<BusinessRepository>(
-    () => BusinessRepositoryImpl(sl()),
+  // ✅ Register Data Source
+  sl.registerLazySingleton<BusinessLocalDataSource>(
+        () => BusinessLocalDataSource(),
   );
 
-  sl.registerLazySingleton(() => AddBusinessUseCase(sl()));
+  // ✅ Register Repository
+  sl.registerLazySingleton<BusinessRepository>(
+        () => BusinessRepositoryImpl(sl<BusinessLocalDataSource>()),
+  );
+
+  // ✅ Register Usecase
+  sl.registerLazySingleton(
+        () => AddBusinessUseCase(sl<BusinessRepository>()),
+  );
 }
