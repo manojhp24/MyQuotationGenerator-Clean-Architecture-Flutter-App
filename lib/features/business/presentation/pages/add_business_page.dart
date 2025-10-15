@@ -5,6 +5,8 @@ import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/business/presentation/provider/business_provider.dart';
 
 import '../../../../config/theme/app_text_styles.dart';
+import '../../../../core/enums/business_category_enum.dart';
+import '../../../../core/enums/state_enum.dart';
 import '../widgets/add_business_widgets/category_bottom_sheet.dart';
 import '../widgets/add_business_widgets/form_text_field.dart';
 import '../widgets/add_business_widgets/section_title.dart';
@@ -44,8 +46,18 @@ class AddBusinessPage extends ConsumerWidget {
                       controller: notifier.selectCategoryController,
                       label: AppStrings.selectCategory,
                       readOnly: true,
-                      onTap: () {
-                        buildShowModalBottomSheet(context);
+                      onTap: () async {
+                        final selected =
+                            await showEnumSelectionSheet<BusinessCategory>(
+                              context,
+                              values: BusinessCategory.values,
+                              labelBuilder: (e) => e.displayName,
+                            );
+
+                        if (selected != null) {
+                          notifier.selectCategoryController.text =
+                              selected.displayName;
+                        }
                       },
                     ),
 
@@ -57,7 +69,18 @@ class AddBusinessPage extends ConsumerWidget {
                     AppFormField(
                       controller: notifier.stateController,
                       label: AppStrings.state,
-                      onTap: () {},
+                      onTap: () async {
+                        final selectedState = await showEnumSelectionSheet(
+                          context,
+                          values: States.values,
+                          labelBuilder: (e) => e.displayName,
+                        );
+
+                        if (selectedState != null) {
+                          notifier.stateController.text =
+                              selectedState.displayName;
+                        }
+                      },
                       readOnly: true,
                     ),
 
@@ -124,7 +147,9 @@ class AddBusinessPage extends ConsumerWidget {
                 ),
 
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    notifier.saveBusiness();
+                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(
                       double.infinity,

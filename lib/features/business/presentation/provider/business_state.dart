@@ -1,4 +1,3 @@
-
 import '../../domain/entities/business.dart';
 
 class BusinessState {
@@ -6,7 +5,7 @@ class BusinessState {
   final List<BusinessEntity> businesses;
   final String? error;
 
-  BusinessState({
+  const BusinessState({
     this.isLoading = false,
     this.businesses = const [],
     this.error,
@@ -14,13 +13,13 @@ class BusinessState {
 
   BusinessState copyWith({
     bool? isLoading,
-    List<BusinessEntity>? business,
+    List<BusinessEntity>? businesses,
     String? error,
   }) {
     return BusinessState(
       isLoading: isLoading ?? this.isLoading,
-      businesses: businesses,
-      error: error,
+      businesses: businesses ?? this.businesses,
+      error: error ?? this.error,
     );
   }
 }

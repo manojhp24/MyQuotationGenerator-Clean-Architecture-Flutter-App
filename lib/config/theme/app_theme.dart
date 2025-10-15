@@ -16,7 +16,6 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.background,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      fontFamily: 'Nunito',
       appBarTheme: AppAppBarTheme.light(context),
       inputDecorationTheme: AppInputTheme.light(context),
       textSelectionTheme: AppTextSelectionTheme.light(context),

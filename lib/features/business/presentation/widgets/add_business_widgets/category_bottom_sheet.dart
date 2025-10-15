@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotation_generator/config/theme/app_text_styles.dart';
 
-Future<dynamic> buildShowModalBottomSheet(BuildContext context) {
-  return showModalBottomSheet(
+Future<T?> showEnumSelectionSheet<T>(BuildContext context, {
+  required List<T> values,
+  required String Function(T) labelBuilder,
+}) {
+  return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.transparent, // allows rounded corners
+    backgroundColor: Colors.transparent,
     builder: (context) {
       return DraggableScrollableSheet(
         initialChildSize: 0.4,
@@ -14,7 +18,8 @@ Future<dynamic> buildShowModalBottomSheet(BuildContext context) {
           return Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16)),
             ),
             child: Column(
               children: [
@@ -29,19 +34,17 @@ Future<dynamic> buildShowModalBottomSheet(BuildContext context) {
                   ),
                 ),
                 Expanded(
-                  child: ListView(
+                  child: ListView.builder(
                     controller: scrollController,
-                    children: [
-                      ListTile(
-                        title: Text("Wood works/Furniture's"),
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      ListTile(
-                        title: Text('Electrical'),
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      // more items
-                    ],
+                    itemCount: values.length,
+                    itemBuilder: (context, index) {
+                      final item = values[index];
+                      return ListTile(
+                        title: Text(labelBuilder(item),
+                          style: AppTextStyle.bodyMedium(context),),
+                        onTap: () => Navigator.pop(context, item),
+                      );
+                    },
                   ),
                 ),
               ],

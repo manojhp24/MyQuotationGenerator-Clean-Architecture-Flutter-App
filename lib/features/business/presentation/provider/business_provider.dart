@@ -5,6 +5,8 @@ import 'package:my_quotation_generator/features/business/domain/usecases/add_bus
 import 'package:my_quotation_generator/features/business/presentation/provider/business_notifier.dart';
 import 'package:my_quotation_generator/features/business/presentation/provider/business_state.dart';
 
+import '../../../../core/di/injection_container.dart';
+
 
 ///Repository Provider
 final businessRepositoryProvider = Provider<BusinessRepository>((ref){
@@ -20,8 +22,7 @@ final addBusinessUseCaseProvider = Provider<AddBusinessUseCase>((ref){
 
 
 /// Notifier Provider
-final businessNotifyProvider = StateNotifierProvider<BusinessNotifier, BusinessState>((ref){
-  final addBusinessUseCase = ref.read(addBusinessUseCaseProvider);
-  return BusinessNotifier(addBusinessUseCase);
-});
-
+final businessNotifyProvider =
+StateNotifierProvider<BusinessNotifier, BusinessState>(
+      (ref) => BusinessNotifier(sl<AddBusinessUseCase>()),
+);

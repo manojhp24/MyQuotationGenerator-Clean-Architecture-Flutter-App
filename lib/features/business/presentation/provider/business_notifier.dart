@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
@@ -52,6 +53,9 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
       state = state.copyWith(isLoading: false, error: null);
       businessNameController.clear();
       selectCategoryController.clear();
+      if(kDebugMode){
+        print("Added Successfully");
+      }
 
     } else if (result is DataFailed<int>) {
       state = state.copyWith(
@@ -60,4 +64,26 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
       );
     }
   }
+
+
+  void printBusinessData() {
+    if (kDebugMode) {
+      print("Business Name: ${businessNameController.text}");
+      print("Category: ${selectCategoryController.text}");
+      print("GST IN: ${gstInController.text}");
+      print("State: ${stateController.text}");
+      print("Other Info: ${otherInfoController.text}");
+      print("Contact Name: ${contactNameController.text}");
+      print("Mobile: ${mobileNumberController.text}");
+      print("Email: ${emailController.text}");
+      print("Address1: ${address1Controller.text}");
+      print("Address2: ${address2Controller.text}");
+      print("Account Name: ${accountNameController.text}");
+      print("Account Number: ${accountNumberController.text}");
+      print("Bank Name: ${bankNameController.text}");
+      print("UPI ID: ${upiIdController.text}");
+    }
+
+  }
 }
+
