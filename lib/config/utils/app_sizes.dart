@@ -57,7 +57,7 @@ class AppSizes {
 
   /// Widgets Height
   static double buttonHeight(BuildContext context) =>
-      AppMedia.h(context, 0.065);
+      AppMedia.h(context, 0.090);
 
   static double textFieldHeight(BuildContext context) =>
       AppMedia.h(context, 0.07);

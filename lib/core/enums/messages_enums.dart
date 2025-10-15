@@ -8,7 +8,7 @@ extension AppMessageExtension on AppMessages{
   String get message{
     switch(this){
       case AppMessages.dataStoreSuccess:
-        return "Data saved successfully!";
+        return "Business data saved successfully!";
       case AppMessages.dataStoreError:
         return "Failed to save data.";
       case AppMessages.invalidInput:

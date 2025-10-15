@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Core theme colors
-  static const Color black = Colors.black;
+  static const Color black = Color(0xFF222222);
   static const Color white = Colors.white;
 
   // Greys
   static const Color lightGrey = Color(0xFFF3F3F3);
   static const Color grey = Color(0xFFBDBDBD);
   static const Color darkGrey = Color(0xFF757575);
+  static const Color darkGrey2 = Color(0xFF535353);
 
   // Text colors
   static const Color textPrimary = black;
