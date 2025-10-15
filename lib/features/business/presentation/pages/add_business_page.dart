@@ -20,7 +20,7 @@ class AddBusinessPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(businessNotifyProvider.notifier);
-    final state = ref.watch(businessNotifyProvider);
+    // final state = ref.watch(businessNotifyProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -151,7 +151,7 @@ class AddBusinessPage extends ConsumerWidget {
 
                 ElevatedButton(
                   onPressed: () {
-                    // notifier.saveBusiness();
+                    notifier.saveBusiness();
                     showCustomSnackBar(
                       context,
                       message: AppMessages.dataStoreSuccess.message,
