@@ -1,8 +1,7 @@
-// ignore_for_file: depend_on_referenced_packages
-
-import 'package:sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
+import 'package:my_quotation_generator/core/database/db_tables.dart';
 import 'package:path/path.dart';
-
+import 'package:sqflite/sqflite.dart';
 
 class AppDatabase{
   static Database ? _database;
@@ -21,25 +20,9 @@ class AppDatabase{
   }
 
   static Future _createDB(Database db,int version) async {
-    await db.execute('''
-      CREATE TABLE business(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        businessName TEXT,
-        contactName TEXT,
-        mobileNumber TEXT,
-        email TEXT,
-        address1 TEXT,
-        address2 TEXT,
-        otherInfo TEXT,
-        gstIN TEXT,
-        state TEXT,
-        businessCategory TEXT,
-        accountName TEXT,
-        accountNumber TEXT,
-        bankName TEXT,
-        upiId TEXT
-        )
-    ''');
+
+    await db.execute(createBusinessTable);
+    await db.execute(createCustomerTable);
   }
 
 

@@ -21,6 +21,7 @@ class BusinessModel extends BusinessEntity {
     super.upiId,
   });
 
+  /// Converts Entity to Map
   Map<String,dynamic> toMap(){
     return {
       'id':id,
@@ -41,6 +42,7 @@ class BusinessModel extends BusinessEntity {
     };
   }
 
+  /// Converts Map To Model
   factory BusinessModel.fromMap(Map<String, dynamic> map) {
     return BusinessModel(
       id: map['id'] as int?,

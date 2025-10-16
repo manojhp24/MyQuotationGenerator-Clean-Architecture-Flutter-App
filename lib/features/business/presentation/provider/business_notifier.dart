@@ -27,6 +27,25 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
 
   BusinessNotifier(this.addBusinessUseCase) : super(BusinessState());
 
+  @override
+  void dispose() {
+    businessNameController.dispose();
+    selectCategoryController.dispose();
+    gstInController.dispose();
+    stateController.dispose();
+    otherInfoController.dispose();
+    contactNameController.dispose();
+    mobileNumberController.dispose();
+    emailController.dispose();
+    address1Controller.dispose();
+    address2Controller.dispose();
+    accountNameController.dispose();
+    accountNumberController.dispose();
+    bankNameController.dispose();
+    upiIdController.dispose();
+    super.dispose();
+  }
+
   Future<void> saveBusiness() async {
     state = state.copyWith(isLoading: true);
 
@@ -60,12 +79,10 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
     } else if (result is DataFailed<int>) {
       state = state.copyWith(
         isLoading: false,
-        error: result.error?.message ?? "Unknown Message",
+        error: result.error?.toString() ?? "Unknown Message",
       );
     }
   }
-
-
 
 }
 
