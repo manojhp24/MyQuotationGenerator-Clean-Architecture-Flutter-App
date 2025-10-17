@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../config/theme/app_text_styles.dart';
-import '../../../../../config/utils/app_sizes.dart';
+import '../../../config/theme/app_text_styles.dart';
+import '../../../config/utils/app_sizes.dart';
 
 class AppFormField extends StatelessWidget {
   final String label;
@@ -10,7 +10,9 @@ class AppFormField extends StatelessWidget {
   final void Function()? onTap;
   final TextInputType? keyboardType;
   final int? maxLength;
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final int? maxLines;
+  final bool? alignLabelWithHint;
 
   const AppFormField({
     super.key,
@@ -20,7 +22,9 @@ class AppFormField extends StatelessWidget {
     this.onTap,
     this.keyboardType,
     this.maxLength,
-    required this.controller,
+    this.controller,
+    this.maxLines,
+    this.alignLabelWithHint
   });
 
   @override
@@ -32,11 +36,14 @@ class AppFormField extends StatelessWidget {
           maxLength: maxLength,
           keyboardType: keyboardType,
           readOnly: readOnly,
+          maxLines: maxLines,
+
           style: AppTextStyle.bodyRegular(context),
           decoration: InputDecoration(
             labelText: label,
             labelStyle: AppTextStyle.bodyRegular(context),
             suffixIcon: Icon(suffixIcon),
+            alignLabelWithHint: alignLabelWithHint,
           ),
           onTap: onTap,
         ),

@@ -11,7 +11,7 @@ class AppStrings {
   static const String businessName = "BusinessName";
   static const String contactName = "ContactName";
   static const String mobileNumber = "Mobile Number";
-  static const String email = "Business Email";
+  static const String email = "Email";
   static const String address1 = "Address 1";
   static const String address2 = "Address 2";
   static const String otherInfo = "Other Info";
@@ -24,6 +24,11 @@ class AppStrings {
   static const String upiId = "UPI ID";
   static const String addDetails = "Add Details";
 
-  //Add Business Form Fields
-
+  //Add Customer Page
+  static const String addCustomerAppBarTitle = "Add Customer";
+  static const String addCustomerDetails = "Save Customer";
+  static const String customerName = "Customer Name";
+  static const String customerEmail = "Email";
+  static const String shippingDetailsTitle = "Shipping Details";
+  static const String shippingAddress = "Shipping Address";
 }
