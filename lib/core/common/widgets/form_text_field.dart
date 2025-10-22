@@ -7,12 +7,17 @@ class AppFormField extends StatelessWidget {
   final String label;
   final bool readOnly;
   final IconData? suffixIcon;
+  final IconData? prefixIcon;
   final void Function()? onTap;
+  final FormFieldValidator<String?>? validator;
   final TextInputType? keyboardType;
   final int? maxLength;
   final TextEditingController? controller;
   final int? maxLines;
   final bool? alignLabelWithHint;
+  final VoidCallback? onPrefixPressed;
+  final VoidCallback? onSuffixPressed;
+
 
   const AppFormField({
     super.key,
@@ -24,7 +29,9 @@ class AppFormField extends StatelessWidget {
     this.maxLength,
     this.controller,
     this.maxLines,
-    this.alignLabelWithHint
+    this.alignLabelWithHint,
+    this.validator,
+    this.prefixIcon, this.onPrefixPressed, this.onSuffixPressed
   });
 
   @override
@@ -37,16 +44,23 @@ class AppFormField extends StatelessWidget {
           keyboardType: keyboardType,
           readOnly: readOnly,
           maxLines: maxLines,
-
+          validator: validator,
           style: AppTextStyle.bodyRegular(context),
           decoration: InputDecoration(
             labelText: label,
             labelStyle: AppTextStyle.bodyRegular(context),
-            suffixIcon: Icon(suffixIcon),
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+            suffixIcon: suffixIcon != null
+                ? IconButton(
+              icon: Icon(suffixIcon),
+              onPressed: onSuffixPressed, // your callback
+            )
+                : null,
             alignLabelWithHint: alignLabelWithHint,
           ),
           onTap: onTap,
         ),
+
         SizedBox(height: AppSizes.sectionVertical(context)),
       ],
     );

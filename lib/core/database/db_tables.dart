@@ -28,6 +28,7 @@ const String createCustomerTable = '''
         address2 TEXT,
         otherInfo TEXT,
         gstIN TEXT,
+        state TEXT,
         shippingAddress TEXT
         )
     ''';

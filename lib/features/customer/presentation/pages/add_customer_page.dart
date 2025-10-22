@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
+import 'package:my_quotation_generator/features/customer/presentation/provider/cutomer_provider.dart';
 
+import '../../../../core/enums/messages_enums.dart';
 import '../widgets/customer_form.dart';
 import '../widgets/customer_form_button.dart';
 
@@ -11,6 +13,10 @@ class AddCustomerPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final notifier = ref.read(customerNotifierProvider.notifier);
+    final state = ref.watch(customerNotifierProvider);
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppStrings.addCustomerAppBarTitle),
@@ -20,14 +26,17 @@ class AddCustomerPage extends ConsumerWidget {
 
       body: Padding(
         padding: AppSizes.pagePadding(context),
-        child: SingleChildScrollView(child: CustomerForm()),
+        child: SingleChildScrollView(child: CustomerForm(notifier: notifier)),
       ),
 
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(AppSizes.lg(context)),
         child: CustomerFormButton(
-          onPressed: () {},
+          onPressed: () {
+            notifier.saveCustomer(context);
+          },
           label: AppStrings.addCustomerDetails,
+          message: AppMessages.customerDataStoreSuccess.message,
         ),
       ),
     );

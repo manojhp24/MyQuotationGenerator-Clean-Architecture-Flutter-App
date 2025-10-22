@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
 
+import '../../../../config/theme/app_colors.dart';
+import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
+import '../../../../core/enums/messages_enums.dart';
 import 'business_state.dart';
 
 class BusinessNotifier extends StateNotifier<BusinessState> {
@@ -24,6 +26,7 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
   final accountNumberController = TextEditingController();
   final bankNameController = TextEditingController();
   final upiIdController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   BusinessNotifier(this.addBusinessUseCase) : super(BusinessState());
 
@@ -46,7 +49,10 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
     super.dispose();
   }
 
-  Future<void> saveBusiness() async {
+  Future<void> saveBusiness(BuildContext context) async {
+
+    if(!formKey.currentState!.validate()) return;
+
     state = state.copyWith(isLoading: true);
 
     final business = BusinessEntity(
@@ -70,10 +76,32 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
 
     if (result is DataSuccess<int>) {
       state = state.copyWith(isLoading: false, error: null);
+
+
       businessNameController.clear();
       selectCategoryController.clear();
-      if(kDebugMode){
-        print("Added Successfully");
+      gstInController.clear();
+      stateController.clear();
+      otherInfoController.clear();
+      contactNameController.clear();
+      mobileNumberController.clear();
+      emailController.clear();
+      address1Controller.clear();
+      address2Controller.clear();
+      accountNameController.clear();
+      accountNumberController.clear();
+      bankNameController.clear();
+      upiIdController.clear();
+
+
+      if (context.mounted) {
+        showCustomSnackBar(
+          context,
+          message: AppMessages.businessDataStoreSuccess.message,
+          isSuccess: true,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 3,
+        );
       }
 
     } else if (result is DataFailed<int>) {
@@ -83,6 +111,7 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
       );
     }
   }
+
 
 }
 

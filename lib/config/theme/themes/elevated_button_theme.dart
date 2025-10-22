@@ -11,7 +11,7 @@ class AppElevatedButtonTheme {
           foregroundColor: AppColors.white,
           minimumSize: Size(double.infinity, AppSizes.buttonHeight(context)),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizes.cardRadius),
+            borderRadius: BorderRadius.circular(10),
           ),
           textStyle: AppTextStyle.buttonText(context),
         ),

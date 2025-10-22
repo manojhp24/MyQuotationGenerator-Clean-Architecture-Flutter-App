@@ -13,7 +13,7 @@ class AddBusinessPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(businessNotifyProvider.notifier);
-    // final state = ref.watch(businessNotifyProvider);
+    final state = ref.watch(businessNotifyProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -23,12 +23,22 @@ class AddBusinessPage extends ConsumerWidget {
       ),
       body: Padding(
         padding: AppSizes.pagePadding(context),
-        child: SingleChildScrollView(
-          child: BusinessForm(notifier: notifier),
-        ),
+          child: Column(
+            children: [
+              if (state.isLoading) LinearProgressIndicator(),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: BusinessForm(notifier: notifier),
+                ),
+              ),
+            ],
+          )
       ),
       bottomNavigationBar: BusinessFormButton(
-        onPressed: notifier.saveBusiness, label: AppStrings.addDetails,),
+        onPressed: () => notifier.saveBusiness(context),
+        label: AppStrings.addDetails,
+      ),
+
     );
   }
 }

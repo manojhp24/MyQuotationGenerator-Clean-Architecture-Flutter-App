@@ -1,4 +1,6 @@
 // ignore: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, duplicate_ignore
+
 import 'package:my_quotation_generator/core/database/db_tables.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
