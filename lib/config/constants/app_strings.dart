@@ -23,12 +23,19 @@ class AppStrings {
   static const String bankName = "Bank name";
   static const String upiId = "UPI ID";
   static const String addDetails = "Add Details";
+  static const String addBusinessDetails = "Add Details";
 
   //Add Customer Page
   static const String addCustomerAppBarTitle = "Add Customer";
+  static const String customerList = "Customer List";
   static const String addCustomerDetails = "Save Customer";
   static const String customerName = "Customer Name";
   static const String customerEmail = "Email";
   static const String shippingDetailsTitle = "Shipping Details";
   static const String shippingAddress = "Shipping Address";
+
+  //Dashboard
+
+  static const String dashboard = "Dashboard";
+  static const String welcomeGreeting = "Welcome back 👋";
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
-import 'package:my_quotation_generator/features/customer/presentation/provider/cutomer_provider.dart';
+import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 
 import '../../../../core/enums/messages_enums.dart';
 import '../widgets/customer_form.dart';
@@ -14,7 +14,7 @@ class AddCustomerPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final notifier = ref.read(customerNotifierProvider.notifier);
-    final state = ref.watch(customerNotifierProvider);
+    // final state = ref.watch(customerNotifierProvider);
 
 
     return Scaffold(

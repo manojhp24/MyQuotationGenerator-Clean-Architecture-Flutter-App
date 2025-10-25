@@ -46,7 +46,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       if (context.mounted) {
         showCustomSnackBar(
           context,
-          message: "Failed to save customer",
+          message: "Enter required Fields",
           isSuccess: false,
           backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,

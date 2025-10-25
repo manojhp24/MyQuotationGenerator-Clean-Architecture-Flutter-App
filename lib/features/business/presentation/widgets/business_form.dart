@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_quotation_generator/core/common/validators/input_validators.dart';
 
@@ -42,7 +43,8 @@ class BusinessForm extends StatelessWidget {
                 prefixIcon: Icons.category,
                 label: AppStrings.selectCategory,
                 validator: (value) =>
-                    Validators.requiredField("Category", value),
+                    Validators.requiredField(
+                        "", value, customMessage: "Select Category"),
                 readOnly: true,
                 onTap: () async {
                   final selected =
@@ -68,6 +70,9 @@ class BusinessForm extends StatelessWidget {
 
               AppFormField(
                 controller: notifier.stateController,
+                validator: (value) =>
+                    Validators.requiredField(
+                    "", value, customMessage: "Select State"),
                 label: AppStrings.state,
                 prefixIcon: Icons.location_city,
                 onTap: () async {
@@ -103,23 +108,33 @@ class BusinessForm extends StatelessWidget {
                 label: AppStrings.contactName,
                 controller: notifier.contactNameController,
                 prefixIcon: Icons.person,
+                validator: (value)=>Validators.requiredField("Name", value),
               ),
               AppFormField(
                 controller: notifier.mobileNumberController,
                 label: AppStrings.mobileNumber,
+                validator: (value)=>Validators.validateMobileNumber("Mobile number", value),
                 keyboardType: TextInputType.numberWithOptions(),
-                maxLength: 10,
+                maxLength: 13,
                 prefixIcon: Icons.phone,
+                suffixIcon: Icons.contact_page,
+                onSuffixPressed: (){
+                  if(kDebugMode){
+                    print("Button pressed");
+                  }
+                },
               ),
               AppFormField(
                 label: AppStrings.email,
                 controller: notifier.emailController,
                 prefixIcon: Icons.email,
+                
               ),
               AppFormField(
                 label: AppStrings.address1,
                 controller: notifier.address1Controller,
                 prefixIcon: Icons.home,
+                validator: (value) => Validators.requiredField("Address 1", value),
               ),
               AppFormField(
                 label: AppStrings.address2,

@@ -15,7 +15,7 @@ void showCustomSnackBar(
   final icnColor = iconColor ?? Colors.white;
   final barColor = progressColor ?? Colors.white;
 
-  final icon = isSuccess ? Icons.thumb_up : Icons.close;
+  final icon = isSuccess ? Icons.thumb_up : Icons.info;
 
   final snackBar = SnackBar(
     behavior: SnackBarBehavior.floating,
@@ -38,7 +38,7 @@ void showCustomSnackBar(
             ),
             GestureDetector(
               onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-              child: Icon(Icons.close, color: txtColor.withOpacity(0.8)),
+              child: Icon(Icons.close, color: txtColor.withAlpha(0.8 as int)),
             ),
           ],
         ),

@@ -51,7 +51,18 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
 
   Future<void> saveBusiness(BuildContext context) async {
 
-    if(!formKey.currentState!.validate()) return;
+    if(!formKey.currentState!.validate()){
+      if(context.mounted){
+        showCustomSnackBar(
+          context,
+          message: AppMessages.fillRequiredFiled.message,
+          isSuccess: false,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 3,
+        );
+      }
+      return;
+    }
 
     state = state.copyWith(isLoading: true);
 

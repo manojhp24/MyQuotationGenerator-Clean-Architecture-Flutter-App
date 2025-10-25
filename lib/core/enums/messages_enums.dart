@@ -3,6 +3,7 @@ enum AppMessages{
   dataStoreError,
   invalidInput,
   customerDataStoreSuccess,
+  fillRequiredFiled
 }
 
 extension AppMessageExtension on AppMessages{
@@ -17,6 +18,8 @@ extension AppMessageExtension on AppMessages{
 
       case AppMessages.customerDataStoreSuccess:
         return "Customer data saved successfully!";
+      case AppMessages.fillRequiredFiled:
+        return "Fill the required fields correctly";
     }
   }
 }

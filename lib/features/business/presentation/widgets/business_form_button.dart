@@ -19,7 +19,7 @@ class BusinessFormButton extends StatelessWidget {
       padding: EdgeInsets.all(AppSizes.lg(context)),
       child: ElevatedButton(
         onPressed: () {
-          onPressed(); // 🔹 executes passed function
+          onPressed(); //
 
         },
         style: ElevatedButton.styleFrom(

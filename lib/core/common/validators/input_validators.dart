@@ -1,7 +1,8 @@
 class Validators {
-  static String? requiredField(String label, String? value) {
+  static String? requiredField(String label, String? value,
+      {String? customMessage}) {
     if (value == null || value.trim().isEmpty) {
-      return '$label is required';
+      return customMessage ?? '$label is required';
     }
     return null;
   }
