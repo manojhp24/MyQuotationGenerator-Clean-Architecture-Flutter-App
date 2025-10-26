@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
@@ -21,7 +22,7 @@ class AddCustomerPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(AppStrings.addCustomerAppBarTitle),
         elevation: 0,
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+        leading: IconButton(onPressed: () => context.pop(), icon: Icon(Icons.arrow_back)),
       ),
 
       body: Padding(

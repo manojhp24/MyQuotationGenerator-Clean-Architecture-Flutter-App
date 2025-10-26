@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/business/presentation/provider/business_provider.dart';
@@ -19,7 +20,7 @@ class AddBusinessPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(AppStrings.addBusinessAppBarTitle),
         elevation: 0,
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
+        leading: IconButton(onPressed: () =>context.pop(), icon: Icon(Icons.arrow_back)),
       ),
       body: Padding(
         padding: AppSizes.pagePadding(context),

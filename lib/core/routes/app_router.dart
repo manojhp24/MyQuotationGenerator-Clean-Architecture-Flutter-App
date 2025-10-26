@@ -6,11 +6,16 @@ import 'package:my_quotation_generator/features/customer/presentation/pages/add_
 import 'package:my_quotation_generator/features/customer/presentation/pages/customer_page.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/pages/dashboard_page.dart';
 
+import '../../features/dashboard/presentation/pages/dashboard_nav.dart';
+
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/dashboard',
+    initialLocation: '/dashboard-nav',
     routes: [
       GoRoute(
+        path: '/dashboard-nav',
+        builder: (context, state) => const DashboardNav(),
+      ),GoRoute(
         path: '/dashboard',
         builder: (context, state) => const DashboardPage(),
       ),GoRoute(

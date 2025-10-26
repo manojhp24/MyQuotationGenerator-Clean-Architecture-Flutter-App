@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/widgets/quick_action_button.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/widgets/section_title.dart';
 
@@ -17,7 +18,7 @@ class QuickActionSection extends StatelessWidget {
           children: [
             DashboardSectionTitle(title: "Quick Actions"),
             QuickActionButton(
-              onTap: () {},
+              onTap: () => context.push('/add-customer'),
               icon: Icons.person_add_alt_outlined,
               label: "Add Customer",
             ),

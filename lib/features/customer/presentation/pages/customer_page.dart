@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/theme/app_colors.dart';
 
 import '../../../../config/theme/app_text_styles.dart';
@@ -16,7 +17,7 @@ class CustomerPage extends StatelessWidget {
       ),
       body: Center(child: Text("Customer Page")),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.push('/add-customer'),
         child: Icon(Icons.add, color: AppColors.white),
       ),
     );

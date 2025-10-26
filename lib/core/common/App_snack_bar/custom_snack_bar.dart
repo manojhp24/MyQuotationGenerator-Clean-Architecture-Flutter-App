@@ -38,7 +38,7 @@ void showCustomSnackBar(
             ),
             GestureDetector(
               onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-              child: Icon(Icons.close, color: txtColor.withAlpha(0.8 as int)),
+              child: Icon(Icons.close, color: txtColor.withValues(alpha: 0.8)),
             ),
           ],
         ),

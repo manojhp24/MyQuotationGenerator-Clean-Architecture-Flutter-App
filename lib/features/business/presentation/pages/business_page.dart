@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_text_styles.dart';
@@ -21,7 +22,7 @@ class BusinessPage extends StatelessWidget {
         child: Text("Business Page"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: ()=>context.push("/add-business"),
         child: Icon(Icons.add, color: AppColors.white),
       ),
     ));
