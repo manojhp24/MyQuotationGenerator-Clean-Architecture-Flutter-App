@@ -6,12 +6,12 @@ import 'package:my_quotation_generator/features/business/presentation/provider/b
 import 'package:my_quotation_generator/features/business/presentation/provider/business_state.dart';
 
 import '../../../../core/di/injection_container.dart';
-import '../../data/repository/business_repository_impl.dart';
+
 
 
 ///Repository Provider
 final businessRepositoryProvider = Provider<BusinessRepository>((ref) {
-  return sl<BusinessRepositoryImpl>();
+  return sl<BusinessRepository>();
 });
 
 

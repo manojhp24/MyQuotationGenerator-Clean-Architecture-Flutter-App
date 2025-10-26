@@ -5,9 +5,9 @@ import 'package:my_quotation_generator/features/Products/domain/entities/product
 import 'package:my_quotation_generator/features/Products/domain/repository/product_repository.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
-  final ProductLocalDataBase productLocalDataBase;
+  final ProductLocalDataSource productLocalDataSource;
 
-  ProductRepositoryImpl(this.productLocalDataBase);
+  ProductRepositoryImpl(this.productLocalDataSource);
 
   @override
   Future<DataState<int>> addProduct(ProductEntity product) async {
@@ -22,7 +22,7 @@ class ProductRepositoryImpl implements ProductRepository {
         hsn: product.hsn,
       );
 
-      final id = await productLocalDataBase.addProduct(model.toMap());
+      final id = await productLocalDataSource.addProduct(model.toMap());
       return DataSuccess(id);
     } catch (e) {
       return DataFailed(Exception('Failed to add product:$e'));
