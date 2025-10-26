@@ -25,6 +25,7 @@ class AppDatabase{
 
     await db.execute(createBusinessTable);
     await db.execute(createCustomerTable);
+    await db.execute(createProductTable);
   }
 
 

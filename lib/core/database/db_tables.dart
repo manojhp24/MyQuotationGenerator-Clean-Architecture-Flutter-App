@@ -32,3 +32,15 @@ const String createCustomerTable = '''
         shippingAddress TEXT
         )
     ''';
+
+const String createProductTable = '''
+    CREATE TABLE product(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        productName TEXT,
+        price TEXT,
+        unitMeasure TEXT,
+        gst TEXT,
+        description TEXT,
+        hsn TEXT
+        )
+    ''';
