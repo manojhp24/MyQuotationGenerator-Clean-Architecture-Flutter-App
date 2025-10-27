@@ -27,7 +27,7 @@ class StatsSection extends StatelessWidget {
                 SizedBox(width: AppSizes.md(context)),
                 Expanded(
                   child: StatsCard(
-                    title: "Products",
+                    title: "products",
                     value: "12",
                     icon: Icons.shopping_cart,
                   ),

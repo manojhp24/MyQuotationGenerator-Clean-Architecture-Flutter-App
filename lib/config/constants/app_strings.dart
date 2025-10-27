@@ -35,7 +35,15 @@ class AppStrings {
   static const String shippingAddress = "Shipping Address";
 
   //Dashboard
-
   static const String dashboard = "Dashboard";
   static const String welcomeGreeting = "Welcome back 👋";
+
+  //Product
+  static const String productAppBarTitle = "Add Product";
+  static const String productName = "Product Name";
+  static const String productPrice = "Price";
+  static const String unitMeasure = "Unit Of Measure(SET,KG etc..)";
+  static const String description = "Description";
+  static const String productHsn = "HSN";
+  static const String productGST = "GST";
 }

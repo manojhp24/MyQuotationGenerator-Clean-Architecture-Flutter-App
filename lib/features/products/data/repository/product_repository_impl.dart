@@ -1,8 +1,9 @@
 import 'package:my_quotation_generator/core/resource/data_state.dart';
-import 'package:my_quotation_generator/features/Products/data/data_sources/product_local_database.dart';
-import 'package:my_quotation_generator/features/Products/data/models/product.dart';
-import 'package:my_quotation_generator/features/Products/domain/entities/product.dart';
-import 'package:my_quotation_generator/features/Products/domain/repository/product_repository.dart';
+import 'package:my_quotation_generator/features/products/data/data_sources/product_local_database.dart';
+import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
+
+import '../../domain/entities/product.dart';
+import '../models/product.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final ProductLocalDataSource productLocalDataSource;
@@ -25,7 +26,7 @@ class ProductRepositoryImpl implements ProductRepository {
       final id = await productLocalDataSource.addProduct(model.toMap());
       return DataSuccess(id);
     } catch (e) {
-      return DataFailed(Exception('Failed to add product:$e'));
+      return DataFailed(Exception('Failed to add products:$e'));
     }
   }
 }

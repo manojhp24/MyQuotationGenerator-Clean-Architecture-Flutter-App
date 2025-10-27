@@ -1,9 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:my_quotation_generator/core/database/app_database.dart';
-import 'package:my_quotation_generator/features/Products/data/data_sources/product_local_database.dart';
-import 'package:my_quotation_generator/features/Products/data/repository/product_repository_impl.dart';
-import 'package:my_quotation_generator/features/Products/domain/repository/product_repository.dart';
-import 'package:my_quotation_generator/features/Products/domain/usecases/add_product_usecase.dart';
+import 'package:my_quotation_generator/features/products/data/data_sources/product_local_database.dart';
+import 'package:my_quotation_generator/features/products/data/repository/product_repository_impl.dart';
+import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
+import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
 import 'package:my_quotation_generator/features/customer/data/data_sources/customer_local_database.dart';
 import 'package:my_quotation_generator/features/customer/data/repository/customer_repository_impl.dart';

@@ -5,7 +5,7 @@ class ProductLocalDataSource {
   Future<int> addProduct(Map<String, dynamic> productMap) async {
     final db = await AppDatabase.database;
     return await db.insert(
-      'product',
+      'products',
       productMap,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );

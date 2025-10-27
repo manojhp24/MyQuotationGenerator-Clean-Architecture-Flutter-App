@@ -7,6 +7,7 @@ class AppFloatingButtonTheme {
       backgroundColor: AppColors.primary,
       splashColor: AppColors.darkGrey2,
       shape: CircleBorder(),
+      foregroundColor: AppColors.white
     );
   }
 }

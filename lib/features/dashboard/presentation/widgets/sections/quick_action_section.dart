@@ -24,7 +24,7 @@ class QuickActionSection extends StatelessWidget {
             ),
             SizedBox(height: AppSizes.sm(context)),
             QuickActionButton(
-              onTap: () {},
+              onTap: ()=>context.push('/add-products'),
               icon: Icons.add_shopping_cart_outlined,
               label: "Add Product",
             ),

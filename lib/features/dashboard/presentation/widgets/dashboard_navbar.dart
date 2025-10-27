@@ -27,7 +27,7 @@ class DashboardNavBar extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Customer'),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_cart),
-          label: 'Products',
+          label: 'products',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.receipt_long),

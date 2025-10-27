@@ -17,7 +17,7 @@ class AppFormField extends StatelessWidget {
   final bool? alignLabelWithHint;
   final VoidCallback? onPrefixPressed;
   final VoidCallback? onSuffixPressed;
-
+  final FocusNode? focusNode;
 
   const AppFormField({
     super.key,
@@ -31,7 +31,8 @@ class AppFormField extends StatelessWidget {
     this.maxLines,
     this.alignLabelWithHint,
     this.validator,
-    this.prefixIcon, this.onPrefixPressed, this.onSuffixPressed
+    this.prefixIcon, this.onPrefixPressed, this.onSuffixPressed,
+    this.focusNode
   });
 
   @override
@@ -39,6 +40,7 @@ class AppFormField extends StatelessWidget {
     return Column(
       children: [
         TextFormField(
+          focusNode: focusNode,
           controller: controller,
           maxLength: maxLength,
           keyboardType: keyboardType,

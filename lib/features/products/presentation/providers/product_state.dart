@@ -1,4 +1,6 @@
-import 'package:my_quotation_generator/features/Products/domain/entities/product.dart';
+
+
+import '../../domain/entities/product.dart';
 
 class ProductState {
   final bool isLoading;

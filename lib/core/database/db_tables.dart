@@ -34,7 +34,7 @@ const String createCustomerTable = '''
     ''';
 
 const String createProductTable = '''
-    CREATE TABLE product(
+    CREATE TABLE products(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         productName TEXT,
         price TEXT,
