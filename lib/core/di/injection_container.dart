@@ -20,7 +20,7 @@ Future<void> init() async {
   // Ensure database initialized
   await AppDatabase.database;
 
-  ///Business
+  ///Business DI
   // ✅ Register Data Source
   sl.registerLazySingleton<BusinessLocalDataSource>(
         () => BusinessLocalDataSource(),
@@ -36,7 +36,7 @@ Future<void> init() async {
         () => AddBusinessUseCase(sl<BusinessRepository>()),
   );
 
-  /// Customer
+  /// Customer DI
   sl.registerLazySingleton<CustomerLocalDataSource>(() =>
       CustomerLocalDataSource(),);
 
@@ -46,7 +46,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => AddCustomerUseCase(sl<CustomerRepository>()),);
 
-  ///Product
+  ///Product DI
   sl.registerLazySingleton<ProductLocalDataSource>(() =>
       ProductLocalDataSource(),);
 

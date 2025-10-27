@@ -15,7 +15,7 @@ class AddCustomerPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final notifier = ref.read(customerNotifierProvider.notifier);
-    // final state = ref.watch(customerNotifierProvider);
+    final state = ref.watch(customerNotifierProvider);
 
 
     return Scaffold(
@@ -37,7 +37,7 @@ class AddCustomerPage extends ConsumerWidget {
             notifier.saveCustomer(context);
           },
           label: AppStrings.addCustomerDetails,
-          message: AppMessages.customerDataStoreSuccess.message,
+          isLoading: state.isLoading,
         ),
       ),
     );

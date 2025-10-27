@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-
 import '../../../../config/theme/app_text_styles.dart';
 import '../../../../config/utils/app_sizes.dart';
-
 
 class CustomerFormButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
-  final String message;
+  final bool isLoading;
 
   const CustomerFormButton({
     super.key,
     required this.onPressed,
-    required this.label, required this.message,
+    required this.label,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        onPressed();
-      },
+      // Disable button when loading
+      onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, AppSizes.buttonHeight(context)),
         padding: EdgeInsets.symmetric(
@@ -28,7 +26,16 @@ class CustomerFormButton extends StatelessWidget {
           vertical: AppSizes.sm(context),
         ),
       ),
-      child: Text(
+      child: isLoading
+          ? SizedBox(
+        height: 20,
+        width: 20,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: Colors.white,
+        ),
+      )
+          : Text(
         label,
         style: AppTextStyle.buttonText(context),
       ),
