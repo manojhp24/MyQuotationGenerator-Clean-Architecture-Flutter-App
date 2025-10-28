@@ -18,16 +18,38 @@ class DashboardAppBar extends StatelessWidget {
           AppSizes.md(context),
           AppSizes.sm(context),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(AppStrings.dashboard, style: AppTextStyle.h2(context)),
-            SizedBox(height: AppSizes.xs(context)),
-            Text(
-              AppStrings.welcomeGreeting,
-              style: AppTextStyle.bodySmall(
-                context,
-              ).copyWith(color: AppColors.textSecondary),
+            // Left side: Title and subtitle
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStrings.dashboard,
+                  style: AppTextStyle.h2(context),
+                ),
+                SizedBox(height: AppSizes.xs(context)),
+                Text(
+                  AppStrings.welcomeGreeting,
+                  style: AppTextStyle.bodySmall(context)
+                      .copyWith(color: AppColors.textSecondary),
+                ),
+              ],
+            ),
+
+            // Right side: Settings icon
+            IconButton(
+              icon: Icon(
+                Icons.tune_rounded,
+                color: AppColors.textPrimary,
+                size: AppSizes.iconMedium(context),
+              ),
+              onPressed: () {
+                // TODO: Navigate to settings page or open a modal
+              },
+              tooltip: 'Settings',
             ),
           ],
         ),

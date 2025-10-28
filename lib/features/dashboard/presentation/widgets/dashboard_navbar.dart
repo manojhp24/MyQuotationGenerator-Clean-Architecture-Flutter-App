@@ -3,7 +3,7 @@ import 'package:my_quotation_generator/config/theme/app_text_styles.dart';
 
 class DashboardNavBar extends StatelessWidget {
   final int currentIndex;
-  final void Function(int) onTap;
+  final ValueChanged<int> onTap;
 
   const DashboardNavBar({
     super.key,
@@ -13,27 +13,36 @@ class DashboardNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const navItems = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.dashboard),
+        label: 'Dashboard',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.receipt_long),
+        label: 'Quotation',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.people),
+        label: 'Customer',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.shopping_cart),
+        label: 'Products',
+      ),
+
+      BottomNavigationBarItem(
+        icon: Icon(Icons.settings),
+        label: 'Settings',
+      ),
+    ];
+
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
       onTap: onTap,
-      type: BottomNavigationBarType.fixed,
       selectedLabelStyle: AppTextStyle.navLabel(context),
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.dashboard),
-          label: 'Dashboard',
-        ),
-        BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Business'),
-        BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Customer'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart),
-          label: 'products',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.receipt_long),
-          label: 'Quotation',
-        ),
-      ],
+      items: navItems,
     );
   }
 }

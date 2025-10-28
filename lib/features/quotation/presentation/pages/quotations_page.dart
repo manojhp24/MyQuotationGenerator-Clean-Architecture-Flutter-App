@@ -12,6 +12,10 @@ class QuotationsPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: Center(child: Text("Quotations")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.note_add_rounded),
+      ),
     );
   }
 }

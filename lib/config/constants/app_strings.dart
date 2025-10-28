@@ -40,10 +40,14 @@ class AppStrings {
 
   //Product
   static const String productAppBarTitle = "Add Product";
+  static const String productListAppBarTitle = "Products List";
   static const String productName = "Product Name";
   static const String productPrice = "Price";
   static const String unitMeasure = "Unit Of Measure(SET,KG etc..)";
   static const String description = "Description";
   static const String productHsn = "HSN";
   static const String productGST = "GST";
+
+  //Settings
+  static const String settingsAppBarTitle = "Settings";
 }

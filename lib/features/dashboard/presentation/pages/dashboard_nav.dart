@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/features/Products/presentation/pages/products_page.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/provider/dashboard_provider.dart';
+import 'package:my_quotation_generator/features/settings/presentation/pages/settings_page.dart';
 
-import '../../../business/presentation/pages/business_page.dart';
 import '../../../customer/presentation/pages/customer_page.dart';
 import '../../../quotation/presentation/pages/quotations_page.dart';
 import '../widgets/dashboard_navbar.dart';
@@ -18,10 +18,10 @@ class DashboardNav extends ConsumerWidget {
 
     const pages = [
       DashboardPage(),
-      BusinessPage(),
+      QuotationsPage(),
       CustomerPage(),
       AddProductsPage(),
-      QuotationsPage()
+      SettingsPage(),
     ];
 
     return SafeArea(

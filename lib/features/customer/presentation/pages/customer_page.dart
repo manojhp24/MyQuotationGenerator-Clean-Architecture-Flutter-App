@@ -18,7 +18,7 @@ class CustomerPage extends StatelessWidget {
       body: Center(child: Text("Customer Page")),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/add-customer'),
-        child: Icon(Icons.add, color: AppColors.white),
+        child: Icon(Icons.person_add_alt_outlined, color: AppColors.white),
       ),
     );
   }
