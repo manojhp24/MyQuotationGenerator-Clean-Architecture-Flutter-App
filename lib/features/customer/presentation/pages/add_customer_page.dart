@@ -29,7 +29,7 @@ class AddCustomerPage extends ConsumerWidget {
 
       body: Padding(
         padding: AppSizes.pagePadding(context),
-        child: SingleChildScrollView(child: CustomerForm(notifier: notifier)),
+        child: SingleChildScrollView(child: CustomerForm(isUpdate: false)),
       ),
 
       bottomNavigationBar: Padding(

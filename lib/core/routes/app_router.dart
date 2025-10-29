@@ -5,8 +5,10 @@ import 'package:my_quotation_generator/features/business/presentation/pages/add_
 import 'package:my_quotation_generator/features/business/presentation/pages/business_page.dart';
 import 'package:my_quotation_generator/features/customer/presentation/pages/add_customer_page.dart';
 import 'package:my_quotation_generator/features/customer/presentation/pages/customer_page.dart';
+import 'package:my_quotation_generator/features/customer/presentation/pages/edit_customer_page.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/pages/dashboard_page.dart';
 
+import '../../features/customer/domain/entities/customer.dart';
 import '../../features/dashboard/presentation/pages/dashboard_nav.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -31,7 +33,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),GoRoute(
         path: '/add-customer',
         builder: (context, state) => const AddCustomerPage(),
+      ),GoRoute(
+        path: '/edit-customer',
+        builder: (context, state) {
+          final customer = state.extra as CustomerEntity;
+          return EditCustomerPage(customer: customer);
+        },
       ),
+
       GoRoute(
         path: '/add-products',
         builder: (context, state) => const AddProductPage(),

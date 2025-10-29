@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../config/theme/app_colors.dart';
 import '../../../../../config/theme/app_text_styles.dart';
@@ -96,7 +97,7 @@ class CustomerCard extends StatelessWidget {
               color: AppColors.primary,
               size: 20,
             ),
-            onPressed: () {},
+            onPressed: () => context.push('/edit-customer', extra: customer),
           ),
         ),
       ),
