@@ -11,4 +11,12 @@ class CustomerLocalDataSource {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<Map<String, dynamic>>> getCustomers() async {
+    final db = await AppDatabase.database;
+
+    final result = await db.query('customer', orderBy: 'customerName ASC');
+
+    return result;
+  }
 }

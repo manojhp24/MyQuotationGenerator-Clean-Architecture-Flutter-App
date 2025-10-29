@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:my_quotation_generator/core/common/validators/input_validators.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_notifier.dart';
 
-import '../../../../config/constants/app_strings.dart';
-import '../../../../config/utils/app_sizes.dart';
-import '../../../../core/common/widgets/category_bottom_sheet.dart';
-import '../../../../core/common/widgets/form_text_field.dart';
-import '../../../../core/enums/state_enum.dart';
+import '../../../../../config/constants/app_strings.dart';
+import '../../../../../config/utils/app_sizes.dart';
+import '../../../../../core/common/widgets/category_bottom_sheet.dart';
+import '../../../../../core/common/widgets/form_text_field.dart';
+import '../../../../../core/enums/state_enum.dart';
 
 class CustomerForm extends StatelessWidget {
 

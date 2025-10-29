@@ -8,11 +8,16 @@ import 'package:my_quotation_generator/features/customer/presentation/provider/c
 import '../../../../config/theme/app_colors.dart';
 import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
 import '../../../../core/enums/messages_enums.dart';
+import '../../domain/usecases/get_customers_usecase.dart';
 
 class CustomerNotifier extends StateNotifier<CustomerState> {
   final AddCustomerUseCase addCustomerUseCase;
+  final GetCustomerUseCase getCustomerUseCase;
 
-  CustomerNotifier(this.addCustomerUseCase) : super(CustomerState());
+  CustomerNotifier(this.addCustomerUseCase, this.getCustomerUseCase)
+    : super(CustomerState()) {
+    fetchCustomer();
+  }
 
   final customerNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -40,8 +45,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
     shippingAddressController.dispose();
   }
 
-  Future<void> saveCustomer(BuildContext context) async {
-
+  /// Adding Customer
+  Future<bool> saveCustomer(BuildContext context) async {
     if (!formKey.currentState!.validate()){
       if (context.mounted) {
         showCustomSnackBar(
@@ -52,7 +57,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           durationSeconds: 3,
         );
       }
-      return;
+      return false;
     }
 
     state = state.copyWith(isLoading: true);
@@ -93,6 +98,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           durationSeconds: 3,
         );
       }
+      return true;
     } else if (result is DataFailed<int>) {
       if (context.mounted) {
         showCustomSnackBar(
@@ -103,8 +109,21 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           durationSeconds: 3,
         );
       }
+      return false;
     }
+    return false;
   }
 
+  /// Fetching Customer
+  Future<void> fetchCustomer() async {
+    state = state.copyWith(isLoading: true);
+    final result = await getCustomerUseCase();
 
+    if (result is DataSuccess<List<CustomerEntity>>) {
+      final customers = result.data ?? [];
+      state = state.copyWith(customer: customers, isLoading: false);
+    } else if (result is DataFailed<List<CustomerEntity>>) {
+      state = state.copyWith(isLoading: false);
+    }
+  }
 }

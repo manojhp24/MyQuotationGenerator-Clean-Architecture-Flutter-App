@@ -21,6 +21,13 @@ class AppTextStyle {
     color: AppColors.textPrimary,
     letterSpacing: 0.3,
   );
+  // Heading 2 - AppBar Title / Medium Heading
+  static TextStyle appBarText(BuildContext context) => GoogleFonts.nunito(
+    fontSize: AppSizes.textLarge(context), // Usually 20-22
+    fontWeight: FontWeight.w600,
+    color: AppColors.textOnPrimary,
+    letterSpacing: 0.3,
+  );
 
   // Heading 3 - Subheadings
   static TextStyle h3(BuildContext context) => GoogleFonts.nunito(

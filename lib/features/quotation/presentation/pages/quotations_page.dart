@@ -8,8 +8,7 @@ class QuotationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Quotations List",style: AppTextStyle.h2(context),),
-        backgroundColor: Colors.transparent,
+        title: Text("Quotations List"),
       ),
       body: Center(child: Text("Quotations")),
       floatingActionButton: FloatingActionButton(

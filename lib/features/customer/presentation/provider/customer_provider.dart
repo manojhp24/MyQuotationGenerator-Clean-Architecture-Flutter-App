@@ -1,25 +1,33 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:my_quotation_generator/features/customer/data/repository/customer_repository_impl.dart';
+import 'package:my_quotation_generator/core/di/injection_container.dart';
 import 'package:my_quotation_generator/features/customer/domain/repository/customer_repository.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
+import 'package:my_quotation_generator/features/customer/domain/usecases/get_customers_usecase.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_notifier.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_state.dart';
 
-import '../../../../core/di/injection_container.dart';
-
-///Customer Repository Provider
+/// Repository Provider
 final customerRepositoryProvider = Provider<CustomerRepository>((ref) {
-  return sl<CustomerRepositoryImpl>();
+  return sl<CustomerRepository>();
 });
 
-/// AddCustomerUseCase Provider
-final addCustomerUseCase = Provider<AddCustomerUseCase>((ref) {
-  final repository = ref.read(customerRepositoryProvider);
-  return AddCustomerUseCase(repository);
+/// Add Customer UseCase Provider
+final addCustomerUseCaseProvider = Provider<AddCustomerUseCase>((ref) {
+  final repo = ref.read(customerRepositoryProvider);
+  return AddCustomerUseCase(repo);
 });
 
+/// Get Customer UseCase Provider
+final getCustomerUseCaseProvider = Provider<GetCustomerUseCase>((ref) {
+  final repo = ref.read(customerRepositoryProvider);
+  return GetCustomerUseCase(repo);
+});
+
+/// Customer Notifier Provider
 final customerNotifierProvider =
-    StateNotifierProvider<CustomerNotifier, CustomerState>((ref) {
-      return CustomerNotifier(sl<AddCustomerUseCase>());
+StateNotifierProvider<CustomerNotifier, CustomerState>((ref) {
+      final addUseCase = ref.read(addCustomerUseCaseProvider);
+      final getUseCase = ref.read(getCustomerUseCaseProvider);
+      return CustomerNotifier(addUseCase, getUseCase);
     });

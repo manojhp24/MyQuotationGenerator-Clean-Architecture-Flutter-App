@@ -4,8 +4,8 @@ import 'package:my_quotation_generator/config/theme/app_colors.dart';
 class BottomNavBarTheme {
   static BottomNavigationBarThemeData light(BuildContext context) {
     return BottomNavigationBarThemeData(
-      backgroundColor: AppColors.white,
-      selectedItemColor: AppColors.black,
+      backgroundColor: AppColors.primary,
+      selectedItemColor: AppColors.textOnPrimary,
       unselectedItemColor: AppColors.darkGrey,
       showUnselectedLabels: true,
       type: BottomNavigationBarType.fixed,

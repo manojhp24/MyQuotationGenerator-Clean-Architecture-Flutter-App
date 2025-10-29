@@ -11,9 +11,8 @@ class AddProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.productListAppBarTitle, style: AppTextStyle.h2(context)),
+        title: Text(AppStrings.productListAppBarTitle),
         elevation: 0,
-        backgroundColor: Colors.transparent,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: ()=>context.push('/add-products'),

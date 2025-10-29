@@ -1,14 +1,15 @@
 import 'package:get_it/get_it.dart';
 import 'package:my_quotation_generator/core/database/app_database.dart';
-import 'package:my_quotation_generator/features/products/data/data_sources/product_local_database.dart';
-import 'package:my_quotation_generator/features/products/data/repository/product_repository_impl.dart';
-import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
-import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
 import 'package:my_quotation_generator/features/customer/data/data_sources/customer_local_database.dart';
 import 'package:my_quotation_generator/features/customer/data/repository/customer_repository_impl.dart';
 import 'package:my_quotation_generator/features/customer/domain/repository/customer_repository.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
+import 'package:my_quotation_generator/features/customer/domain/usecases/get_customers_usecase.dart';
+import 'package:my_quotation_generator/features/products/data/data_sources/product_local_database.dart';
+import 'package:my_quotation_generator/features/products/data/repository/product_repository_impl.dart';
+import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
+import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
 
 import '../../features/business/data/data_sources/business_local_database.dart';
 import '../../features/business/data/repository/business_repository_impl.dart';
@@ -45,6 +46,7 @@ Future<void> init() async {
 
 
   sl.registerLazySingleton(() => AddCustomerUseCase(sl<CustomerRepository>()),);
+  sl.registerLazySingleton(() => GetCustomerUseCase(sl<CustomerRepository>()));
 
   ///Product DI
   sl.registerLazySingleton<ProductLocalDataSource>(() =>

@@ -8,8 +8,8 @@ import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 
 import '../../../../core/enums/messages_enums.dart';
-import '../widgets/customer_form.dart';
-import '../widgets/customer_form_button.dart';
+import '../widgets/forms/customer_form.dart';
+import '../widgets/forms/customer_form_button.dart';
 
 class AddCustomerPage extends ConsumerWidget {
   const AddCustomerPage({super.key});
@@ -35,9 +35,16 @@ class AddCustomerPage extends ConsumerWidget {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(AppSizes.lg(context)),
         child: CustomerFormButton(
-          onPressed: () {
-            notifier.saveCustomer(context);
+          onPressed: () async {
+            final isSaved = await notifier.saveCustomer(context);
+            if (isSaved) {
+              await Future.delayed(const Duration(seconds: 3));
+              if (context.mounted) {
+                context.pop(true);
+              }
+            }
           },
+
           label: AppStrings.addCustomerDetails,
           isLoading: state.isLoading,
         ),

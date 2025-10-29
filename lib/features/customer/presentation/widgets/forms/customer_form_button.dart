@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../config/theme/app_text_styles.dart';
-import '../../../../config/utils/app_sizes.dart';
+
+import '../../../../../config/theme/app_text_styles.dart';
+import '../../../../../config/utils/app_sizes.dart';
 
 class CustomerFormButton extends StatelessWidget {
   final VoidCallback onPressed;

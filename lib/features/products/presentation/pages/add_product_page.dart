@@ -18,7 +18,6 @@ class AddProductPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           AppStrings.productAppBarTitle,
-          style: AppTextStyle.h2(context),
         ),
       ),
       body: ProductForm(notifier: notifier),

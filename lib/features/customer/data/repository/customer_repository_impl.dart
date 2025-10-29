@@ -9,6 +9,7 @@ class CustomerRepositoryImpl implements CustomerRepository{
 
   CustomerRepositoryImpl(this.localDataSource);
 
+  /// Adding Customer
   @override
   Future<DataState<int>> addCustomer(CustomerEntity customer) async {
     try {
@@ -31,4 +32,19 @@ class CustomerRepositoryImpl implements CustomerRepository{
     }
   }
 
+  /// Fetching Customer
+  @override
+  Future<DataState<List<CustomerEntity>>> getCustomers() async {
+    try {
+      final List<Map<String, dynamic>> data = await localDataSource
+          .getCustomers();
+
+      final customers = data
+          .map((e) => CustomerModel.fromMap(e).toEntity())
+          .toList();
+      return DataSuccess(customers);
+    } catch (e) {
+      return DataFailed(Exception("Failed to fetch customers: $e"));
+    }
+  }
 }
