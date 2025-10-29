@@ -13,17 +13,7 @@ class CustomerRepositoryImpl implements CustomerRepository{
   @override
   Future<DataState<int>> addCustomer(CustomerEntity customer) async {
     try {
-      final model = CustomerModel(
-        customerName: customer.customerName,
-        mobile: customer.mobile,
-        email: customer.email,
-        address1: customer.address1,
-        address2: customer.address2,
-        state: customer.state,
-        gstIn: customer.gstIn,
-        otherInfo: customer.otherInfo,
-        shippingAddress: customer.shippingAddress,
-      );
+      final model = CustomerModel.fromEntity(customer);
 
       final id = await localDataSource.addCustomer(model.toMap());
       return DataSuccess<int>(id);
@@ -45,6 +35,28 @@ class CustomerRepositoryImpl implements CustomerRepository{
       return DataSuccess(customers);
     } catch (e) {
       return DataFailed(Exception("Failed to fetch customers: $e"));
+    }
+  }
+
+  /// Updating Customer
+  @override
+  Future<DataState<int>> updateCustomer(CustomerEntity customer) async {
+    try {
+      if (customer.id == null) {
+        return DataFailed<int>(Exception("Customer id required for update"));
+      }
+
+      final model = CustomerModel.fromEntity(customer);
+
+      final rowsAffected = await localDataSource.updateCustomer(
+          model.toMap(), customer.id!);
+      if (rowsAffected > 0) {
+        return DataSuccess<int>(rowsAffected);
+      } else {
+        return DataFailed<int>(Exception("No customer found to update"));
+      }
+    } catch (e) {
+      return DataFailed<int>(Exception("Failed to update customer: $e"));
     }
   }
 }

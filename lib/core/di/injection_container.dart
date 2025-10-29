@@ -6,6 +6,7 @@ import 'package:my_quotation_generator/features/customer/data/repository/custome
 import 'package:my_quotation_generator/features/customer/domain/repository/customer_repository.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/get_customers_usecase.dart';
+import 'package:my_quotation_generator/features/customer/domain/usecases/update_customer_usecase.dart';
 import 'package:my_quotation_generator/features/products/data/data_sources/product_local_database.dart';
 import 'package:my_quotation_generator/features/products/data/repository/product_repository_impl.dart';
 import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
@@ -18,7 +19,6 @@ import '../../features/business/domain/repository/business_repository.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Ensure database initialized
   await AppDatabase.database;
 
   ///Business DI
@@ -40,13 +40,14 @@ Future<void> init() async {
   /// Customer DI
   sl.registerLazySingleton<CustomerLocalDataSource>(() =>
       CustomerLocalDataSource(),);
-
   sl.registerLazySingleton<CustomerRepository>(() =>
       CustomerRepositoryImpl(sl<CustomerLocalDataSource>()),);
-
-
-  sl.registerLazySingleton(() => AddCustomerUseCase(sl<CustomerRepository>()),);
-  sl.registerLazySingleton(() => GetCustomerUseCase(sl<CustomerRepository>()));
+  sl.registerLazySingleton(() =>
+      AddCustomerUseCase(sl<CustomerRepository>(),),);
+  sl.registerLazySingleton(() =>
+      GetCustomerUseCase(sl<CustomerRepository>(),),);
+  sl.registerLazySingleton(() =>
+      UpdateCustomerUseCase(sl<CustomerRepository>(),));
 
   ///Product DI
   sl.registerLazySingleton<ProductLocalDataSource>(() =>
@@ -55,5 +56,5 @@ Future<void> init() async {
   sl.registerLazySingleton<ProductRepository>(() =>
       ProductRepositoryImpl(sl<ProductLocalDataSource>()));
 
-  sl.registerLazySingleton(() => AddProductUseCase(sl<ProductRepository>()));
+  sl.registerLazySingleton(() => AddProductUseCase(sl<ProductRepository>(),),);
 }

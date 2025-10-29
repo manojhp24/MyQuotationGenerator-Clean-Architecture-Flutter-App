@@ -2,6 +2,7 @@ import 'package:my_quotation_generator/core/database/app_database.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CustomerLocalDataSource {
+  ///CREATE
   Future<int> addCustomer(Map<String, dynamic> customerMap) async {
     final db = await AppDatabase.database;
 
@@ -12,11 +13,27 @@ class CustomerLocalDataSource {
     );
   }
 
+  /// READ
   Future<List<Map<String, dynamic>>> getCustomers() async {
     final db = await AppDatabase.database;
 
     final result = await db.query('customer', orderBy: 'customerName ASC');
 
     return result;
+  }
+
+  /// UPDATE
+  Future<int> updateCustomer(Map<String, dynamic> customerMap, int id) async {
+    final db = await AppDatabase.database;
+
+    customerMap.remove('id');
+
+    return await db.update(
+      'customer',
+      customerMap,
+      where: 'id = ?',
+      whereArgs: [id],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }

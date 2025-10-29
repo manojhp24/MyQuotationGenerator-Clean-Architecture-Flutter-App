@@ -32,6 +32,7 @@ class _CustomerFormState extends ConsumerState<CustomerForm> {
   void initState() {
     super.initState();
     notifier = ref.read(customerNotifierProvider.notifier);
+
     if (widget.isUpdate && widget.customer != null) {
       final c = widget.customer!;
       notifier.customerNameController.text = c.customerName ?? '';
@@ -43,8 +44,19 @@ class _CustomerFormState extends ConsumerState<CustomerForm> {
       notifier.gstInController.text = c.gstIn ?? '';
       notifier.stateController.text = c.state ?? '';
       notifier.shippingAddressController.text = c.shippingAddress ?? '';
+    } else {
+      notifier.customerNameController.clear();
+      notifier.emailController.clear();
+      notifier.mobileNumberController.clear();
+      notifier.address1Controller.clear();
+      notifier.address2Controller.clear();
+      notifier.otherInfoController.clear();
+      notifier.gstInController.clear();
+      notifier.stateController.clear();
+      notifier.shippingAddressController.clear();
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

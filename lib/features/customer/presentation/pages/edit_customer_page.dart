@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../config/utils/app_sizes.dart';
 import '../../domain/entities/customer.dart';
 import '../provider/customer_provider.dart';
 import '../widgets/forms/customer_form.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 
@@ -15,6 +16,7 @@ class EditCustomerPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final notifier = ref.read(customerNotifierProvider.notifier);
     final state = ref.watch(customerNotifierProvider);
 
     return Scaffold(
@@ -34,11 +36,12 @@ class EditCustomerPage extends ConsumerWidget {
         padding: EdgeInsets.all(AppSizes.lg(context)),
         child: ElevatedButton(
           onPressed: () async {
-            // final success = await notifier.updateCustomer(context, customer.id);
-            // if (success) {
-            //   await Future.delayed(const Duration(seconds: 2));
-            //   if (context.mounted) context.pop(true);
-            // }
+            final success = await notifier.updateCustomer(
+                context, customer.id!);
+            if (success) {
+              await Future.delayed(const Duration(seconds: 3));
+              if (context.mounted) context.pop(true);
+            }
           },
           child: Text(
             state.isLoading ? 'Updating...' : 'Update Customer',

@@ -4,6 +4,7 @@ import 'package:my_quotation_generator/core/di/injection_container.dart';
 import 'package:my_quotation_generator/features/customer/domain/repository/customer_repository.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/get_customers_usecase.dart';
+import 'package:my_quotation_generator/features/customer/domain/usecases/update_customer_usecase.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_notifier.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_state.dart';
 
@@ -24,10 +25,17 @@ final getCustomerUseCaseProvider = Provider<GetCustomerUseCase>((ref) {
   return GetCustomerUseCase(repo);
 });
 
+/// Update customer UseCase Provider
+final updateCustomerUseCaseProvider = Provider<UpdateCustomerUseCase>((ref) {
+  final repo = ref.read(customerRepositoryProvider);
+  return UpdateCustomerUseCase(repo);
+});
+
 /// Customer Notifier Provider
 final customerNotifierProvider =
 StateNotifierProvider<CustomerNotifier, CustomerState>((ref) {
       final addUseCase = ref.read(addCustomerUseCaseProvider);
       final getUseCase = ref.read(getCustomerUseCaseProvider);
-      return CustomerNotifier(addUseCase, getUseCase);
+      final updateUSeCase = ref.read(updateCustomerUseCaseProvider);
+      return CustomerNotifier(addUseCase, getUseCase, updateUSeCase);
     });

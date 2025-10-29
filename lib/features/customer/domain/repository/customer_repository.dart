@@ -3,6 +3,6 @@ import 'package:my_quotation_generator/features/customer/domain/entities/custome
 
 abstract class CustomerRepository{
   Future<DataState<int>> addCustomer(CustomerEntity customer);
-
   Future<DataState<List<CustomerEntity>>> getCustomers();
+  Future<DataState<int>> updateCustomer(CustomerEntity customer);
 }

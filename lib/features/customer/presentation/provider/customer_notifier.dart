@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
+import 'package:my_quotation_generator/features/customer/domain/usecases/update_customer_usecase.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_state.dart';
 
 import '../../../../config/theme/app_colors.dart';
@@ -13,8 +14,10 @@ import '../../domain/usecases/get_customers_usecase.dart';
 class CustomerNotifier extends StateNotifier<CustomerState> {
   final AddCustomerUseCase addCustomerUseCase;
   final GetCustomerUseCase getCustomerUseCase;
+  final UpdateCustomerUseCase updateCustomerUseCase;
 
-  CustomerNotifier(this.addCustomerUseCase, this.getCustomerUseCase)
+  CustomerNotifier(this.addCustomerUseCase, this.getCustomerUseCase,
+      this.updateCustomerUseCase)
     : super(CustomerState()) {
     fetchCustomer();
   }
@@ -125,5 +128,57 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
     } else if (result is DataFailed<List<CustomerEntity>>) {
       state = state.copyWith(isLoading: false);
     }
+  }
+
+  /// Update Customer
+  Future<bool> updateCustomer(BuildContext context,int customerId) async {
+    if (!formKey.currentState!.validate()) {
+      if (context.mounted) {
+        showCustomSnackBar(context, message: "Fill required fields correctly",
+          isSuccess: false,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 3,);
+      }
+      return false;
+    }
+
+    state = state.copyWith(isLoading: true);
+    final customer = CustomerEntity(
+      id: customerId,
+      customerName: customerNameController.text,
+      email: emailController.text,
+      mobile: mobileNumberController.text,
+      address1: address1Controller.text,
+      address2: address2Controller.text,
+      otherInfo: otherInfoController.text,
+      gstIn: gstInController.text,
+      state: stateController.text,
+      shippingAddress: shippingAddressController.text,
+    );
+
+    final result = await updateCustomerUseCase(customer);
+
+    if (result is DataSuccess<int>) {
+      if (context.mounted) {
+        showCustomSnackBar(context, message: "Customer data updated",
+          isSuccess: true,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 3,);
+      }
+      fetchCustomer();
+      return true;
+    } else if (result is DataFailed<int>) {
+      if (context.mounted) {
+        showCustomSnackBar(
+          context,
+          message: result.error?.toString() ?? "Failed to save customer",
+          isSuccess: false,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 3,
+        );
+      }
+      return false;
+    }
+    return false;
   }
 }
