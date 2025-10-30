@@ -6,8 +6,7 @@ import '../../../../config/utils/app_sizes.dart';
 import '../../domain/entities/customer.dart';
 import '../provider/customer_provider.dart';
 import '../widgets/forms/customer_form.dart';
-
-
+import '../widgets/forms/customer_form_button.dart'; // <-- Import your custom button
 
 class EditCustomerPage extends ConsumerWidget {
   final CustomerEntity customer;
@@ -34,24 +33,18 @@ class EditCustomerPage extends ConsumerWidget {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(AppSizes.lg(context)),
-        child: ElevatedButton(
+        child: CustomerFormButton(
+          label: "Update Customer",
+          isLoading: state.isLoading,
           onPressed: () async {
             final success = await notifier.updateCustomer(
                 context, customer.id!);
             if (success) {
-              await Future.delayed(const Duration(seconds: 3));
               if (context.mounted) context.pop(true);
             }
           },
-          child: Text(
-            state.isLoading ? 'Updating...' : 'Update Customer',
-          ),
         ),
       ),
     );
   }
 }
-
-
-
-

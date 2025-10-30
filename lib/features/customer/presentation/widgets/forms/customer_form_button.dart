@@ -18,7 +18,6 @@ class CustomerFormButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      // Disable button when loading
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, AppSizes.buttonHeight(context)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 
 void showCustomSnackBar(
     BuildContext context, {
@@ -15,7 +16,7 @@ void showCustomSnackBar(
   final icnColor = iconColor ?? Colors.white;
   final barColor = progressColor ?? Colors.white;
 
-  final icon = isSuccess ? Icons.thumb_up : Icons.info;
+  final icon = isSuccess ? Icons.thumb_up_alt_outlined : Icons.info;
 
   final snackBar = SnackBar(
     behavior: SnackBarBehavior.floating,
@@ -28,7 +29,7 @@ void showCustomSnackBar(
       children: [
         Row(
           children: [
-            Icon(icon, color: icnColor),
+            Icon(icon, color: icnColor,size: AppSizes.iconSmall(context),),
             const SizedBox(width: 12),
             Expanded(
               child: Text(

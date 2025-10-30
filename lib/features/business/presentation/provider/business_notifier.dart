@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:my_quotation_generator/core/enums/business_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
 
 import '../../../../config/theme/app_colors.dart';
 import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
-import '../../../../core/enums/messages_enums.dart';
 import 'business_state.dart';
 
 class BusinessNotifier extends StateNotifier<BusinessState> {
@@ -55,7 +55,7 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
       if(context.mounted){
         showCustomSnackBar(
           context,
-          message: AppMessages.fillRequiredFiled.message,
+          message: BusinessMessages.requiredFields.message,
           isSuccess: false,
           backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
@@ -108,7 +108,7 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
       if (context.mounted) {
         showCustomSnackBar(
           context,
-          message: AppMessages.businessDataStoreSuccess.message,
+          message: BusinessMessages.addSuccess.message,
           isSuccess: true,
           backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:my_quotation_generator/core/enums/customer_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
@@ -8,7 +9,6 @@ import 'package:my_quotation_generator/features/customer/presentation/provider/c
 
 import '../../../../config/theme/app_colors.dart';
 import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
-import '../../../../core/enums/messages_enums.dart';
 import '../../domain/usecases/get_customers_usecase.dart';
 
 class CustomerNotifier extends StateNotifier<CustomerState> {
@@ -54,7 +54,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       if (context.mounted) {
         showCustomSnackBar(
           context,
-          message: "Enter required Fields",
+          message: CustomerMessages.requiredFields.message,
           isSuccess: false,
           backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
@@ -79,6 +79,18 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
 
     final result = await addCustomerUseCase(customer);
 
+    await Future.delayed(const Duration(seconds: 2));
+
+    if (context.mounted) {
+      showCustomSnackBar(
+        context,
+        message: CustomerMessages.addSuccess.message,
+        isSuccess: true,
+        backgroundColor: AppColors.darkGrey2,
+        durationSeconds: 3,
+      );
+    }
+
     state = state.copyWith(isLoading: false);
 
     if (result is DataSuccess<int>) {
@@ -92,15 +104,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       stateController.clear();
       shippingAddressController.clear();
 
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: AppMessages.customerDataStoreSuccess.message,
-          isSuccess: true,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 3,
-        );
-      }
       return true;
     } else if (result is DataFailed<int>) {
       if (context.mounted) {
@@ -158,13 +161,22 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
 
     final result = await updateCustomerUseCase(customer);
 
+    await Future.delayed(const Duration(milliseconds: 1500));
+
+
+    if (context.mounted) {
+      showCustomSnackBar(
+        context,
+        message: CustomerMessages.updateSuccess.message,
+        isSuccess: true,
+        backgroundColor: AppColors.darkGrey2,
+        durationSeconds: 3,
+      );
+    }
+
+    state = state.copyWith(isLoading: false);
+
     if (result is DataSuccess<int>) {
-      if (context.mounted) {
-        showCustomSnackBar(context, message: "Customer data updated",
-          isSuccess: true,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 3,);
-      }
       fetchCustomer();
       return true;
     } else if (result is DataFailed<int>) {

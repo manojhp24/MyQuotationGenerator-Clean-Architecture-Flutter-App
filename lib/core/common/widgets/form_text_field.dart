@@ -18,6 +18,8 @@ class AppFormField extends StatelessWidget {
   final VoidCallback? onPrefixPressed;
   final VoidCallback? onSuffixPressed;
   final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final FocusNode? nextFocusNode;
 
   const AppFormField({
     super.key,
@@ -32,7 +34,7 @@ class AppFormField extends StatelessWidget {
     this.alignLabelWithHint,
     this.validator,
     this.prefixIcon, this.onPrefixPressed, this.onSuffixPressed,
-    this.focusNode
+    this.focusNode, this.textInputAction, this.nextFocusNode
   });
 
   @override
@@ -41,6 +43,7 @@ class AppFormField extends StatelessWidget {
       children: [
         TextFormField(
           focusNode: focusNode,
+          textInputAction: textInputAction,
           controller: controller,
           maxLength: maxLength,
           keyboardType: keyboardType,

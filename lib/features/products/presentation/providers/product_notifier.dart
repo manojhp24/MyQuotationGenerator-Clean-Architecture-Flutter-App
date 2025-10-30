@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/core/common/App_snack_bar/custom_snack_bar.dart';
-import 'package:my_quotation_generator/core/enums/messages_enums.dart';
+import 'package:my_quotation_generator/core/enums/product_message.dart';
+
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
@@ -75,7 +76,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
       if (context.mounted) {
         FocusScope.of(context).requestFocus(productNameFocus);
         showCustomSnackBar(
-            context, message: AppMessages.productDataStoreSuccess.message,
+            context, message: ProductMessages.addSuccess.message,
             isSuccess: true,
             backgroundColor: AppColors.darkGrey2,
             durationSeconds: 3
