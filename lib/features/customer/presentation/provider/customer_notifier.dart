@@ -4,6 +4,7 @@ import 'package:my_quotation_generator/core/enums/customer_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
+import 'package:my_quotation_generator/features/customer/domain/usecases/delete_customer_usecase.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/update_customer_usecase.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_state.dart';
 
@@ -11,13 +12,24 @@ import '../../../../config/theme/app_colors.dart';
 import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
 import '../../domain/usecases/get_customers_usecase.dart';
 
+/// ---------------------------------------------------------------------------
+/// CustomerNotifier
+/// ---------------------------------------------------------------------------
+/// This class is a Riverpod `StateNotifier` that manages all the business logic
+/// for handling customers: adding, fetching, updating, and deleting.
+///
+/// It interacts with the domain layer (use cases) and updates the UI layer
+/// through a reactive `CustomerState`.
+///
+
 class CustomerNotifier extends StateNotifier<CustomerState> {
   final AddCustomerUseCase addCustomerUseCase;
   final GetCustomerUseCase getCustomerUseCase;
   final UpdateCustomerUseCase updateCustomerUseCase;
+  final DeleteCustomerUseCase deleteCustomerUseCase;
 
   CustomerNotifier(this.addCustomerUseCase, this.getCustomerUseCase,
-      this.updateCustomerUseCase)
+      this.updateCustomerUseCase, this.deleteCustomerUseCase)
     : super(CustomerState()) {
     fetchCustomer();
   }
@@ -79,7 +91,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
 
     final result = await addCustomerUseCase(customer);
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     if (context.mounted) {
       showCustomSnackBar(
@@ -161,7 +173,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
 
     final result = await updateCustomerUseCase(customer);
 
-    await Future.delayed(const Duration(milliseconds: 1500));
+    await Future.delayed(const Duration(seconds: 1));
 
 
     if (context.mounted) {
@@ -193,4 +205,44 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
     }
     return false;
   }
+
+  /// Delete Customer
+  Future<bool> deleteCustomer(BuildContext context, int customerId) async {
+    state = state.copyWith(isLoading: true);
+
+    final result = await deleteCustomerUseCase(customerId);
+
+    if (context.mounted) {
+      showCustomSnackBar(
+        context,
+        message: CustomerMessages.deleteSuccess.message,
+        isSuccess: true,
+        backgroundColor: AppColors.darkGrey2,
+        durationSeconds: 3,
+      );
+    }
+
+    state = state.copyWith(isLoading: false);
+
+    if (result is DataSuccess<int>) {
+      fetchCustomer();
+      return true;
+    } else if (result is DataFailed<int>) {
+      if (context.mounted) {
+        showCustomSnackBar(
+          context,
+          message: result.error?.toString() ?? "Failed to save customer",
+          isSuccess: false,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 3,
+        );
+      }
+      return false;
+    }
+
+
+    return false;
+  }
+
+
 }

@@ -5,4 +5,5 @@ abstract class CustomerRepository{
   Future<DataState<int>> addCustomer(CustomerEntity customer);
   Future<DataState<List<CustomerEntity>>> getCustomers();
   Future<DataState<int>> updateCustomer(CustomerEntity customer);
+  Future<DataState<int>> deleteCustomer(int customerId);
 }

@@ -59,4 +59,24 @@ class CustomerRepositoryImpl implements CustomerRepository{
       return DataFailed<int>(Exception("Failed to update customer: $e"));
     }
   }
+
+  /// Delete Customer
+  @override
+  Future<DataState<int>> deleteCustomer(int id) async {
+    try {
+      if (id <= 0) {
+        return DataFailed<int>(Exception("Invalid customer id for deletion"));
+      }
+
+      final rowsDeleted = await localDataSource.deleteCustomer(id);
+
+      if (rowsDeleted > 0) {
+        return DataSuccess<int>(rowsDeleted);
+      } else {
+        return DataFailed(Exception('No Customer found to delete'));
+      }
+    } catch (e) {
+      return DataFailed(Exception("Failed to delete customer"));
+    }
+  }
 }

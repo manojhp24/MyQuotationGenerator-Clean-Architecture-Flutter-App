@@ -33,6 +33,11 @@ class AppStrings {
   static const String customerEmail = "Email";
   static const String shippingDetailsTitle = "Shipping Details";
   static const String shippingAddress = "Shipping Address";
+  static const String remove = "Remove";
+  static const String update = "Update";
+  static const String deleteCustomer = "Delete Customer?";
+  static const String deleteMessage =
+      "Are you sure you want to delete this customer? This action cannot be undone.";
 
   //Dashboard
   static const String dashboard = "Dashboard";

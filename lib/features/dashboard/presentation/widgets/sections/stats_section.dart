@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/widgets/stats_card.dart';
 
 import '../../../../../config/utils/app_sizes.dart';
+import '../../../../customer/presentation/provider/customer_provider.dart';
 
-class StatsSection extends StatelessWidget {
+class StatsSection extends ConsumerWidget {
   const StatsSection({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    final customerState = ref.watch(customerNotifierProvider);
+
+    final totalCustomer = customerState.customer.length;
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppSizes.md(context)),
@@ -20,7 +26,7 @@ class StatsSection extends StatelessWidget {
                 Expanded(
                   child: StatsCard(
                     title: "Customer",
-                    value: "35",
+                    value: "$totalCustomer",
                     icon: Icons.people_outline,
                   ),
                 ),

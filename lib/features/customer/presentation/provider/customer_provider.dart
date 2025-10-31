@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/core/di/injection_container.dart';
 import 'package:my_quotation_generator/features/customer/domain/repository/customer_repository.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
+import 'package:my_quotation_generator/features/customer/domain/usecases/delete_customer_usecase.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/get_customers_usecase.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/update_customer_usecase.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_notifier.dart';
@@ -31,11 +32,18 @@ final updateCustomerUseCaseProvider = Provider<UpdateCustomerUseCase>((ref) {
   return UpdateCustomerUseCase(repo);
 });
 
+/// Delete customer UseCase Provider
+final deleteCustomerUseCaseProvider = Provider<DeleteCustomerUseCase>((ref) {
+  final repo = ref.read(customerRepositoryProvider);
+  return DeleteCustomerUseCase(repo);
+});
+
 /// Customer Notifier Provider
 final customerNotifierProvider =
 StateNotifierProvider<CustomerNotifier, CustomerState>((ref) {
       final addUseCase = ref.read(addCustomerUseCaseProvider);
       final getUseCase = ref.read(getCustomerUseCaseProvider);
       final updateUSeCase = ref.read(updateCustomerUseCaseProvider);
-      return CustomerNotifier(addUseCase, getUseCase, updateUSeCase);
+      final deleteUseCase = ref.read(deleteCustomerUseCaseProvider);
+      return CustomerNotifier(addUseCase, getUseCase, updateUSeCase,deleteUseCase);
     });

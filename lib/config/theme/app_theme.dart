@@ -4,6 +4,7 @@ import 'package:my_quotation_generator/config/theme/themes/bottom_navigation_the
 import 'package:my_quotation_generator/config/theme/themes/elevated_button_theme.dart';
 import 'package:my_quotation_generator/config/theme/themes/floating_button_theme.dart';
 import 'package:my_quotation_generator/config/theme/themes/input_theme.dart';
+import 'package:my_quotation_generator/config/theme/themes/outlined_button_theme.dart';
 import 'package:my_quotation_generator/config/theme/themes/text_selection_theme.dart';
 
 import 'app_colors.dart';
@@ -30,7 +31,8 @@ class AppTheme {
         displayLarge: AppTextStyle.h1(context),
       ),
       bottomNavigationBarTheme: BottomNavBarTheme.light(context),
-      floatingActionButtonTheme: AppFloatingButtonTheme.light(context)
+      floatingActionButtonTheme: AppFloatingButtonTheme.light(context),
+      outlinedButtonTheme: AppOutlinedButtonTheme.light(context)
     );
   }
 }
