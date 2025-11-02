@@ -10,4 +10,9 @@ class ProductLocalDataSource {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<Map<String, dynamic>>> getProducts() async {
+    final db = await AppDatabase.database;
+    return await db.query('products', orderBy: "id");
+  }
 }

@@ -29,4 +29,18 @@ class ProductRepositoryImpl implements ProductRepository {
       return DataFailed(Exception('Failed to add products:$e'));
     }
   }
+
+  @override
+  Future<DataState<List<ProductEntity>>> getProducts() async {
+    try {
+      final List<Map<String, dynamic>> data = await productLocalDataSource
+          .getProducts();
+      final products = data
+          .map((e) => ProductModel.fromMap(e).toEntity())
+          .toList();
+      return DataSuccess(products);
+    } catch (e) {
+      return DataFailed(Exception("Failed to fetch products $e"));
+    }
+  }
 }

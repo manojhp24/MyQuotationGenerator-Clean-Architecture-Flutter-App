@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_quotation_generator/features/Products/presentation/pages/products_page.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/provider/dashboard_provider.dart';
+import 'package:my_quotation_generator/features/products/presentation/pages/products_page.dart';
 import 'package:my_quotation_generator/features/settings/presentation/pages/settings_page.dart';
 
 import '../../../customer/presentation/pages/customer_page.dart';
@@ -16,11 +16,11 @@ class DashboardNav extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(dashboardIndexProvider);
 
-    const pages = [
+    final pages = [
       DashboardPage(),
       QuotationsPage(),
       CustomerPage(),
-      AddProductsPage(),
+      ProductPage(),
       SettingsPage(),
     ];
 

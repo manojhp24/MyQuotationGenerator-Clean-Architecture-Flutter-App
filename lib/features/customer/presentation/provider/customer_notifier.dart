@@ -28,9 +28,12 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
   final UpdateCustomerUseCase updateCustomerUseCase;
   final DeleteCustomerUseCase deleteCustomerUseCase;
 
-  CustomerNotifier(this.addCustomerUseCase, this.getCustomerUseCase,
-      this.updateCustomerUseCase, this.deleteCustomerUseCase)
-    : super(CustomerState()) {
+  CustomerNotifier(
+    this.addCustomerUseCase,
+    this.getCustomerUseCase,
+    this.updateCustomerUseCase,
+    this.deleteCustomerUseCase,
+  ) : super(CustomerState()) {
     fetchCustomer();
   }
 
@@ -44,7 +47,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
   final stateController = TextEditingController();
   final shippingAddressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
 
   @override
   void dispose() {
@@ -62,7 +64,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
 
   /// Adding Customer
   Future<bool> saveCustomer(BuildContext context) async {
-    if (!formKey.currentState!.validate()){
+    if (!formKey.currentState!.validate()) {
       if (context.mounted) {
         showCustomSnackBar(
           context,
@@ -146,13 +148,16 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
   }
 
   /// Update Customer
-  Future<bool> updateCustomer(BuildContext context,int customerId) async {
+  Future<bool> updateCustomer(BuildContext context, int customerId) async {
     if (!formKey.currentState!.validate()) {
       if (context.mounted) {
-        showCustomSnackBar(context, message: "Fill required fields correctly",
+        showCustomSnackBar(
+          context,
+          message: "Fill required fields correctly",
           isSuccess: false,
           backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 3,);
+          durationSeconds: 3,
+        );
       }
       return false;
     }
@@ -174,7 +179,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
     final result = await updateCustomerUseCase(customer);
 
     await Future.delayed(const Duration(seconds: 1));
-
 
     if (context.mounted) {
       showCustomSnackBar(
@@ -240,9 +244,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       return false;
     }
 
-
     return false;
   }
-
-
 }

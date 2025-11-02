@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/core/common/App_snack_bar/custom_snack_bar.dart';
 import 'package:my_quotation_generator/core/enums/product_message.dart';
-
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
@@ -37,7 +36,8 @@ class ProductNotifier extends StateNotifier<ProductState> {
     super.dispose();
   }
 
-  Future<void> saveProduct(BuildContext context) async {
+  /// Save Products
+  Future<bool> saveProduct(BuildContext context) async {
     if (!formKey.currentState!.validate()) {
       if (context.mounted) {
         showCustomSnackBar(
@@ -48,7 +48,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
           durationSeconds: 3,
         );
       }
-      return;
+      return false;
     }
 
     state = state.copyWith(isLoading: true);
@@ -62,9 +62,19 @@ class ProductNotifier extends StateNotifier<ProductState> {
         hsn: hsnController.text);
     final result = await addProductUseCase(product);
 
-    if (result is DataSuccess<int>) {
-      state = state.copyWith(isLoading: false, error: null);
+    await Future.delayed(const Duration(seconds: 1));
+    if (context.mounted) {
+      FocusScope.of(context).requestFocus(productNameFocus);
+      showCustomSnackBar(
+          context, message: ProductMessages.addSuccess.message,
+          isSuccess: true,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 3
+      );
 
+      state = state.copyWith(isLoading: false);
+
+    if (result is DataSuccess<int>) {
       productNameController.clear();
       priceController.clear();
       unitMeasureController.clear();
@@ -72,23 +82,21 @@ class ProductNotifier extends StateNotifier<ProductState> {
       descriptionController.clear();
       hsnController.clear();
 
-
-      if (context.mounted) {
-        FocusScope.of(context).requestFocus(productNameFocus);
-        showCustomSnackBar(
-            context, message: ProductMessages.addSuccess.message,
-            isSuccess: true,
-            backgroundColor: AppColors.darkGrey2,
-            durationSeconds: 3
-        );
+      return true;
       } else if (result is DataFailed<int>) {
-        state = state.copyWith(
-          isLoading: false,
-          error: result.error?.toString() ?? "Unknown Message",
+      if (context.mounted) {
+        showCustomSnackBar(
+          context,
+          message: result.error?.toString() ?? "Failed to save products",
+          isSuccess: false,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 3,
         );
       }
+        return false;
+      }
     }
-
+    return false;
   }
 
 }

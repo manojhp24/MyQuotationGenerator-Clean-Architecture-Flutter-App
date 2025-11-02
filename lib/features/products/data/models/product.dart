@@ -1,9 +1,9 @@
-
 import '../../domain/entities/product.dart';
 
+/// Product Model — bridges the Data and Domain layers
 class ProductModel extends ProductEntity {
   const ProductModel({
-    required super.id,
+    super.id,
     required super.productName,
     required super.price,
     required super.unitMeasure,
@@ -12,7 +12,33 @@ class ProductModel extends ProductEntity {
     required super.hsn,
   });
 
-  /// Converts Entity to Map
+  /// ✅ Entity → Model
+  factory ProductModel.fromEntity(ProductEntity entity) {
+    return ProductModel(
+      id: entity.id,
+      productName: entity.productName,
+      price: entity.price,
+      unitMeasure: entity.unitMeasure,
+      gst: entity.gst,
+      description: entity.description,
+      hsn: entity.hsn,
+    );
+  }
+
+  /// ✅ Model → Entity
+  ProductEntity toEntity() {
+    return ProductEntity(
+      id: id,
+      productName: productName,
+      price: price,
+      unitMeasure: unitMeasure,
+      gst: gst,
+      description: description,
+      hsn: hsn,
+    );
+  }
+
+  /// ✅ Model → Map (for SQLite insert/update)
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -25,18 +51,16 @@ class ProductModel extends ProductEntity {
     };
   }
 
-  /// Converts Map To Model
+  /// ✅ Map → Model (for SQLite query results)
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      id: map['id'] as int,
+      id: map['id'] as int?,
       productName: map['productName'] ?? '',
-      price: map['price'] ?? '',
+      price: map['price'] ?? 0,
       unitMeasure: map['unitMeasure'] ?? '',
-      gst: map['gst'] ?? '',
+      gst: map['gst'] ?? 0,
       description: map['description'] ?? '',
-      hsn: map['hsn'],
+      hsn: map['hsn'] ?? '',
     );
   }
 }
-
-

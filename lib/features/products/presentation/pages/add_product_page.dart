@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 
 import '../widgets/product_form.dart';
+import '../widgets/product_form_button.dart';
 
 class AddProductPage extends ConsumerWidget {
   const AddProductPage({super.key});
@@ -12,6 +14,7 @@ class AddProductPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(productNotifierProvider.notifier);
+    final state = ref.watch(productNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -22,11 +25,18 @@ class AddProductPage extends ConsumerWidget {
       body: ProductForm(notifier: notifier),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(AppSizes.lg(context)),
-        child: ElevatedButton(
-          onPressed: () => notifier.saveProduct(context),
-          child: Text("Add Product"),
-        ),
+        child: ProductFormButton(
+          onPressed: () async {
+            final isSaved = await notifier.saveProduct(context);
+            if (isSaved) {
+              if (context.mounted) context.pop(true);
+            }
+          },
+          label: AppStrings.productListAppBarTitle,
+          isLoading: state.isLoading,),
       ),
     );
   }
 }
+
+
