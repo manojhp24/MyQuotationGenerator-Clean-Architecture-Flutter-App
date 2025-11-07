@@ -16,7 +16,6 @@ void main() {
     getProductUseCase = GetProductUseCase(mockProductRepository);
   });
 
-  const productId = 1;
   const productList = [
     ProductEntity(
       id: 1,

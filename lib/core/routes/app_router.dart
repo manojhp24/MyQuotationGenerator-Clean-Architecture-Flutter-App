@@ -7,6 +7,7 @@ import 'package:my_quotation_generator/features/customer/presentation/pages/add_
 import 'package:my_quotation_generator/features/customer/presentation/pages/customer_page.dart';
 import 'package:my_quotation_generator/features/customer/presentation/pages/edit_customer_page.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:my_quotation_generator/features/settings/presentation/pages/settings_page.dart';
 
 import '../../features/customer/domain/entities/customer.dart';
 import '../../features/dashboard/presentation/pages/dashboard_nav.dart';
@@ -40,10 +41,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           return EditCustomerPage(customer: customer);
         },
       ),
-
       GoRoute(
         path: '/add-products',
         builder: (context, state) => const AddProductPage(),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsPage(),
       ),
     ],
   );

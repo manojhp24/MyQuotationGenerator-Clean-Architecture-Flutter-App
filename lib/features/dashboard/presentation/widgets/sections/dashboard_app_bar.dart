@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../config/constants/app_strings.dart';
 import '../../../../../config/theme/app_colors.dart';
@@ -46,9 +47,7 @@ class DashboardAppBar extends StatelessWidget {
                 color: AppColors.textPrimary,
                 size: AppSizes.iconMedium(context),
               ),
-              onPressed: () {
-                // TODO: Navigate to settings page or open a modal
-              },
+              onPressed: () => context.push('/settings'),
               tooltip: 'Settings',
             ),
           ],

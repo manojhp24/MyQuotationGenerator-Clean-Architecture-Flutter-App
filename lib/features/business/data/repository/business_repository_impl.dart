@@ -2,6 +2,7 @@ import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/data/models/business.dart';
 import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/domain/repository/business_repository.dart';
+
 import '../data_sources/business_local_database.dart';
 
 class BusinessRepositoryImpl implements BusinessRepository {
@@ -33,6 +34,24 @@ class BusinessRepositoryImpl implements BusinessRepository {
       return DataSuccess(id);
     } catch (e) {
       return DataFailed(Exception('Failed to add business: $e'));
+    }
+  }
+
+  @override
+  Future<DataState<int>> updateBusiness(BusinessEntity business) async {
+    if (business.id == null) {
+      return DataFailed<int>(Exception("Business id required for update"));
+    }
+
+    try {
+      final model = BusinessModel.fromEntity(business);
+      final result = await localDataSource.updateBusiness(
+        model.toMap(),
+        business.id!,
+      );
+      return DataSuccess(result);
+    } catch (e) {
+      return DataFailed(Exception('Repository error: Database error'));
     }
   }
 }

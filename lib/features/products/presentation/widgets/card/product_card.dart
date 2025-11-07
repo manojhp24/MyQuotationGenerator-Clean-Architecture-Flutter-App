@@ -28,7 +28,7 @@ class ProductCard extends StatelessWidget {
             // Product Icon
             Container(
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               padding: const EdgeInsets.all(10),
@@ -84,7 +84,7 @@ class ProductCard extends StatelessWidget {
             // Edit Button
             Container(
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.08),
+                color: AppColors.primary.withValues(alpha: .08),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(

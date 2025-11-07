@@ -55,4 +55,10 @@ class AppStrings {
 
   //Settings
   static const String settingsAppBarTitle = "Settings";
+  static const String document = "Document";
+  static const String documentSettingsSubtitle = "Manage your documents settings";
+  static const String documentSettingsTitle = "Manage Document";
+  static const String businessInfoTitle = "Business info";
+  static const String business = "Business";
+  static const String businessInfoSubtitle = "Update,Mangage your business info";
 }

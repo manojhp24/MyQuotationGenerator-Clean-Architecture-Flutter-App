@@ -4,4 +4,6 @@ import 'package:my_quotation_generator/features/business/domain/entities/busines
 
 abstract class BusinessRepository{
   Future<DataState<int>> addBusiness(BusinessEntity business);
+
+  Future<DataState<int>> updateBusiness(BusinessEntity business);
 }
