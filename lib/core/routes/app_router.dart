@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/features/Products/presentation/pages/add_product_page.dart';
 import 'package:my_quotation_generator/features/business/presentation/pages/add_business_page.dart';
 import 'package:my_quotation_generator/features/business/presentation/pages/business_page.dart';
+import 'package:my_quotation_generator/features/business/presentation/pages/update_business_page.dart';
 import 'package:my_quotation_generator/features/customer/presentation/pages/add_customer_page.dart';
 import 'package:my_quotation_generator/features/customer/presentation/pages/customer_page.dart';
 import 'package:my_quotation_generator/features/customer/presentation/pages/edit_customer_page.dart';
@@ -28,6 +29,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),GoRoute(
         path: '/add-business',
         builder: (context, state) => const AddBusinessPage(),
+      ),GoRoute(
+        path: '/update-business',
+        builder: (context, state) => const UpdateBusinessPage(),
       ),GoRoute(
         path: '/customer',
         builder: (context, state) => const CustomerPage(),

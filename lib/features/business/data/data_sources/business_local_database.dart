@@ -25,4 +25,11 @@ class BusinessLocalDataSource {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<Map<String, dynamic>>> getBusiness() async {
+    final db = testDb ?? await AppDatabase.database;
+
+    final result = await db.query('business', orderBy: 'id');
+    return result;
+  }
 }

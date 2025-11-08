@@ -63,7 +63,7 @@ void main() {
 
   test('should update existing business and return 1 row affected', () async {
     // 🅰️ Arrange
-    // Insert the original business first
+
     final insertId = await dataSource.addBusiness(businessMap);
     expect(insertId, equals(1));
 
@@ -104,4 +104,44 @@ void main() {
     expect(result, equals(1)); 
   });
 
+  // FETCHING TEST
+
+  test("should fetch all business data for local DB", () async {
+    // Arrange
+    await dataSource.addBusiness(businessMap);
+
+    final secondBusiness = Map<String, dynamic>.from(businessMap)
+      ..['id'] = 2
+      ..['businessName'] = "Wood"
+      ..['email'] = 'sampleemail@gmail.com';
+
+    await dataSource.addBusiness(secondBusiness);
+
+    // Act
+    final result = await dataSource.getBusiness();
+
+    //Assert
+    expect(result, isA<List<Map<String, dynamic>>>());
+    expect(result.length, equals(2));
+
+    final first = result.first;
+    final second = result.last;
+
+    expect(first['businessName'], equals('GowriEvents'));
+    expect(second['businessName'], equals('Wood'));
+  });
+
+  // ERROR TEST
+  test("should throw exception when business table does not exist", () async {
+    final brokenDb = await openDatabase(inMemoryDatabasePath, version: 1);
+    final brokenDataSource = BusinessLocalDataSource(testDb: brokenDb);
+
+    expect(
+          () async => await brokenDataSource.getBusiness(),
+      throwsA(isA<DatabaseException>()),
+    );
+
+    await brokenDb.close();
+  });
+  
 }

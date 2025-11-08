@@ -6,4 +6,6 @@ abstract class BusinessRepository{
   Future<DataState<int>> addBusiness(BusinessEntity business);
 
   Future<DataState<int>> updateBusiness(BusinessEntity business);
+
+  Future<DataState<List<BusinessEntity>>> getBusiness();
 }

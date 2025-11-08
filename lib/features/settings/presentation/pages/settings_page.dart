@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
-import 'package:my_quotation_generator/config/theme/app_colors.dart';
-import 'package:my_quotation_generator/config/theme/app_text_styles.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/settings/presentation/widgets/settings_heading.dart';
 import 'package:my_quotation_generator/features/settings/presentation/widgets/settings_list.dart';
@@ -32,7 +30,7 @@ class SettingsPage extends StatelessWidget {
 
             SettingsList(
               leadingIcon: Icons.business_center_outlined,
-              onTap: ()=> context.push("/add-business"),
+              onTap: ()=> context.push("/update-business"),
               subTitle: AppStrings.businessInfoSubtitle,
               title: AppStrings.businessInfoTitle,
               trailingIcon: Icons.chevron_right,

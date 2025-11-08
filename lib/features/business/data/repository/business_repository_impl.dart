@@ -54,4 +54,19 @@ class BusinessRepositoryImpl implements BusinessRepository {
       return DataFailed(Exception('Repository error: Database error'));
     }
   }
+
+  @override
+  Future<DataState<List<BusinessEntity>>> getBusiness() async {
+    try {
+      final List<Map<String, dynamic>> data = await localDataSource
+          .getBusiness();
+
+      final business = data
+          .map((e) => BusinessModel.fromMap(e).toEntity())
+          .toList();
+      return DataSuccess(business);
+    } catch (e) {
+      return DataFailed(Exception("Failed to get business data $e"));
+    }
+  }
 }

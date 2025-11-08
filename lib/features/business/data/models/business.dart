@@ -82,4 +82,24 @@ class BusinessModel extends BusinessEntity {
       upiId: entity.upiId,
     );
   }
+
+  BusinessEntity toEntity(){
+    return BusinessEntity(
+      id: id,
+      businessName: businessName,
+      contactName: contactName,
+      mobileNumber: mobileNumber,
+      email: email,
+      address1: address1,
+      address2: address2,
+      otherInfo: otherInfo,
+      gstIn: gstIn,
+      state: state,
+      businessCategory: businessCategory,
+      accountNumber: accountNumber,
+      accountName: accountName,
+      bankName: bankName,
+      upiId: upiId,
+    );
+  }
 }

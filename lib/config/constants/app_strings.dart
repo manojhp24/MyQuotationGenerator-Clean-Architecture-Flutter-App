@@ -3,6 +3,7 @@ class AppStrings {
 
   // Add Business Screen
   static const String addBusinessAppBarTitle = "Add Business Info";
+  static const String updateBusinessAppBarTitle = "Update Business Info";
   static const String addBusiness = "Add Business";
   static const String businessDetails = "Business Details";
   static const String selectCategory = "Select Category";
