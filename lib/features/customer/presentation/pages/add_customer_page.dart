@@ -7,7 +7,6 @@ import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 
-
 import '../widgets/forms/customer_form.dart';
 import '../widgets/forms/customer_form_button.dart';
 

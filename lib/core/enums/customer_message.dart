@@ -4,8 +4,10 @@ enum CustomerMessages {
   deleteSuccess,
   fetchError,
   saveError,
+  deleteError,
   invalidInput,
   requiredFields,
+  updateError,
 }
 
 extension CustomerMessagesExtension on CustomerMessages {
@@ -25,6 +27,10 @@ extension CustomerMessagesExtension on CustomerMessages {
         return "Please check your input and try again.";
       case CustomerMessages.requiredFields:
         return "Please fill in all required fields.";
+      case CustomerMessages.deleteError:
+        return "Failed to delete customer. Please try again.";
+      case CustomerMessages.updateError:
+        return "Failed to update customer. Please try again";
     }
   }
 }

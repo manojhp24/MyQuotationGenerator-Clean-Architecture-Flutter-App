@@ -43,7 +43,7 @@ final customerNotifierProvider =
 StateNotifierProvider<CustomerNotifier, CustomerState>((ref) {
       final addUseCase = ref.read(addCustomerUseCaseProvider);
       final getUseCase = ref.read(getCustomerUseCaseProvider);
-      final updateUSeCase = ref.read(updateCustomerUseCaseProvider);
+      final updateUseCase = ref.read(updateCustomerUseCaseProvider);
       final deleteUseCase = ref.read(deleteCustomerUseCaseProvider);
-      return CustomerNotifier(addUseCase, getUseCase, updateUSeCase,deleteUseCase);
+      return CustomerNotifier(addUseCase, getUseCase, updateUseCase,deleteUseCase);
     });

@@ -22,9 +22,13 @@ import 'package:my_quotation_generator/features/products/data/repository/product
 import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
 
+// Global service locator instance (GetIt)
 final sl = GetIt.instance;
 
-Future<void> init() async {
+
+/// Sets up all app dependencies (repositories, data sources, use cases).
+/// This must run before `runApp()` in main.dart
+Future<void> setupDependencies() async {
   await AppDatabase.database;
 
   /// BUSINESS

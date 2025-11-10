@@ -79,59 +79,72 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
 
     state = state.copyWith(isLoading: true);
 
-    final customer = CustomerEntity(
-      customerName: customerNameController.text,
-      email: emailController.text,
-      mobile: mobileNumberController.text,
-      address1: address1Controller.text,
-      address2: address2Controller.text,
-      otherInfo: otherInfoController.text,
-      gstIn: gstInController.text,
-      state: stateController.text,
-      shippingAddress: shippingAddressController.text,
-    );
-
-    final result = await addCustomerUseCase(customer);
-
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (context.mounted) {
-      showCustomSnackBar(
-        context,
-        message: CustomerMessages.addSuccess.message,
-        isSuccess: true,
-        backgroundColor: AppColors.darkGrey2,
-        durationSeconds: 3,
+    try {
+      final customer = CustomerEntity(
+        customerName: customerNameController.text,
+        email: emailController.text,
+        mobile: mobileNumberController.text,
+        address1: address1Controller.text,
+        address2: address2Controller.text,
+        otherInfo: otherInfoController.text,
+        gstIn: gstInController.text,
+        state: stateController.text,
+        shippingAddress: shippingAddressController.text,
       );
-    }
 
-    state = state.copyWith(isLoading: false);
+      final result = await addCustomerUseCase(customer);
 
-    if (result is DataSuccess<int>) {
-      customerNameController.clear();
-      emailController.clear();
-      mobileNumberController.clear();
-      address1Controller.clear();
-      address2Controller.clear();
-      otherInfoController.clear();
-      gstInController.clear();
-      stateController.clear();
-      shippingAddressController.clear();
+      if (result is DataSuccess<int>) {
+        customerNameController.clear();
+        emailController.clear();
+        mobileNumberController.clear();
+        address1Controller.clear();
+        address2Controller.clear();
+        otherInfoController.clear();
+        gstInController.clear();
+        stateController.clear();
+        shippingAddressController.clear();
 
-      return true;
-    } else if (result is DataFailed<int>) {
+        if (context.mounted) {
+          showCustomSnackBar(
+            context,
+            message: CustomerMessages.addSuccess.message,
+            isSuccess: true,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 3,
+          );
+        }
+
+        return true;
+      } else if (result is DataFailed<int>) {
+        if (context.mounted) {
+          showCustomSnackBar(
+            context,
+            message:
+                result.error?.toString() ?? CustomerMessages.saveError.message,
+            isSuccess: false,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 3,
+          );
+        }
+        return false;
+      }
+      return false;
+    } catch (e) {
       if (context.mounted) {
         showCustomSnackBar(
           context,
-          message: result.error?.toString() ?? "Failed to save customer",
+          message: "Unexpected error: $e",
           isSuccess: false,
           backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
         );
       }
+
       return false;
+    } finally {
+      state = state.copyWith(isLoading: false);
     }
-    return false;
   }
 
   /// Fetching Customer
@@ -153,7 +166,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       if (context.mounted) {
         showCustomSnackBar(
           context,
-          message: "Fill required fields correctly",
+          message: CustomerMessages.requiredFields.message,
           isSuccess: false,
           backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
@@ -163,87 +176,114 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
     }
 
     state = state.copyWith(isLoading: true);
-    final customer = CustomerEntity(
-      id: customerId,
-      customerName: customerNameController.text,
-      email: emailController.text,
-      mobile: mobileNumberController.text,
-      address1: address1Controller.text,
-      address2: address2Controller.text,
-      otherInfo: otherInfoController.text,
-      gstIn: gstInController.text,
-      state: stateController.text,
-      shippingAddress: shippingAddressController.text,
-    );
 
-    final result = await updateCustomerUseCase(customer);
-
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (context.mounted) {
-      showCustomSnackBar(
-        context,
-        message: CustomerMessages.updateSuccess.message,
-        isSuccess: true,
-        backgroundColor: AppColors.darkGrey2,
-        durationSeconds: 3,
+    try {
+      final customer = CustomerEntity(
+        id: customerId,
+        customerName: customerNameController.text,
+        email: emailController.text,
+        mobile: mobileNumberController.text,
+        address1: address1Controller.text,
+        address2: address2Controller.text,
+        otherInfo: otherInfoController.text,
+        gstIn: gstInController.text,
+        state: stateController.text,
+        shippingAddress: shippingAddressController.text,
       );
-    }
 
-    state = state.copyWith(isLoading: false);
+      final result = await updateCustomerUseCase(customer);
 
-    if (result is DataSuccess<int>) {
-      fetchCustomer();
-      return true;
-    } else if (result is DataFailed<int>) {
+      if (result is DataSuccess<int>) {
+        fetchCustomer();
+        if (context.mounted) {
+          showCustomSnackBar(
+            context,
+            message: CustomerMessages.updateSuccess.message,
+            isSuccess: true,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 3,
+          );
+        }
+        return true;
+      } else if (result is DataFailed<int>) {
+        if (context.mounted) {
+          showCustomSnackBar(
+            context,
+            message:
+                result.error?.toString() ??
+                CustomerMessages.updateError.message,
+            isSuccess: false,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 3,
+          );
+        }
+        return false;
+      }
+      return false;
+    } catch (e) {
       if (context.mounted) {
         showCustomSnackBar(
           context,
-          message: result.error?.toString() ?? "Failed to save customer",
+          message: "Unexpected error: $e",
           isSuccess: false,
           backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
         );
       }
       return false;
+    } finally {
+      state = state.copyWith(isLoading: false);
     }
-    return false;
   }
 
   /// Delete Customer
   Future<bool> deleteCustomer(BuildContext context, int customerId) async {
     state = state.copyWith(isLoading: true);
 
-    final result = await deleteCustomerUseCase(customerId);
+    try {
+      final result = await deleteCustomerUseCase(customerId);
 
-    if (context.mounted) {
-      showCustomSnackBar(
-        context,
-        message: CustomerMessages.deleteSuccess.message,
-        isSuccess: true,
-        backgroundColor: AppColors.darkGrey2,
-        durationSeconds: 3,
-      );
-    }
+      if (result is DataSuccess<int>) {
+        fetchCustomer();
+        if (context.mounted) {
+          showCustomSnackBar(
+            context,
+            message: CustomerMessages.deleteSuccess.message,
+            isSuccess: true,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 3,
+          );
+        }
+        return true;
+      } else if (result is DataFailed<int>) {
+        if (context.mounted) {
+          showCustomSnackBar(
+            context,
+            message:
+                result.error?.toString() ??
+                CustomerMessages.deleteError.message,
+            isSuccess: false,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 3,
+          );
+        }
+        return false;
+      }
 
-    state = state.copyWith(isLoading: false);
-
-    if (result is DataSuccess<int>) {
-      fetchCustomer();
-      return true;
-    } else if (result is DataFailed<int>) {
+      return false;
+    } catch (e) {
       if (context.mounted) {
         showCustomSnackBar(
           context,
-          message: result.error?.toString() ?? "Failed to save customer",
+          message: "Unexpected error: $e",
           isSuccess: false,
           backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
         );
       }
       return false;
+    } finally {
+      state = state.copyWith(isLoading: false);
     }
-
-    return false;
   }
 }
