@@ -37,19 +37,38 @@ void main() {
     ),
   ];
 
-  test("should return list of products from datasource", () async {
-    // Arrange
-    when(
-      () => mockProductRepository.getProducts(),
-    ).thenAnswer((_) async => DataSuccess(productList));
+  group("ProductUseCase Test-", () {
+    test("should return list of products from datasource", () async {
+      // Arrange
+      when(
+            () => mockProductRepository.getProducts(),
+      ).thenAnswer((_) async => DataSuccess(productList));
 
-    // Act
-    final result = await getProductUseCase();
+      // Act
+      final result = await getProductUseCase();
 
-    //assert
-    expect(result, isA<DataState<List<ProductEntity>>>());
-    expect(result.data, equals(productList));
-    verify(() => mockProductRepository.getProducts()).called(1);
-    verifyNoMoreInteractions(mockProductRepository);
+      //assert
+      expect(result, isA<DataState<List<ProductEntity>>>());
+      expect(result.data, equals(productList));
+      verify(() => mockProductRepository.getProducts()).called(1);
+      verifyNoMoreInteractions(mockProductRepository);
+    });
+
+    test("should return DataFailed when repository throw exception", () async {
+      // Arrange
+
+      when(() => mockProductRepository.getProducts()).thenAnswer((_) async =>
+          DataFailed(Exception("DB Error")));
+
+      // Act
+
+      final result = await getProductUseCase();
+
+      // assert
+      expect(result, isA<DataFailed<List<ProductEntity>>>());
+      expect(result.error, isA<Exception>());
+      verify(() => mockProductRepository.getProducts()).called(1);
+    });
+    
   });
 }

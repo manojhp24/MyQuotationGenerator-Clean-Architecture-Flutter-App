@@ -15,7 +15,7 @@ import 'package:my_quotation_generator/features/settings/presentation/widgets/se
 import '../../../business/domain/entities/business.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
-  SettingsPage({super.key});
+  const SettingsPage({super.key});
 
   @override
   ConsumerState<SettingsPage> createState() => _SettingsPageState();
@@ -83,10 +83,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   if (context.mounted) {
                     showCustomSnackBar(
                       context,
+                        durationSeconds: 2,
                       message: path != null
                           ? "Backup saved."
                           : "Backup failed.",
                       isSuccess: path != null,
+                        backgroundColor: AppColors.darkGrey2
                     );
                   }
                 } catch (e) {
@@ -97,6 +99,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       message: "Backup failed.",
                       isSuccess: false,
                       backgroundColor: AppColors.darkGrey2,
+                        durationSeconds: 2
                     );
                   }
                 }
@@ -112,17 +115,24 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 final restored = await backupHelper.restoreDataBase();
                 if (restored) {
                   ref.read(customerNotifierProvider.notifier).fetchCustomer();
-                  showCustomSnackBar(
-                    context,
-                    message: "Database restored.",
-                    isSuccess: true,
-                  );
+                  if (context.mounted) {
+                    showCustomSnackBar(
+                        context,
+                        message: "Database restored.",
+                        isSuccess: true,
+                        backgroundColor: AppColors.darkGrey2,
+                        durationSeconds: 2
+                    );
+                  }
                 } else {
-                  showCustomSnackBar(
-                    context,
-                    message: "Restore failed.",
-                    isSuccess: false,
-                  );
+                  if (context.mounted) {
+                    showCustomSnackBar(
+                        context,
+                        message: "Restore failed.",
+                        isSuccess: false,
+                        durationSeconds: 2
+                    );
+                  }
                 }
               },
               title: AppStrings.restore,
@@ -160,7 +170,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                             final success = await backupHelper
                                 .deleteDataBaseFile();
 
-                            if (success) {
+                            if (success == true && context.mounted) {
                               ref
                                   .read(customerNotifierProvider.notifier)
                                   .clearCustomers();
@@ -168,14 +178,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               showCustomSnackBar(
                                 context,
                                 message: "Database deleted successfully.",
-                                isSuccess: true,
+                                  isSuccess: true,
+                                  backgroundColor: AppColors.darkGrey2,
+                                  durationSeconds: 2
                               );
                             } else {
-                              showCustomSnackBar(
-                                context,
-                                message: "Failed to delete database.",
-                                isSuccess: false,
-                              );
+                              if (context.mounted) {
+                                showCustomSnackBar(
+                                    context,
+                                    message: "Database not exist.",
+                                    isSuccess: false,
+                                    backgroundColor: AppColors.darkGrey2,
+                                    durationSeconds: 2
+
+                                );
+                              }
                             }
                           },
                         ),

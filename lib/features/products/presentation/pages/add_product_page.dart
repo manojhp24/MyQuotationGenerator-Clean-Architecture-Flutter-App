@@ -5,8 +5,8 @@ import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 
-import '../widgets/product_form.dart';
-import '../widgets/product_form_button.dart';
+import '../widgets/form/product_form.dart';
+import '../widgets/form/product_form_button.dart';
 
 class AddProductPage extends ConsumerWidget {
   const AddProductPage({super.key});
@@ -22,7 +22,7 @@ class AddProductPage extends ConsumerWidget {
           AppStrings.productAppBarTitle,
         ),
       ),
-      body: ProductForm(notifier: notifier),
+      body: ProductForm(isUpdate: false,),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(AppSizes.lg(context)),
         child: ProductFormButton(
@@ -32,7 +32,7 @@ class AddProductPage extends ConsumerWidget {
               if (context.mounted) context.pop(true);
             }
           },
-          label: AppStrings.productListAppBarTitle,
+          label: AppStrings.productAppBarTitle,
           isLoading: state.isLoading,),
       ),
     );

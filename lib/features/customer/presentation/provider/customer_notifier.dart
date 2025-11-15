@@ -70,7 +70,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: CustomerMessages.requiredFields.message,
           isSuccess: false,
-          durationSeconds: 3,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 2,
         );
       }
       return false;
@@ -109,7 +110,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
             context,
             message: CustomerMessages.addSuccess.message,
             isSuccess: true,
-            durationSeconds: 3,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 2,
           );
         }
 
@@ -121,7 +123,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
             message:
                 result.error?.toString() ?? CustomerMessages.saveError.message,
             isSuccess: false,
-            durationSeconds: 3,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 2,
           );
         }
         return false;
@@ -133,7 +136,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: "Unexpected error: $e",
           isSuccess: false,
-          durationSeconds: 3,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 2,
         );
       }
 
@@ -164,7 +168,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: CustomerMessages.requiredFields.message,
           isSuccess: false,
-          durationSeconds: 3,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 2,
         );
       }
       return false;
@@ -195,7 +200,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
             context,
             message: CustomerMessages.updateSuccess.message,
             isSuccess: true,
-            durationSeconds: 3,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 2,
           );
         }
         return true;
@@ -207,7 +213,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
                 result.error?.toString() ??
                 CustomerMessages.updateError.message,
             isSuccess: false,
-            durationSeconds: 3,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 2,
           );
         }
         return false;
@@ -219,7 +226,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: "Unexpected error: $e",
           isSuccess: false,
-          durationSeconds: 3,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 2,
         );
       }
       return false;
@@ -242,7 +250,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
             context,
             message: CustomerMessages.deleteSuccess.message,
             isSuccess: true,
-            durationSeconds: 3,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 2,
           );
         }
         return true;
@@ -254,7 +263,8 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
                 result.error?.toString() ??
                 CustomerMessages.deleteError.message,
             isSuccess: false,
-            durationSeconds: 3,
+            backgroundColor: AppColors.darkGrey2,
+            durationSeconds: 2,
           );
         }
         return false;
@@ -267,13 +277,42 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: "Unexpected error: $e",
           isSuccess: false,
-          durationSeconds: 3,
+          backgroundColor: AppColors.darkGrey2,
+          durationSeconds: 2,
         );
       }
       return false;
     } finally {
       state = state.copyWith(isLoading: false);
     }
+  }
+
+  void initializeForm({required bool isUpdate, CustomerEntity? customer}) {
+    if (isUpdate && customer != null) {
+      customerNameController.text = customer.customerName ?? '';
+      emailController.text = customer.email ?? '';
+      mobileNumberController.text = customer.mobile ?? '';
+      address1Controller.text = customer.address1 ?? '';
+      address2Controller.text = customer.address2 ?? '';
+      otherInfoController.text = customer.otherInfo ?? '';
+      gstInController.text = customer.gstIn ?? '';
+      stateController.text = customer.state ?? '';
+      shippingAddressController.text = customer.shippingAddress ?? '';
+    } else {
+      clearForm();
+    }
+  }
+
+  void clearForm() {
+    customerNameController.clear();
+    emailController.clear();
+    mobileNumberController.clear();
+    address1Controller.clear();
+    address2Controller.clear();
+    otherInfoController.clear();
+    gstInController.clear();
+    stateController.clear();
+    shippingAddressController.clear();
   }
 
   void clearCustomers() {

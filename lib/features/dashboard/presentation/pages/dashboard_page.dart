@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../widgets/sections/dashboard_app_bar.dart';
 import '../widgets/sections/quick_action_section.dart';
@@ -18,7 +19,9 @@ class DashboardPage extends StatelessWidget {
             DashboardAppBar(),
 
             /// Stats Grid
-            StatsSection(),
+            Consumer(builder: (context, ref, _) {
+              return StatsSection();
+            }),
 
             ///Quick Actions
             QuickActionSection(),

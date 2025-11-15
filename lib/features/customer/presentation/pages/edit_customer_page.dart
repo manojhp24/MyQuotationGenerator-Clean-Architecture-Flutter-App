@@ -9,7 +9,7 @@ import '../provider/customer_provider.dart';
 import '../widgets/card/customer_alert_dialog.dart';
 import '../widgets/forms/customer_form.dart';
 import '../widgets/forms/customer_form_button.dart';
-import '../widgets/forms/customer_remove_button.dart'; // <-- Import your custom button
+import '../widgets/forms/customer_remove_button.dart';
 
 class EditCustomerPage extends ConsumerWidget {
   final CustomerEntity customer;

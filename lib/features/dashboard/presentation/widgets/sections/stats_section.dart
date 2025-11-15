@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/features/dashboard/presentation/widgets/stats_card.dart';
+import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 
 import '../../../../../config/utils/app_sizes.dart';
 import '../../../../customer/presentation/provider/customer_provider.dart';
@@ -13,8 +14,10 @@ class StatsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     final customerState = ref.watch(customerNotifierProvider);
+    final productState = ref.watch(productNotifierProvider);
 
     final totalCustomer = customerState.customer.length;
+    final totalProducts = productState.product.length;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -34,7 +37,7 @@ class StatsSection extends ConsumerWidget {
                 Expanded(
                   child: StatsCard(
                     title: "products",
-                    value: "12",
+                    value: "$totalProducts",
                     icon: Icons.shopping_cart,
                   ),
                 ),

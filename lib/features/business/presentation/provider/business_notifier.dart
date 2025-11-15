@@ -5,7 +5,6 @@ import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/get_business_usecase.dart';
-import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 
 import '../../../../config/theme/app_colors.dart';
 import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';

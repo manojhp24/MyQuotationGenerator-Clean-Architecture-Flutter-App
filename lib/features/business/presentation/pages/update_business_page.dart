@@ -16,7 +16,7 @@ class UpdateBusinessPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(businessNotifyProvider.notifier);
+    ref.read(businessNotifyProvider.notifier);
     final state = ref.watch(businessNotifyProvider);
 
     return Scaffold(

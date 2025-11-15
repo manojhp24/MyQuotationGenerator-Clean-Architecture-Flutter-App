@@ -5,12 +5,14 @@ import 'package:my_quotation_generator/core/enums/product_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
+import 'package:my_quotation_generator/features/products/domain/usecases/get_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_state.dart';
 
 import '../../../../config/theme/app_colors.dart';
 
 class ProductNotifier extends StateNotifier<ProductState> {
   final AddProductUseCase addProductUseCase;
+  final GetProductUseCase getProductUseCase;
 
   final productNameController = TextEditingController();
   final priceController = TextEditingController();
@@ -22,7 +24,8 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
   final productNameFocus = FocusNode();
 
-  ProductNotifier(this.addProductUseCase) : super(ProductState());
+  ProductNotifier(this.addProductUseCase, this.getProductUseCase)
+      : super(ProductState());
 
   @override
   void dispose() {
@@ -62,14 +65,13 @@ class ProductNotifier extends StateNotifier<ProductState> {
         hsn: hsnController.text);
     final result = await addProductUseCase(product);
 
-    await Future.delayed(const Duration(seconds: 1));
     if (context.mounted) {
       FocusScope.of(context).requestFocus(productNameFocus);
       showCustomSnackBar(
           context, message: ProductMessages.addSuccess.message,
           isSuccess: true,
           backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 3
+          durationSeconds: 2
       );
 
       state = state.copyWith(isLoading: false);
@@ -99,4 +101,38 @@ class ProductNotifier extends StateNotifier<ProductState> {
     return false;
   }
 
+  Future<void> fetchProduct() async {
+    state = state.copyWith(isLoading: true);
+
+    final result = await getProductUseCase();
+
+    if (result is DataSuccess<List<ProductEntity>>) {
+      final productData = result.data ?? [];
+      state = state.copyWith(product: productData, isLoading: false);
+    } else if (result is DataFailed<List<ProductEntity>>) {
+      state = state.copyWith(isLoading: false);
+    }
+  }
+
+  void initializeForm({required bool isUpdate, ProductEntity? products}) {
+    if (isUpdate && products != null) {
+      productNameController.text = products.productName;
+      priceController.text = products.price;
+      unitMeasureController.text = products.unitMeasure;
+      gstController.text = products.gst;
+      descriptionController.text = products.description;
+      hsnController.text = products.hsn;
+    } else {
+      clearForm();
+    }
+  }
+
+  void clearForm() {
+    productNameController.clear();
+    priceController.clear();
+    unitMeasureController.clear();
+    gstController.clear();
+    descriptionController.clear();
+    hsnController.clear();
+  }
 }

@@ -44,7 +44,7 @@ class BusinessLocalDataSource {
       );
 
       return result;
-    } catch (e, stackTrace) {
+    } catch (e) {
       rethrow;
     }
   }

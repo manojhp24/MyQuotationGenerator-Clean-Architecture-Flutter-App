@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/core/common/validators/input_validators.dart';
+import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_notifier.dart';
+import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 
-import '../../../../config/constants/app_strings.dart';
-import '../../../../config/utils/app_sizes.dart';
-import '../../../../core/common/widgets/form_text_field.dart';
+import '../../../../../config/constants/app_strings.dart';
+import '../../../../../config/utils/app_sizes.dart';
+import '../../../../../core/common/widgets/form_text_field.dart';
 
-class ProductForm extends StatelessWidget {
-  final ProductNotifier notifier;
+class ProductForm extends ConsumerStatefulWidget {
+  final bool isUpdate;
+  final ProductEntity? products;
 
-  const ProductForm({super.key, required this.notifier});
+  const ProductForm({super.key, this.isUpdate = false, this.products});
+
+  @override
+  ConsumerState<ProductForm> createState() => _ProductFormState();
+}
+
+class _ProductFormState extends ConsumerState<ProductForm> {
+  late final ProductNotifier notifier;
+
+  @override
+  void initState() {
+    notifier = ref.read(productNotifierProvider.notifier);
+    notifier.initializeForm(
+        isUpdate: widget.isUpdate, products: widget.products);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

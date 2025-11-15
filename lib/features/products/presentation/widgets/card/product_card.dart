@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 
 import '../../../../../config/theme/app_colors.dart';
 import '../../../../../config/theme/app_text_styles.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final ProductEntity product;
+
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,7 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Pen",
+                    product.productName,
                     style: AppTextStyle.h3(context)
                   ),
                   const SizedBox(height: 6),
@@ -58,7 +61,7 @@ class ProductCard extends StatelessWidget {
                         color: AppColors.textSecondary,
                       ),
                       Text(
-                        "200",
+                        product.price,
                         style: AppTextStyle.bodyMedium(
                           context,
                         ).copyWith(color: AppColors.textSecondary),

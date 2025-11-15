@@ -46,28 +46,7 @@ class _CustomerFormState extends ConsumerState<CustomerForm> {
     super.initState();
     notifier = ref.read(customerNotifierProvider.notifier);
 
-    if (widget.isUpdate && widget.customer != null) {
-      final c = widget.customer!;
-      notifier.customerNameController.text = c.customerName ?? '';
-      notifier.emailController.text = c.email ?? '';
-      notifier.mobileNumberController.text = c.mobile ?? '';
-      notifier.address1Controller.text = c.address1 ?? '';
-      notifier.address2Controller.text = c.address2 ?? '';
-      notifier.otherInfoController.text = c.otherInfo ?? '';
-      notifier.gstInController.text = c.gstIn ?? '';
-      notifier.stateController.text = c.state ?? '';
-      notifier.shippingAddressController.text = c.shippingAddress ?? '';
-    } else {
-      notifier.customerNameController.clear();
-      notifier.emailController.clear();
-      notifier.mobileNumberController.clear();
-      notifier.address1Controller.clear();
-      notifier.address2Controller.clear();
-      notifier.otherInfoController.clear();
-      notifier.gstInController.clear();
-      notifier.stateController.clear();
-      notifier.shippingAddressController.clear();
-    }
+    notifier.initializeForm(isUpdate: widget.isUpdate,customer: widget.customer);
   }
 
   @override
