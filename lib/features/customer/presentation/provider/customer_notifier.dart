@@ -70,7 +70,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: CustomerMessages.requiredFields.message,
           isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
         );
       }
@@ -110,7 +109,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
             context,
             message: CustomerMessages.addSuccess.message,
             isSuccess: true,
-            backgroundColor: AppColors.darkGrey2,
             durationSeconds: 3,
           );
         }
@@ -123,7 +121,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
             message:
                 result.error?.toString() ?? CustomerMessages.saveError.message,
             isSuccess: false,
-            backgroundColor: AppColors.darkGrey2,
             durationSeconds: 3,
           );
         }
@@ -136,7 +133,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: "Unexpected error: $e",
           isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
         );
       }
@@ -168,7 +164,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: CustomerMessages.requiredFields.message,
           isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
         );
       }
@@ -200,7 +195,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
             context,
             message: CustomerMessages.updateSuccess.message,
             isSuccess: true,
-            backgroundColor: AppColors.darkGrey2,
             durationSeconds: 3,
           );
         }
@@ -213,7 +207,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
                 result.error?.toString() ??
                 CustomerMessages.updateError.message,
             isSuccess: false,
-            backgroundColor: AppColors.darkGrey2,
             durationSeconds: 3,
           );
         }
@@ -226,7 +219,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: "Unexpected error: $e",
           isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
         );
       }
@@ -250,7 +242,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
             context,
             message: CustomerMessages.deleteSuccess.message,
             isSuccess: true,
-            backgroundColor: AppColors.darkGrey2,
             durationSeconds: 3,
           );
         }
@@ -263,7 +254,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
                 result.error?.toString() ??
                 CustomerMessages.deleteError.message,
             isSuccess: false,
-            backgroundColor: AppColors.darkGrey2,
             durationSeconds: 3,
           );
         }
@@ -277,7 +267,6 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
           context,
           message: "Unexpected error: $e",
           isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
           durationSeconds: 3,
         );
       }
@@ -286,4 +275,9 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       state = state.copyWith(isLoading: false);
     }
   }
+
+  void clearCustomers() {
+    state = state.copyWith(customer: []);
+  }
+
 }

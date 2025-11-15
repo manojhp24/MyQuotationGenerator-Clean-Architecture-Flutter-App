@@ -61,5 +61,13 @@ class AppStrings {
   static const String documentSettingsTitle = "Manage Document";
   static const String businessInfoTitle = "Business info";
   static const String business = "Business";
-  static const String businessInfoSubtitle = "Update,Mangage your business info";
+  static const String businessInfoSubtitle = "Update,Manage your business info";
+  static const String backupAndRestore = "Backup & restore";
+  static const String backup = "Backup";
+  static const String backupSubtitle = "Backup your offline data to device storage.";
+  static const String restore = "Restore";
+  static const String restoreSubtitle = "Restore your data from a backup file.";
+
+
+
 }

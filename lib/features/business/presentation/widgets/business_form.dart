@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/core/common/validators/input_validators.dart';
+import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
+import 'package:my_quotation_generator/features/business/presentation/provider/business_provider.dart';
 
 import '../../../../config/constants/app_strings.dart';
 import '../../../../config/utils/app_sizes.dart';
@@ -11,13 +14,59 @@ import '../../../../core/enums/state_enum.dart';
 import '../provider/business_notifier.dart';
 import 'section_title.dart';
 
-class BusinessForm extends StatelessWidget {
+class BusinessForm extends ConsumerStatefulWidget {
   const BusinessForm({
     super.key,
-    required this.notifier,
+    this.business,
+    this.isUpdate = false,
   });
 
-  final BusinessNotifier notifier;
+  final BusinessEntity? business;
+  final bool isUpdate;
+
+  @override
+  ConsumerState<BusinessForm> createState() => _BusinessFormState();
+}
+
+class _BusinessFormState extends ConsumerState<BusinessForm> {
+  late final BusinessNotifier notifier;
+
+  @override
+  void initState() {
+    super.initState();
+    notifier = ref.read(businessNotifyProvider.notifier);
+    if (widget.isUpdate && widget.business != null) {
+      final b = widget.business!;
+      notifier.businessNameController.text = b.businessName ?? '';
+      notifier.contactNameController.text = b.contactName ?? '';
+      notifier.mobileNumberController.text = b.mobileNumber ?? '';
+      notifier.emailController.text = b.email ?? '';
+      notifier.address1Controller.text = b.address1 ?? '';
+      notifier.address2Controller.text = b.address2 ?? '';
+      notifier.otherInfoController.text = b.otherInfo ?? '';
+      notifier.gstInController.text = b.gstIn ?? '';
+      notifier.stateController.text = b.state ?? '';
+      notifier.selectCategoryController.text = b.businessCategory ?? '';
+      notifier.accountNameController.text = b.accountName ?? '';
+      notifier.accountNumberController.text = b.accountNumber ?? '';
+      notifier.bankNameController.text = b.bankName ?? '';
+      notifier.upiIdController.text = b.upiId ?? '';
+    } else {
+      notifier.businessNameController.clear();
+      notifier.contactNameController.clear();
+      notifier.mobileNumberController.clear();
+      notifier.emailController.clear();
+      notifier.address1Controller.clear();
+      notifier.address2Controller.clear();
+      notifier.otherInfoController.clear();
+      notifier.gstInController.clear();
+      notifier.stateController.clear();
+      notifier.selectCategoryController.clear();
+      notifier.accountNameController.clear();
+      notifier.accountNumberController.clear();
+      notifier.upiIdController.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +74,7 @@ class BusinessForm extends StatelessWidget {
       key: notifier.formKey,
       child: Column(
         children: [
+
           /// Business Details Section
           SectionTitle(title: AppStrings.businessDetails),
           SizedBox(height: AppSizes.sectionVertical(context)),
@@ -72,7 +122,7 @@ class BusinessForm extends StatelessWidget {
                 controller: notifier.stateController,
                 validator: (value) =>
                     Validators.requiredField(
-                    "", value, customMessage: "Select State"),
+                        "", value, customMessage: "Select State"),
                 label: AppStrings.state,
                 prefixIcon: Icons.location_city,
                 onTap: () async {
@@ -108,18 +158,19 @@ class BusinessForm extends StatelessWidget {
                 label: AppStrings.contactName,
                 controller: notifier.contactNameController,
                 prefixIcon: Icons.person,
-                validator: (value)=>Validators.requiredField("Name", value),
+                validator: (value) => Validators.requiredField("Name", value),
               ),
               AppFormField(
                 controller: notifier.mobileNumberController,
                 label: AppStrings.mobileNumber,
-                validator: (value)=>Validators.validateMobileNumber("Mobile number", value),
+                validator: (value) =>
+                    Validators.validateMobileNumber("Mobile number", value),
                 keyboardType: TextInputType.numberWithOptions(),
                 maxLength: 13,
                 prefixIcon: Icons.phone,
                 suffixIcon: Icons.contact_page,
-                onSuffixPressed: (){
-                  if(kDebugMode){
+                onSuffixPressed: () {
+                  if (kDebugMode) {
                     print("Button pressed");
                   }
                 },
@@ -128,13 +179,14 @@ class BusinessForm extends StatelessWidget {
                 label: AppStrings.email,
                 controller: notifier.emailController,
                 prefixIcon: Icons.email,
-                
+
               ),
               AppFormField(
                 label: AppStrings.address1,
                 controller: notifier.address1Controller,
                 prefixIcon: Icons.home,
-                validator: (value) => Validators.requiredField("Address 1", value),
+                validator: (value) =>
+                    Validators.requiredField("Address 1", value),
               ),
               AppFormField(
                 label: AppStrings.address2,

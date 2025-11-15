@@ -29,7 +29,7 @@ class AddBusinessPage extends ConsumerWidget {
               if (state.isLoading) LinearProgressIndicator(),
               Expanded(
                 child: SingleChildScrollView(
-                  child: BusinessForm(notifier: notifier),
+                  child: BusinessForm(),
                 ),
               ),
             ],

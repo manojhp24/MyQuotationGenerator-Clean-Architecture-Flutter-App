@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/features/Products/presentation/pages/add_product_page.dart';
+import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/presentation/pages/add_business_page.dart';
 import 'package:my_quotation_generator/features/business/presentation/pages/business_page.dart';
 import 'package:my_quotation_generator/features/business/presentation/pages/update_business_page.dart';
@@ -31,8 +32,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const AddBusinessPage(),
       ),GoRoute(
         path: '/update-business',
-        builder: (context, state) => const UpdateBusinessPage(),
-      ),GoRoute(
+        builder: (context, state) {
+          final business = state.extra;
+          if (business is! BusinessEntity) {
+            throw Exception('BusinessEntity missing when navigating to /update-business');
+          }
+          return UpdateBusinessPage(business: business);
+        },
+      ),
+      GoRoute(
         path: '/customer',
         builder: (context, state) => const CustomerPage(),
       ),GoRoute(
@@ -51,7 +59,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/settings',
-        builder: (context, state) => const SettingsPage(),
+        builder: (context, state) => SettingsPage(),
       ),
     ],
   );

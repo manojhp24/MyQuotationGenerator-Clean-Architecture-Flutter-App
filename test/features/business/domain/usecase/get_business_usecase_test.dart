@@ -64,7 +64,7 @@ void main() {
       final result = await getBusinessUseCase();
 
       // Assert
-      expect(result, isA<DataFailed<int>>());
+      expect(result, isA<DataFailed<List<BusinessEntity>>>());
       expect(result.error, isA<Exception>());
       verify(() => mockBusinessRepository.getBusiness()).called(1);
     });

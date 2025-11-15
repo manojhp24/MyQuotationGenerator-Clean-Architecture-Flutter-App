@@ -3,13 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
+import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/presentation/provider/business_provider.dart';
 
 import '../widgets/business_form.dart';
 import '../widgets/business_form_button.dart';
 
 class UpdateBusinessPage extends ConsumerWidget {
-  const UpdateBusinessPage({super.key});
+  final BusinessEntity business;
+
+  const UpdateBusinessPage({super.key, required this.business});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +32,7 @@ class UpdateBusinessPage extends ConsumerWidget {
               if (state.isLoading) LinearProgressIndicator(),
               Expanded(
                 child: SingleChildScrollView(
-                  child: BusinessForm(notifier: notifier),
+                  child: BusinessForm(isUpdate: true, business: business,),
                 ),
               ),
             ],

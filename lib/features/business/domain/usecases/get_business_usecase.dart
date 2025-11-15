@@ -10,7 +10,7 @@ class GetBusinessUseCase
   GetBusinessUseCase(this._repository);
 
   @override
-  Future<DataState<List<BusinessEntity>>> call([void params]) async {
+  Future<DataState<List<BusinessEntity>>> call([void _]) async {
     try {
       return await _repository.getBusiness();
     } catch (e) {

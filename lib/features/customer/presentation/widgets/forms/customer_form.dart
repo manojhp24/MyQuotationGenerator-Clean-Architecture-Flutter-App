@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/core/common/validators/input_validators.dart';
-import 'package:my_quotation_generator/core/service/contact_picker_helper.dart';
+import 'package:my_quotation_generator/core/helpers/contact_picker_helper.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 

@@ -10,7 +10,7 @@ class GetCustomerUseCase
   GetCustomerUseCase(this._repository);
 
   @override
-  Future<DataState<List<CustomerEntity>>> call([void _]) {
+  Future<DataState<List<CustomerEntity>>> call([void _]) async {
     return _repository.getCustomers();
   }
 }

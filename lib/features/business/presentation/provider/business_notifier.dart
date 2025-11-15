@@ -4,6 +4,8 @@ import 'package:my_quotation_generator/core/enums/business_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
+import 'package:my_quotation_generator/features/business/domain/usecases/get_business_usecase.dart';
+import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 
 import '../../../../config/theme/app_colors.dart';
 import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
@@ -11,6 +13,7 @@ import 'business_state.dart';
 
 class BusinessNotifier extends StateNotifier<BusinessState> {
   final AddBusinessUseCase addBusinessUseCase;
+  final GetBusinessUseCase getBusinessUseCase;
 
   final businessNameController = TextEditingController();
   final selectCategoryController = TextEditingController();
@@ -28,7 +31,8 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
   final upiIdController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  BusinessNotifier(this.addBusinessUseCase) : super(BusinessState());
+  BusinessNotifier(this.addBusinessUseCase, this.getBusinessUseCase)
+    : super(BusinessState());
 
   @override
   void dispose() {
@@ -123,6 +127,31 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
     }
   }
 
+  Future<void> fetchBusiness() async {
+    state = state.copyWith(isLoading: true);
 
+    try {
+      final result = await getBusinessUseCase();
+
+      if (result is DataSuccess<List<BusinessEntity>>) {
+        final business = result.data ?? [];
+        print('✅ Received business list: ${result.data}');
+        state = state.copyWith(
+          businesses: business,
+          isLoading: false,
+          error: null,
+        );
+      } else if (result is DataFailed) {
+        state = state.copyWith(
+          isLoading: false,
+          error: result.error?.toString() ?? 'Something went wrong',
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    } finally {
+      state = state.copyWith(isLoading: false);
+    }
+  }
 }
 
