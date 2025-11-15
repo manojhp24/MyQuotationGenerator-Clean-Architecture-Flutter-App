@@ -1,83 +1,77 @@
 name: my_quotation_generator
-description: "A new Flutter project."
-
-
-publish_to: 'none' 
-
-
+description: A clean architecture Flutter project.
+publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
   sdk: ^3.9.2
 
-
-
-
-
-
-
 dependencies:
   flutter:
     sdk: flutter
 
-  #--------------- STATE MANAGEMENT ---------------#
+  # ------------------------------------------------------------------
+  # STATE MANAGEMENT / CORE
+  # ------------------------------------------------------------------
   flutter_riverpod: ^3.0.3
   equatable: ^2.0.7
   get_it: ^9.0.5
   dartz: ^0.10.1
-  path_provider: ^2.1.5
-  intl: ^0.20.2
+
+  # ------------------------------------------------------------------
+  # NETWORK + REQUESTS
+  # ------------------------------------------------------------------
   dio: ^5.9.0
-  #--------------- STATE MANAGEMENT END ---------------#
 
+  # ------------------------------------------------------------------
+  # FILE SYSTEM & PATH UTILITIES
+  # ------------------------------------------------------------------
+  path_provider: ^2.1.5
+  file_picker: ^10.3.6
+  permission_handler: ^12.0.1
+  saf: ^1.0.4
 
-
-  #--------------- DATA BASE --------------------------#
+  # ------------------------------------------------------------------
+  # DATABASE
+  # ------------------------------------------------------------------
   sqflite: ^2.4.2
   sqlite3_flutter_libs: ^0.5.40
-  #--------------- DATA BASE END -----------------------#
+  sqflite_common_ffi: ^2.3.6
 
-
-
-  #--------------- PDF + File Sharing -----------------#
+  # ------------------------------------------------------------------
+  # PDF / SHARING / FILE EXPORT
+  # ------------------------------------------------------------------
   pdf: ^3.11.3
   printing: ^5.14.2
   share_plus: ^12.0.0
   open_filex: ^4.7.0
-  #---------------- PDF + File Sharing End -------------#
 
-  #------------------ UI Helpers ---------------------- #
+  # ------------------------------------------------------------------
+  # UI / STYLING / ROUTING
+  # ------------------------------------------------------------------
   flutter_svg: ^2.2.1
   google_fonts: ^6.3.2
-  #-------------------- UI Helper End -------------------#
+  go_router: ^17.0.0
 
-  
+  # ------------------------------------------------------------------
+  # CONTACTS / MISC UTILITIES
+  # ------------------------------------------------------------------
+  flutter_contacts: ^1.1.9+2
+  intl: ^0.20.2
 
+  # ------------------------------------------------------------------
+  # TESTING UTILITIES
+  # ------------------------------------------------------------------
+  mocktail: ^1.0.4
 
   cupertino_icons: ^1.0.8
-  sqflite_common_ffi: ^2.3.6
-  go_router: ^17.0.0
-  flutter_contacts: ^1.1.9+2
-  mocktail: ^1.0.4
-  file_picker: ^10.3.6
-  saf: ^1.0.4
-  permission_handler: ^12.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  
-  
-  
-  
-  
   flutter_lints: ^6.0.0
-
-
-
-
 
 flutter:
   uses-material-design: true
