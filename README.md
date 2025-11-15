@@ -1,16 +1,119 @@
-# my_quotation_generator
+# **MyQuotationGenerator – Clean Architecture Flutter App**
 
-A new Flutter project.
+A Flutter-based quotation management application that allows businesses to manage customers, products, and create quotations.  
+Built using **Clean Architecture**, with **Sqflite** as the local database, **Riverpod** for state management, **GoRouter** for routing, and **get_it** for dependency injection.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Features
 
-A few resources to get you started if this is your first Flutter project:
+- Manage **Business Profiles**
+- Manage **Customers**
+- Manage **Products**
+- Create & View **Quotations**
+- Local database using **Sqflite**
+- Modern UI with custom themes
+- Clean Architecture (Data → Domain → Presentation)
+- State management using **Riverpod**
+- Navigation using **GoRouter**
+- Dependency Injection using **get_it**
+- Modular & scalable codebase
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🏗 Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | Flutter, Dart |
+| **State Management** | Riverpod |
+| **Routing** | GoRouter |
+| **Local Database** | Sqflite |
+| **Architecture** | Clean Architecture |
+| **Dependency Injection** | get_it |
+
+---
+
+## 📂 Folder Structure
+
+``` bash
+lib/
+│── app.dart
+│── main.dart
+│
+├── config/
+│ ├── constants/
+│ ├── theme/
+│ ├── utils/
+│
+├── core/
+│ ├── common/
+│ ├── database/
+│ ├── di/
+│ ├── enums/
+│ ├── platform/
+│ ├── resource/
+│ ├── routes/
+│ └── service/
+│
+├── features/
+│ ├── business/
+│ ├── customer/
+│ ├── products/
+│ ├── quotation/
+│ ├── dashboard/
+│ └── settings/
+│
+└── ...
+```
+
+This project follows **Clean Architecture**, divided into:
+
+- **Data Layer** → Models, Local Datasources, Repository Implementations
+- **Domain Layer** → Entities, Repository Interfaces, Use Cases
+- **Presentation Layer** → Pages, Widgets, Providers
+
+---
+
+## 🧠 Architecture
+
+### Clean Architecture Layers
+
+
+- **Domain Layer** contains core business logic (Entities, UseCases).
+- **Data Layer** handles database operations and repository implementations.
+- **Presentation Layer** contains screens, widgets, and Riverpod providers.
+
+This structure ensures the app is **scalable, testable, and easy to maintain**.
+
+---
+
+## 🔌 Dependency Injection
+
+Dependency Injection is handled using **get_it**, initialized in:
+
+
+All repositories, datasources, and use cases are registered here.
+
+---
+
+## 🗄️ Local Database (Sqflite)
+
+Database initialization & table definitions:
+
+
+Local datasources per module:
+
+- `business_local_database.dart`
+- `customer_local_database.dart`
+- `product_local_database.dart`
+
+---
+
+## ▶️ How to Run the Project
+
+### 1. Install dependencies
+```sh
+flutter pub get
+flutter run
+```
