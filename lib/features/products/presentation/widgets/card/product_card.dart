@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 
 import '../../../../../config/theme/app_colors.dart';
@@ -91,7 +92,8 @@ class ProductCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () =>
+                    context.push('/update-product', extra: product),
                 icon: const Icon(
                   Icons.edit_outlined,
                   color: AppColors.primary,

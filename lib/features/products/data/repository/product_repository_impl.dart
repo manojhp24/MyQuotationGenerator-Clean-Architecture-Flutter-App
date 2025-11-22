@@ -43,4 +43,32 @@ class ProductRepositoryImpl implements ProductRepository {
       return DataFailed(Exception("Failed to fetch products $e"));
     }
   }
+
+  @override
+  Future<DataState<int>> updateProduct(ProductEntity product) async {
+    try {
+      if (product.id == null) {
+        return DataFailed<int>(Exception("Product id required for update"));
+      }
+
+      final model = ProductModel.fromEntity(product);
+
+      final rowUpdated = await productLocalDataSource.updateProduct(
+          model.toMap(), product.id!);
+
+      if (rowUpdated > 0) {
+        return DataSuccess<int>(rowUpdated);
+      } else {
+        return DataFailed<int>(Exception("No product found to update"));
+      }
+    } catch (e) {
+      return DataFailed<int>(Exception("Failed to update product."));
+    }
+  }
+
+  @override
+  Future<DataState<int>> deleteProduct(int productId) {
+    // TODO: implement deleteProduct
+    throw UnimplementedError();
+  }
 }

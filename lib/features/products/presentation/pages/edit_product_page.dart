@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
+import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 import 'package:my_quotation_generator/features/products/presentation/widgets/form/product_remove_button.dart';
 
 import '../../../../config/constants/app_strings.dart';
+import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
+import '../../../../core/enums/product_message.dart';
 import '../../../customer/presentation/widgets/card/customer_alert_dialog.dart';
 import '../../../customer/presentation/widgets/forms/customer_form_button.dart';
 import '../widgets/form/product_form.dart';
@@ -21,11 +27,8 @@ class EditProductPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Edit Product")),
-      body: Padding(
-        padding: AppSizes.pagePadding(context),
-        child: SingleChildScrollView(
-          child: ProductForm(isUpdate: true, products: products),
-        ),
+      body: SingleChildScrollView(
+        child: ProductForm(isUpdate: true, products: products),
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(AppSizes.lg(context)), child: Row(
@@ -50,16 +53,37 @@ class EditProductPage extends ConsumerWidget {
             ),
           ),
           SizedBox(width: AppSizes.sm(context)),
-          // Expanded(
-          //   child: CustomerFormButton(
-          //     label: AppStrings.update,
-          //     isLoading: state.isLoading,
-          //     onPressed: () async {
-          //
-          //     },
-          //   ),
-          // ),
-        ],
+            Expanded(
+              child: CustomerFormButton(
+                label: AppStrings.update,
+                onPressed: () async {
+                  notifier.selectedProductId = products.id;
+
+                  final result = await notifier.updateProduct();
+
+                  if (!context.mounted) return;
+
+                  if (result is DataSuccess) {
+                    showCustomSnackBar(
+                      context,
+                      message: ProductMessages.updateSuccess.message,
+                      isSuccess: true,
+                    );
+                    context.pop(true);
+                  } else {
+                    log(result.error.toString());
+                    showCustomSnackBar(
+                      context,
+                      message:
+                          result.error?.toString() ??
+                          ProductMessages.saveError.message,
+                      isSuccess: false,
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
       ),
       ),
     );

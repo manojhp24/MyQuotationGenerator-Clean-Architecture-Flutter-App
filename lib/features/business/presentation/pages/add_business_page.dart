@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
+import 'package:my_quotation_generator/core/common/App_snack_bar/custom_snack_bar.dart';
+import 'package:my_quotation_generator/core/enums/business_message.dart';
+import 'package:my_quotation_generator/core/helpers/business_message_mapper.dart';
+import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/presentation/provider/business_provider.dart';
 
 import '../widgets/business_form.dart';
@@ -36,7 +40,18 @@ class AddBusinessPage extends ConsumerWidget {
           )
       ),
       bottomNavigationBar: BusinessFormButton(
-        onPressed: () => notifier.saveBusiness(context),
+        onPressed: () async {
+          final result = await notifier.saveBusiness(context);
+          if (!context.mounted) return;
+          final isSuccess = result is DataSuccess;
+
+          showCustomSnackBar(
+            context,
+            message: isSuccess
+                ? BusinessMessages.addSuccess.message
+                : mapErrorToBusinessMessage(result.error),
+          );
+        },
         label: AppStrings.addDetails,
       ),
 

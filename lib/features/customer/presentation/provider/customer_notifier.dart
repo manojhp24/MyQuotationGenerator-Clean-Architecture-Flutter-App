@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:my_quotation_generator/core/enums/customer_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 import 'package:my_quotation_generator/features/customer/domain/usecases/add_customer_usecases.dart';
@@ -8,8 +7,6 @@ import 'package:my_quotation_generator/features/customer/domain/usecases/delete_
 import 'package:my_quotation_generator/features/customer/domain/usecases/update_customer_usecase.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_state.dart';
 
-import '../../../../config/theme/app_colors.dart';
-import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
 import '../../domain/usecases/get_customers_usecase.dart';
 
 /// ---------------------------------------------------------------------------
@@ -63,23 +60,13 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
   }
 
   /// Adding Customer
-  Future<bool> saveCustomer(BuildContext context) async {
+  Future<DataState<int>> saveCustomer(BuildContext context) async {
     if (!formKey.currentState!.validate()) {
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: CustomerMessages.requiredFields.message,
-          isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 2,
-        );
-      }
-      return false;
+      state = state.copyWith(error: "Validation Failed");
+      return DataFailed<int>(Exception("Validation Failed"));
     }
 
     state = state.copyWith(isLoading: true);
-
-    try {
       final customer = CustomerEntity(
         customerName: customerNameController.text,
         email: emailController.text,
@@ -95,56 +82,14 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       final result = await addCustomerUseCase(customer);
 
       if (result is DataSuccess<int>) {
-        customerNameController.clear();
-        emailController.clear();
-        mobileNumberController.clear();
-        address1Controller.clear();
-        address2Controller.clear();
-        otherInfoController.clear();
-        gstInController.clear();
-        stateController.clear();
-        shippingAddressController.clear();
-
-        if (context.mounted) {
-          showCustomSnackBar(
-            context,
-            message: CustomerMessages.addSuccess.message,
-            isSuccess: true,
-            backgroundColor: AppColors.darkGrey2,
-            durationSeconds: 2,
-          );
-        }
-
-        return true;
+        clearForm();
       } else if (result is DataFailed<int>) {
-        if (context.mounted) {
-          showCustomSnackBar(
-            context,
-            message:
-                result.error?.toString() ?? CustomerMessages.saveError.message,
-            isSuccess: false,
-            backgroundColor: AppColors.darkGrey2,
-            durationSeconds: 2,
-          );
-        }
-        return false;
-      }
-      return false;
-    } catch (e) {
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: "Unexpected error: $e",
-          isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 2,
+        state = state.copyWith(
+          error: result.error?.toString() ?? "Something went wrong",
         );
       }
-
-      return false;
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
+    state = state.copyWith(isLoading: false);
+    return result;
   }
 
   /// Fetching Customer
@@ -161,24 +106,16 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
   }
 
   /// Update Customer
-  Future<bool> updateCustomer(BuildContext context, int customerId) async {
+  Future<DataState<int>> updateCustomer(BuildContext context,
+      int customerId) async {
     if (!formKey.currentState!.validate()) {
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: CustomerMessages.requiredFields.message,
-          isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 2,
-        );
-      }
-      return false;
+      state = state.copyWith(error: "Validation Error");
+      return DataFailed<int>(Exception("Validation Error"));
     }
 
     state = state.copyWith(isLoading: true);
 
-    try {
-      final customer = CustomerEntity(
+    final customer = CustomerEntity(
         id: customerId,
         customerName: customerNameController.text,
         email: emailController.text,
@@ -195,96 +132,32 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
 
       if (result is DataSuccess<int>) {
         fetchCustomer();
-        if (context.mounted) {
-          showCustomSnackBar(
-            context,
-            message: CustomerMessages.updateSuccess.message,
-            isSuccess: true,
-            backgroundColor: AppColors.darkGrey2,
-            durationSeconds: 2,
-          );
-        }
-        return true;
+        return result;
       } else if (result is DataFailed<int>) {
-        if (context.mounted) {
-          showCustomSnackBar(
-            context,
-            message:
-                result.error?.toString() ??
-                CustomerMessages.updateError.message,
-            isSuccess: false,
-            backgroundColor: AppColors.darkGrey2,
-            durationSeconds: 2,
-          );
-        }
-        return false;
-      }
-      return false;
-    } catch (e) {
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: "Unexpected error: $e",
-          isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 2,
+        state = state.copyWith(
+          error: result.error?.toString() ?? "Something went wrong",
         );
       }
-      return false;
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
+    state = state.copyWith(isLoading: false);
+    return result;
   }
 
   /// Delete Customer
-  Future<bool> deleteCustomer(BuildContext context, int customerId) async {
+  Future<DataState<int>> deleteCustomer(BuildContext context,
+      int customerId) async {
     state = state.copyWith(isLoading: true);
 
-    try {
-      final result = await deleteCustomerUseCase(customerId);
+    final result = await deleteCustomerUseCase(customerId);
 
       if (result is DataSuccess<int>) {
         fetchCustomer();
-        if (context.mounted) {
-          showCustomSnackBar(
-            context,
-            message: CustomerMessages.deleteSuccess.message,
-            isSuccess: true,
-            backgroundColor: AppColors.darkGrey2,
-            durationSeconds: 2,
-          );
-        }
-        return true;
+        return result;
       } else if (result is DataFailed<int>) {
-        if (context.mounted) {
-          showCustomSnackBar(
-            context,
-            message:
-                result.error?.toString() ??
-                CustomerMessages.deleteError.message,
-            isSuccess: false,
-            backgroundColor: AppColors.darkGrey2,
-            durationSeconds: 2,
-          );
-        }
-        return false;
+        state = state.copyWith(
+            error: result.error?.toString() ?? 'Something went wrong');
       }
-
-      return false;
-    } catch (e) {
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: "Unexpected error: $e",
-          isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 2,
-        );
-      }
-      return false;
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
+    state = state.copyWith(isLoading: false);
+    return result;
   }
 
   void initializeForm({required bool isUpdate, CustomerEntity? customer}) {

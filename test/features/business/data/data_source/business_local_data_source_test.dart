@@ -27,7 +27,7 @@ void main() {
   };
 
   setUp(() async {
-    // 🧩 Arrange — create in-memory database
+
     db = await openDatabase(
       inMemoryDatabasePath,
       version: 1,
@@ -67,7 +67,7 @@ void main() {
     final insertId = await dataSource.addBusiness(businessMap);
     expect(insertId, equals(1));
 
-    // Create an updated copy of that record
+
     final updatedMap = Map<String, dynamic>.from(businessMap)
       ..['businessName'] = 'GowriEvents Updated'
       ..['mobileNumber'] = '9876543210'

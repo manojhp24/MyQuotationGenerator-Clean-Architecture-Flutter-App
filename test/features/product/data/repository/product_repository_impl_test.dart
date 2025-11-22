@@ -29,6 +29,16 @@ void main() {
     },
   ];
 
+  final productMap = {
+    'id': 1,
+    'productName': 'Laptop',
+    'price': '50000.0',
+    'unitMeasure': 'pcs',
+    'gst': '18.0',
+    'description': 'High-end laptop',
+    'hsn': '8471',
+  };
+
   final productEntityList = [
     ProductEntity(
       id: 1,
@@ -76,5 +86,60 @@ void main() {
       expect(result.error.toString(), contains("Data base error"));
       verify(() => mockProductLocalDataSource.getProducts()).called(1);
     });
+  });
+
+  test(
+      "should return DataSuccess when local datasource update data successfully", () async {
+    // Arrange
+    when(() => mockProductLocalDataSource.updateProduct(productMap, 1))
+        .thenAnswer((_) async => 1);
+
+    final product = ProductEntity(
+      id: 1,
+      productName: 'Laptop',
+      price: '50000.0',
+      unitMeasure: 'pcs',
+      gst: '18.0',
+      description: 'High-end laptop',
+      hsn: '8471',
+    );
+
+    // Act
+    final result = await repository.updateProduct(product);
+
+    // Assert
+    expect(result, isA<DataSuccess<int>>());
+    expect(result.data, equals(1));
+    verify(() => mockProductLocalDataSource.updateProduct(productMap, 1))
+        .called(1);
+    verifyNoMoreInteractions(mockProductLocalDataSource);
+  });
+
+  test(
+      "should return DataFailed<int> when local datasource throws exception", () async {
+    // Arrange
+    when(() => mockProductLocalDataSource.updateProduct(productMap, 1))
+        .thenThrow(Exception("DB Error"));
+    final product = ProductEntity(
+      id: 1,
+      productName: 'Laptop',
+      price: '50000.0',
+      unitMeasure: 'pcs',
+      gst: '18.0',
+      description: 'High-end laptop',
+      hsn: '8471',
+    );
+    //  Act
+
+    final result = await repository.updateProduct(product);
+
+    // Assert
+
+    expect(result, isA<DataFailed<int>>());
+    expect(result.error, isA<Exception>());
+    expect(result.error.toString(), contains("Failed to update product."));
+    verify(() => mockProductLocalDataSource.updateProduct(productMap, 1))
+        .called(1);
+    verifyNoMoreInteractions(mockProductLocalDataSource);
   });
 }

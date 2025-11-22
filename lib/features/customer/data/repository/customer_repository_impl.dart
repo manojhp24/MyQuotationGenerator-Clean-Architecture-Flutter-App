@@ -18,7 +18,6 @@ class CustomerRepositoryImpl implements CustomerRepository{
       final id = await localDataSource.addCustomer(model.toMap());
       return DataSuccess<int>(id);
     } catch (e) {
-      print(e.toString());
       return DataFailed<int>(e is Exception ? e : Exception(e.toString()));
 
     }

@@ -6,6 +6,7 @@ enum BusinessMessages {
   saveError,
   invalidInput,
   requiredFields,
+  unknownError,
 }
 
 extension BusinessMessagesExtension on BusinessMessages {
@@ -25,6 +26,8 @@ extension BusinessMessagesExtension on BusinessMessages {
         return "Please check your input and try again.";
       case BusinessMessages.requiredFields:
         return "Please fill in all required fields.";
+      case BusinessMessages.unknownError:
+        return "Something went wrong. Please try again";
     }
   }
 }

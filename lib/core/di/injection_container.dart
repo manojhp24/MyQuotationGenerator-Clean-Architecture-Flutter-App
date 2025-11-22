@@ -20,6 +20,7 @@ import 'package:my_quotation_generator/features/products/data/repository/product
 import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/get_product_usecase.dart';
+import 'package:my_quotation_generator/features/products/domain/usecases/update_product_usecase.dart';
 
 // Global helpers locator instance (GetIt)
 final sl = GetIt.instance;
@@ -49,4 +50,5 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl(sl()));
   sl.registerLazySingleton(() => AddProductUseCase(sl()));
   sl.registerLazySingleton(() => GetProductUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateProductUseCase(sl()));
 }

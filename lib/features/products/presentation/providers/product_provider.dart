@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/get_product_usecase.dart';
+import 'package:my_quotation_generator/features/products/domain/usecases/update_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_notifier.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_state.dart';
 
@@ -22,9 +23,16 @@ final getProductUseCaseProvider = Provider<GetProductUseCase>((ref) {
   return GetProductUseCase(repository);
 });
 
+final updateProductUseCaseProvider = Provider<UpdateProductUseCase>((ref) {
+  final repository = ref.read(productRepositoryProvider);
+  return UpdateProductUseCase(repository);
+});
+
 final productNotifierProvider =
     StateNotifierProvider<ProductNotifier, ProductState>((ref) {
       final addProductUseCase = ref.read(addProductUseCaseProvider);
       final getProductUseCase = ref.read(getProductUseCaseProvider);
-      return ProductNotifier(addProductUseCase, getProductUseCase);
+      final updateProductUseCase = ref.read(updateProductUseCaseProvider);
+      return ProductNotifier(
+          addProductUseCase, getProductUseCase, updateProductUseCase);
     });

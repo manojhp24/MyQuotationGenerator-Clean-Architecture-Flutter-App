@@ -35,54 +35,51 @@ class _ProductFormState extends ConsumerState<ProductForm> {
     return Padding(
       padding: AppSizes.pagePadding(context),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Form(
-                key: notifier.formKey,
-                child: Column(
-                  children: [
-                    AppFormField(
-                      focusNode: notifier.productNameFocus,
-                      label: AppStrings.productName,
-                      controller: notifier.productNameController,
-                      validator: (value) =>
-                          Validators.requiredField("Product name", value),
-                    ),
-                    AppFormField(
-                      label: AppStrings.productPrice,
-                      keyboardType: TextInputType.numberWithOptions(),
-                      controller: notifier.priceController,
-                      validator: (value) =>
-                          Validators.requiredField("Price", value),
-                    ),
-                    AppFormField(
-                      label: AppStrings.unitMeasure,
-                      controller: notifier.unitMeasureController,
-                      validator: (value) =>
-                          Validators.requiredField("Unit Measure", value),
-                    ),
-                    AppFormField(
-                      label: AppStrings.productGST,
-                      suffixIcon: Icons.percent,
-                      keyboardType: TextInputType.numberWithOptions(),
-                      controller: notifier.gstController,
-                    ),
-                    AppFormField(
-                      label: "Description",
-                      alignLabelWithHint: true,
-                      maxLines: 5,
-                      controller: notifier.descriptionController,
-                    ),
-                    AppFormField(
-                      label: AppStrings.productHsn,
-                      controller: notifier.hsnController,
-                    ),
-                  ],
-                ),
+            Form(
+              key: notifier.formKey,
+              child: Column(
+                children: [
+                  AppFormField(
+                    focusNode: notifier.productNameFocus,
+                    label: AppStrings.productName,
+                    controller: notifier.productNameController,
+                    validator: (value) =>
+                        Validators.requiredField("Product name", value),
+                  ),
+                  AppFormField(
+                    label: AppStrings.productPrice,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    controller: notifier.priceController,
+                    validator: (value) =>
+                        Validators.requiredField("Price", value),
+                  ),
+                  AppFormField(
+                    label: AppStrings.unitMeasure,
+                    controller: notifier.unitMeasureController,
+                    validator: (value) =>
+                        Validators.requiredField("Unit Measure", value),
+                  ),
+                  AppFormField(
+                    label: AppStrings.productGST,
+                    suffixIcon: Icons.percent,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    controller: notifier.gstController,
+                  ),
+                  AppFormField(
+                    label: "Description",
+                    alignLabelWithHint: true,
+                    maxLines: 5,
+                    controller: notifier.descriptionController,
+                  ),
+                  AppFormField(
+                    label: AppStrings.productHsn,
+                    controller: notifier.hsnController,
+                  ),
+                ],
               ),
             ),
-          ),
         ],
       ),
     );

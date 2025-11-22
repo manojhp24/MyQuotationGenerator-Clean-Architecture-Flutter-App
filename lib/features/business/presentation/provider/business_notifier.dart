@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:my_quotation_generator/core/enums/business_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/get_business_usecase.dart';
 
-import '../../../../config/theme/app_colors.dart';
-import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
 import 'business_state.dart';
 
 class BusinessNotifier extends StateNotifier<BusinessState> {
@@ -52,77 +49,45 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
     super.dispose();
   }
 
-  Future<void> saveBusiness(BuildContext context) async {
-
-    if(!formKey.currentState!.validate()){
-      if(context.mounted){
-        showCustomSnackBar(
-          context,
-          message: BusinessMessages.requiredFields.message,
-          isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 3,
-        );
-      }
-      return;
+  Future<DataState<int>> saveBusiness(BuildContext context) async {
+    if (!formKey.currentState!.validate()) {
+      return DataFailed<int>(Exception("Validation Failed"));
     }
 
     state = state.copyWith(isLoading: true);
 
-    final business = BusinessEntity(
-      businessName: businessNameController.text,
-      businessCategory: selectCategoryController.text,
-      gstIn: gstInController.text,
-      state: stateController.text,
-      otherInfo: otherInfoController.text,
-      contactName: contactNameController.text,
-      mobileNumber: mobileNumberController.text,
-      email: emailController.text,
-      address1: address1Controller.text,
-      address2: address2Controller.text,
-      accountName: accountNameController.text,
-      accountNumber: accountNumberController.text,
-      bankName: bankNameController.text,
-      upiId: upiIdController.text,
-    );
-
-    final result = await addBusinessUseCase(business);
-
-    if (result is DataSuccess<int>) {
-      state = state.copyWith(isLoading: false, error: null);
-
-
-      businessNameController.clear();
-      selectCategoryController.clear();
-      gstInController.clear();
-      stateController.clear();
-      otherInfoController.clear();
-      contactNameController.clear();
-      mobileNumberController.clear();
-      emailController.clear();
-      address1Controller.clear();
-      address2Controller.clear();
-      accountNameController.clear();
-      accountNumberController.clear();
-      bankNameController.clear();
-      upiIdController.clear();
-
-
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: BusinessMessages.addSuccess.message,
-          isSuccess: true,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 3,
-        );
-      }
-
-    } else if (result is DataFailed<int>) {
-      state = state.copyWith(
-        isLoading: false,
-        error: result.error?.toString() ?? "Unknown Message",
+    try {
+      final business = BusinessEntity(
+        businessName: businessNameController.text,
+        businessCategory: selectCategoryController.text,
+        gstIn: gstInController.text,
+        state: stateController.text,
+        otherInfo: otherInfoController.text,
+        contactName: contactNameController.text,
+        mobileNumber: mobileNumberController.text,
+        email: emailController.text,
+        address1: address1Controller.text,
+        address2: address2Controller.text,
+        accountName: accountNameController.text,
+        accountNumber: accountNumberController.text,
+        bankName: bankNameController.text,
+        upiId: upiIdController.text,
       );
+
+      final result = await addBusinessUseCase(business);
+
+      if (result is DataSuccess<int>) {
+        clearForm();
+      } else if (result is DataFailed<int>) {
+        state = state.copyWith(error: result.error?.toString());
+      }
+      return result;
+    } catch (e) {
+      final ex = e is Exception ? e : Exception(e.toString());
+      state = state.copyWith(error: ex.toString());
+      return DataFailed<int>(ex);
+    } finally {
+      state = state.copyWith(isLoading: false);
     }
   }
 
@@ -134,7 +99,6 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
 
       if (result is DataSuccess<List<BusinessEntity>>) {
         final business = result.data ?? [];
-        print('✅ Received business list: ${result.data}');
         state = state.copyWith(
           businesses: business,
           isLoading: false,
@@ -151,6 +115,43 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
     } finally {
       state = state.copyWith(isLoading: false);
     }
+  }
+
+  void initializeForm({required bool isUpdate, BusinessEntity? business}) {
+    if (isUpdate && business != null) {
+      businessNameController.text = business.businessName ?? '';
+      contactNameController.text = business.contactName ?? '';
+      mobileNumberController.text = business.mobileNumber ?? '';
+      emailController.text = business.email ?? '';
+      address1Controller.text = business.address1 ?? '';
+      address2Controller.text = business.address2 ?? '';
+      otherInfoController.text = business.otherInfo ?? '';
+      gstInController.text = business.gstIn ?? '';
+      stateController.text = business.state ?? '';
+      selectCategoryController.text = business.businessCategory ?? '';
+      accountNameController.text = business.accountName ?? '';
+      accountNumberController.text = business.accountNumber ?? '';
+      bankNameController.text = business.bankName ?? '';
+      upiIdController.text = business.upiId ?? '';
+    } else {
+      clearForm();
+    }
+  }
+
+  void clearForm() {
+    businessNameController.clear();
+    contactNameController.clear();
+    mobileNumberController.clear();
+    emailController.clear();
+    address1Controller.clear();
+    address2Controller.clear();
+    otherInfoController.clear();
+    gstInController.clear();
+    stateController.clear();
+    selectCategoryController.clear();
+    accountNameController.clear();
+    accountNumberController.clear();
+    upiIdController.clear();
   }
 }
 

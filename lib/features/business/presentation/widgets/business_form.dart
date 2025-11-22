@@ -35,37 +35,8 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
   void initState() {
     super.initState();
     notifier = ref.read(businessNotifyProvider.notifier);
-    if (widget.isUpdate && widget.business != null) {
-      final b = widget.business!;
-      notifier.businessNameController.text = b.businessName ?? '';
-      notifier.contactNameController.text = b.contactName ?? '';
-      notifier.mobileNumberController.text = b.mobileNumber ?? '';
-      notifier.emailController.text = b.email ?? '';
-      notifier.address1Controller.text = b.address1 ?? '';
-      notifier.address2Controller.text = b.address2 ?? '';
-      notifier.otherInfoController.text = b.otherInfo ?? '';
-      notifier.gstInController.text = b.gstIn ?? '';
-      notifier.stateController.text = b.state ?? '';
-      notifier.selectCategoryController.text = b.businessCategory ?? '';
-      notifier.accountNameController.text = b.accountName ?? '';
-      notifier.accountNumberController.text = b.accountNumber ?? '';
-      notifier.bankNameController.text = b.bankName ?? '';
-      notifier.upiIdController.text = b.upiId ?? '';
-    } else {
-      notifier.businessNameController.clear();
-      notifier.contactNameController.clear();
-      notifier.mobileNumberController.clear();
-      notifier.emailController.clear();
-      notifier.address1Controller.clear();
-      notifier.address2Controller.clear();
-      notifier.otherInfoController.clear();
-      notifier.gstInController.clear();
-      notifier.stateController.clear();
-      notifier.selectCategoryController.clear();
-      notifier.accountNameController.clear();
-      notifier.accountNumberController.clear();
-      notifier.upiIdController.clear();
-    }
+    notifier.initializeForm(
+        isUpdate: widget.isUpdate, business: widget.business);
   }
 
   @override

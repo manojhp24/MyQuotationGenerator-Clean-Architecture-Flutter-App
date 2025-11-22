@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
+import 'package:my_quotation_generator/config/theme/app_colors.dart';
+import 'package:my_quotation_generator/core/common/App_snack_bar/custom_snack_bar.dart';
+import 'package:my_quotation_generator/core/enums/customer_message.dart';
+import 'package:my_quotation_generator/core/resource/data_state.dart';
 
 import '../../../../config/utils/app_sizes.dart';
 import '../../domain/entities/customer.dart';
@@ -49,13 +53,20 @@ class EditCustomerPage extends ConsumerWidget {
                       message: AppStrings.deleteMessage,
                       onPressed: () async {
                         Navigator.pop(context);
-                        final success = await notifier.deleteCustomer(
+                        final result = await notifier.deleteCustomer(
                           context,
                           customer.id!,
                         );
-                        if (success) {
-                          if (context.mounted) context.pop(true);
-                        }
+                        if (!context.mounted) return;
+                        final isDeleted = result is DataSuccess;
+                        showCustomSnackBar(context,
+                            message: isDeleted ? CustomerMessages.deleteSuccess
+                                .message : CustomerMessages.deleteError.message,
+                          durationSeconds: 2,
+                          backgroundColor: AppColors.darkGrey2
+                        );
+                        if (isDeleted) context.pop(true);
+
                       },
                     );
                   },
@@ -69,13 +80,19 @@ class EditCustomerPage extends ConsumerWidget {
               label: AppStrings.update,
               isLoading: state.isLoading,
               onPressed: () async {
-                final success = await notifier.updateCustomer(
+                final result = await notifier.updateCustomer(
                   context,
                   customer.id!,
                 );
-                if (success) {
-                  if (context.mounted) context.pop(true);
-                }
+                if (!context.mounted) return;
+                final isSuccess = result is DataSuccess;
+                showCustomSnackBar(context, message: isSuccess
+                    ? CustomerMessages.updateSuccess.message
+                    : CustomerMessages.updateError.message,
+                    backgroundColor: AppColors.darkGrey2,
+                    durationSeconds: 2
+                );
+                if (isSuccess) context.pop(true);
               },
             ),
           ),

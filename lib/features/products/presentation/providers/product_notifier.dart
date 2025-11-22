@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:my_quotation_generator/core/common/App_snack_bar/custom_snack_bar.dart';
-import 'package:my_quotation_generator/core/enums/product_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/get_product_usecase.dart';
+import 'package:my_quotation_generator/features/products/domain/usecases/update_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_state.dart';
-
-import '../../../../config/theme/app_colors.dart';
 
 class ProductNotifier extends StateNotifier<ProductState> {
   final AddProductUseCase addProductUseCase;
   final GetProductUseCase getProductUseCase;
+  final UpdateProductUseCase updateProductUseCase;
 
   final productNameController = TextEditingController();
   final priceController = TextEditingController();
@@ -24,7 +22,10 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
   final productNameFocus = FocusNode();
 
-  ProductNotifier(this.addProductUseCase, this.getProductUseCase)
+  int? selectedProductId;
+
+  ProductNotifier(this.addProductUseCase, this.getProductUseCase,
+      this.updateProductUseCase)
       : super(ProductState());
 
   @override
@@ -40,65 +41,87 @@ class ProductNotifier extends StateNotifier<ProductState> {
   }
 
   /// Save Products
-  Future<bool> saveProduct(BuildContext context) async {
+  Future<DataState<int>> saveProduct() async {
     if (!formKey.currentState!.validate()) {
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: "Fill required fields!",
-          isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 3,
-        );
-      }
-      return false;
+      state = state.copyWith(error: "Validation failed");
+      return DataFailed<int>(Exception("Validation failed"));
     }
 
     state = state.copyWith(isLoading: true);
 
-    final product = ProductEntity(
+    try {
+      final product = ProductEntity(
         productName: productNameController.text,
         price: priceController.text,
         unitMeasure: unitMeasureController.text,
         gst: gstController.text,
         description: descriptionController.text,
-        hsn: hsnController.text);
-    final result = await addProductUseCase(product);
-
-    if (context.mounted) {
-      FocusScope.of(context).requestFocus(productNameFocus);
-      showCustomSnackBar(
-          context, message: ProductMessages.addSuccess.message,
-          isSuccess: true,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 2
+        hsn: hsnController.text,
       );
+
+      final result = await addProductUseCase(product);
+
+      if (result is DataSuccess<int>) {
+        productNameController.clear();
+        priceController.clear();
+        unitMeasureController.clear();
+        gstController.clear();
+        descriptionController.clear();
+        hsnController.clear();
+      }
+
+      return result;
+    } catch (e) {
+      final ex = e is Exception ? e : Exception(e.toString());
+      state = state.copyWith(error: ex.toString());
+      return DataFailed<int>(e is Exception ? e : Exception(e.toString()));
+    } finally {
+      state = state.copyWith(isLoading: false);
+    }
+  }
+
+
+  Future<DataState<int>> updateProduct() async {
+    if (!formKey.currentState!.validate()) {
+      return DataFailed<int>(Exception("Validation error"));
+    }
+
+    state = state.copyWith(isLoading: true);
+
+    try {
+
+      if (selectedProductId == null) {
+        return DataFailed<int>(Exception("Product id required for update"));
+      }
+
+      final product = ProductEntity(
+        id: selectedProductId,
+        productName: productNameController.text,
+        price: priceController.text,
+        unitMeasure: unitMeasureController.text,
+        gst: gstController.text,
+        description: descriptionController.text,
+        hsn: hsnController.text,);
+
+      final result = await updateProductUseCase(product);
 
       state = state.copyWith(isLoading: false);
 
-    if (result is DataSuccess<int>) {
-      productNameController.clear();
-      priceController.clear();
-      unitMeasureController.clear();
-      gstController.clear();
-      descriptionController.clear();
-      hsnController.clear();
+      if (result is DataSuccess) {
+        productNameController.clear();
+        priceController.clear();
+        unitMeasureController.clear();
+        gstController.clear();
+        descriptionController.clear();
+        hsnController.clear();
+      }
 
-      return true;
-      } else if (result is DataFailed<int>) {
-      if (context.mounted) {
-        showCustomSnackBar(
-          context,
-          message: result.error?.toString() ?? "Failed to save products",
-          isSuccess: false,
-          backgroundColor: AppColors.darkGrey2,
-          durationSeconds: 3,
-        );
-      }
-        return false;
-      }
+      return result;
+    } catch (e) {
+      return DataFailed<int>(e is Exception ? e : Exception(e.toString()));
+    } finally {
+      state = state.copyWith(isLoading: false);
     }
-    return false;
   }
 
   Future<void> fetchProduct() async {

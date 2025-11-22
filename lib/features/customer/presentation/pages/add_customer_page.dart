@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
+import 'package:my_quotation_generator/config/theme/app_colors.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
+import 'package:my_quotation_generator/core/common/App_snack_bar/custom_snack_bar.dart';
+import 'package:my_quotation_generator/core/enums/customer_message.dart';
+import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 
 import '../widgets/forms/customer_form.dart';
@@ -35,10 +39,17 @@ class AddCustomerPage extends ConsumerWidget {
         padding: EdgeInsets.all(AppSizes.lg(context)),
         child: CustomerFormButton(
           onPressed: () async {
-            final isSaved = await notifier.saveCustomer(context);
-            if (isSaved) {
-              if (context.mounted) context.pop(true);
-            }
+            final result = await notifier.saveCustomer(context);
+            if (!context.mounted) return;
+
+            final isSuccess = result is DataSuccess;
+            showCustomSnackBar(context, message: isSuccess
+                ? CustomerMessages.addSuccess.message
+                : CustomerMessages.saveError.message,
+                backgroundColor: AppColors.darkGrey2,
+                durationSeconds: 2
+            );
+            if (isSuccess) context.pop(true);
           },
 
           label: AppStrings.addCustomerDetails,
