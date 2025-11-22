@@ -60,6 +60,7 @@ class _CustomerPageState extends ConsumerState<CustomerPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         onPressed: () async {
+          ScaffoldMessenger.of(context).clearSnackBars();
           final result = await context.push('/add-customer');
           if (result == true) {
             ref.read(customerNotifierProvider.notifier).fetchCustomer();

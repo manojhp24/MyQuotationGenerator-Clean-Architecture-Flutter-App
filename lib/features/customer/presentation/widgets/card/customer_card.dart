@@ -97,7 +97,10 @@ class CustomerCard extends StatelessWidget {
               color: AppColors.primary,
               size: 20,
             ),
-            onPressed: () => context.push('/edit-customer', extra: customer),
+            onPressed: () {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              context.push('/edit-customer', extra: customer);
+            },
           ),
         ),
       ),

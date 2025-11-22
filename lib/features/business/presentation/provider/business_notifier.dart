@@ -56,8 +56,7 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
 
     state = state.copyWith(isLoading: true);
 
-    try {
-      final business = BusinessEntity(
+    final business = BusinessEntity(
         businessName: businessNameController.text,
         businessCategory: selectCategoryController.text,
         gstIn: gstInController.text,
@@ -79,25 +78,21 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
       if (result is DataSuccess<int>) {
         clearForm();
       } else if (result is DataFailed<int>) {
-        state = state.copyWith(error: result.error?.toString());
+        state = state.copyWith(
+            error: result.error?.toString() ?? "Something went wrong");
       }
-      return result;
-    } catch (e) {
-      final ex = e is Exception ? e : Exception(e.toString());
-      state = state.copyWith(error: ex.toString());
-      return DataFailed<int>(ex);
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
+
+    state = state.copyWith(isLoading: false);
+    return result;
+
   }
 
   Future<void> fetchBusiness() async {
     state = state.copyWith(isLoading: true);
 
-    try {
-      final result = await getBusinessUseCase();
+    final result = await getBusinessUseCase();
 
-      if (result is DataSuccess<List<BusinessEntity>>) {
+    if (result is DataSuccess<List<BusinessEntity>>) {
         final business = result.data ?? [];
         state = state.copyWith(
           businesses: business,
@@ -110,11 +105,6 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
           error: result.error?.toString() ?? 'Something went wrong',
         );
       }
-    } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
   }
 
   void initializeForm({required bool isUpdate, BusinessEntity? business}) {

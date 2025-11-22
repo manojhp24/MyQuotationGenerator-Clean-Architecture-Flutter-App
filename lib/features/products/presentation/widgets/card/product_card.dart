@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 
 import '../../../../../config/theme/app_colors.dart';
 import '../../../../../config/theme/app_text_styles.dart';
+import '../../providers/product_provider.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends ConsumerWidget {
   final ProductEntity product;
 
   const ProductCard({super.key, required this.product});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -92,8 +94,14 @@ class ProductCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
-                onPressed: () =>
-                    context.push('/update-product', extra: product),
+                onPressed: () async {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  final result = await context.push(
+                      '/update-product', extra: product);
+                  if (result == true) {
+                    ref.read(productNotifierProvider.notifier).fetchProduct();
+                  }
+                },
                 icon: const Icon(
                   Icons.edit_outlined,
                   color: AppColors.primary,

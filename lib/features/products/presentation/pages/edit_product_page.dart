@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_quotation_generator/config/theme/app_colors.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
@@ -60,26 +59,17 @@ class EditProductPage extends ConsumerWidget {
                   notifier.selectedProductId = products.id;
 
                   final result = await notifier.updateProduct();
-
                   if (!context.mounted) return;
+                  final isUpdated = result is DataSuccess;
 
-                  if (result is DataSuccess) {
-                    showCustomSnackBar(
-                      context,
-                      message: ProductMessages.updateSuccess.message,
-                      isSuccess: true,
-                    );
-                    context.pop(true);
-                  } else {
-                    log(result.error.toString());
-                    showCustomSnackBar(
-                      context,
-                      message:
-                          result.error?.toString() ??
-                          ProductMessages.saveError.message,
-                      isSuccess: false,
-                    );
-                  }
+                  showCustomSnackBar(context, message: isUpdated
+                      ? ProductMessages.updateSuccess.message
+                      : ProductMessages.updateError.message,
+                      backgroundColor: AppColors.darkGrey2,
+                      durationSeconds: 2
+                  );
+
+                  if (isUpdated) context.pop(true);
                 },
               ),
             ),

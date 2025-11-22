@@ -49,8 +49,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
     state = state.copyWith(isLoading: true);
 
-    try {
-      final product = ProductEntity(
+    final product = ProductEntity(
         productName: productNameController.text,
         price: priceController.text,
         unitMeasure: unitMeasureController.text,
@@ -62,33 +61,25 @@ class ProductNotifier extends StateNotifier<ProductState> {
       final result = await addProductUseCase(product);
 
       if (result is DataSuccess<int>) {
-        productNameController.clear();
-        priceController.clear();
-        unitMeasureController.clear();
-        gstController.clear();
-        descriptionController.clear();
-        hsnController.clear();
+        clearForm();
+        return result;
+      } else if (result is DataFailed<int>) {
+        state = state.copyWith(
+            error: result.error?.toString() ?? "Something went wrong");
       }
 
-      return result;
-    } catch (e) {
-      final ex = e is Exception ? e : Exception(e.toString());
-      state = state.copyWith(error: ex.toString());
-      return DataFailed<int>(e is Exception ? e : Exception(e.toString()));
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
+    state = state.copyWith(isLoading: false);
+    return result;
   }
 
 
   Future<DataState<int>> updateProduct() async {
     if (!formKey.currentState!.validate()) {
+      state = state.copyWith(error: "Validation error");
       return DataFailed<int>(Exception("Validation error"));
     }
 
     state = state.copyWith(isLoading: true);
-
-    try {
 
       if (selectedProductId == null) {
         return DataFailed<int>(Exception("Product id required for update"));
@@ -101,27 +92,24 @@ class ProductNotifier extends StateNotifier<ProductState> {
         unitMeasure: unitMeasureController.text,
         gst: gstController.text,
         description: descriptionController.text,
-        hsn: hsnController.text,);
+        hsn: hsnController.text,
+      );
 
       final result = await updateProductUseCase(product);
 
       state = state.copyWith(isLoading: false);
 
       if (result is DataSuccess) {
-        productNameController.clear();
-        priceController.clear();
-        unitMeasureController.clear();
-        gstController.clear();
-        descriptionController.clear();
-        hsnController.clear();
+        await fetchProduct();
+        clearForm();
+        return result;
+      } else if (result is DataFailed<int>) {
+        state = state.copyWith(
+            error: result.error?.toString() ?? "Something went wrong");
       }
 
-      return result;
-    } catch (e) {
-      return DataFailed<int>(e is Exception ? e : Exception(e.toString()));
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
+    state = state.copyWith(isLoading: false);
+    return result;
   }
 
   Future<void> fetchProduct() async {
