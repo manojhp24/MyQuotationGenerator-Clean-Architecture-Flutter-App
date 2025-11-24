@@ -3,6 +3,7 @@ enum ProductMessages {
   updateSuccess,
   updateError,
   deleteSuccess,
+  deleteError,
   fetchError,
   saveError,
   invalidInput,
@@ -28,6 +29,8 @@ extension ProductMessagesExtension on ProductMessages {
         return "Please fill in all required fields.";
       case ProductMessages.updateError:
         return "Failed to update product. Please try again";
+      case ProductMessages.deleteError:
+        return "Failed to delete product. Please try again";
     }
   }
 }

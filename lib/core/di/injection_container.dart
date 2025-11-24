@@ -19,6 +19,7 @@ import 'package:my_quotation_generator/features/products/data/data_sources/produ
 import 'package:my_quotation_generator/features/products/data/repository/product_repository_impl.dart';
 import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
+import 'package:my_quotation_generator/features/products/domain/usecases/delete_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/get_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/update_product_usecase.dart';
 
@@ -51,4 +52,5 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton(() => AddProductUseCase(sl()));
   sl.registerLazySingleton(() => GetProductUseCase(sl()));
   sl.registerLazySingleton(() => UpdateProductUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteProductUseCase(sl()));
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/add_product_usecase.dart';
+import 'package:my_quotation_generator/features/products/domain/usecases/delete_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/get_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/update_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_state.dart';
@@ -11,6 +12,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
   final AddProductUseCase addProductUseCase;
   final GetProductUseCase getProductUseCase;
   final UpdateProductUseCase updateProductUseCase;
+  final DeleteProductUseCase deleteProductUseCase;
 
   final productNameController = TextEditingController();
   final priceController = TextEditingController();
@@ -25,7 +27,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
   int? selectedProductId;
 
   ProductNotifier(this.addProductUseCase, this.getProductUseCase,
-      this.updateProductUseCase)
+      this.updateProductUseCase, this.deleteProductUseCase)
       : super(ProductState());
 
   @override
@@ -62,7 +64,6 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
       if (result is DataSuccess<int>) {
         clearForm();
-        return result;
       } else if (result is DataFailed<int>) {
         state = state.copyWith(
             error: result.error?.toString() ?? "Something went wrong");
@@ -82,6 +83,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
     state = state.copyWith(isLoading: true);
 
       if (selectedProductId == null) {
+        state = state.copyWith(error: "Product id required for update");
         return DataFailed<int>(Exception("Product id required for update"));
       }
 
@@ -97,12 +99,10 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
       final result = await updateProductUseCase(product);
 
-      state = state.copyWith(isLoading: false);
 
       if (result is DataSuccess) {
         await fetchProduct();
         clearForm();
-        return result;
       } else if (result is DataFailed<int>) {
         state = state.copyWith(
             error: result.error?.toString() ?? "Something went wrong");
@@ -125,8 +125,31 @@ class ProductNotifier extends StateNotifier<ProductState> {
     }
   }
 
+  Future<DataState<int>> deleteProduct() async {
+    if (selectedProductId == null) {
+      return DataFailed<int>(Exception("No product selected to delete"));
+    }
+
+    state = state.copyWith(isLoading: true);
+
+    final result = await deleteProductUseCase(selectedProductId!);
+
+    if (result is DataSuccess) {
+      await fetchProduct();
+      clearForm();
+      selectedProductId = null;
+    } else if (result is DataFailed) {
+      state = state.copyWith(
+          error: result.error?.toString() ?? "Something went wrong");
+    }
+
+    state = state.copyWith(isLoading: false);
+    return result;
+  }
+
   void initializeForm({required bool isUpdate, ProductEntity? products}) {
     if (isUpdate && products != null) {
+      selectedProductId = products.id;
       productNameController.text = products.productName;
       priceController.text = products.price;
       unitMeasureController.text = products.unitMeasure;
@@ -134,6 +157,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
       descriptionController.text = products.description;
       hsnController.text = products.hsn;
     } else {
+      selectedProductId = null;
       clearForm();
     }
   }

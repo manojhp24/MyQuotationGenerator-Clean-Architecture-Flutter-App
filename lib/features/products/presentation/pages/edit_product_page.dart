@@ -43,7 +43,22 @@ class EditProductPage extends ConsumerWidget {
                       title: AppStrings.deleteCustomer,
                       message: AppStrings.deleteMessage,
                       onPressed: () async {
-                        Navigator.pop(context);
+                        notifier.selectedProductId = products.id;
+
+                        final result = await notifier.deleteProduct();
+                        if (!context.mounted) return;
+                        final isDeleted = result is DataSuccess;
+                        showCustomSnackBar(context,
+                          message: isDeleted ? ProductMessages.deleteSuccess
+                              .message : ProductMessages.deleteError.message,
+                          durationSeconds: 2,
+                          backgroundColor: AppColors.darkGrey2,
+                        );
+                        if (isDeleted) {
+                          Navigator.of(context).pop();
+                          GoRouter.of(context).pop(true);
+                        }
+
                       },
                     );
                   },

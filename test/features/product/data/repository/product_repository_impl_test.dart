@@ -142,4 +142,21 @@ void main() {
         .called(1);
     verifyNoMoreInteractions(mockProductLocalDataSource);
   });
+
+  test(
+      "should return DataSuccess<int> when local datasource delete data successfully", () async {
+    // Arrange
+    when(() => mockProductLocalDataSource.deleteProduct(1)).thenAnswer((
+        _) async => 1);
+
+    // Act
+
+    final result = await repository.deleteProduct(1);
+
+    // Assert
+    expect(result, isA<DataSuccess<int>>());
+    expect((result as DataSuccess<int>).data, equals(1));
+    verify(() => mockProductLocalDataSource.deleteProduct(1)).called(1);
+    verifyNoMoreInteractions(mockProductLocalDataSource);
+  });
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:my_quotation_generator/core/database/app_database.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -24,7 +26,15 @@ class ProductLocalDataSource {
   Future<int> updateProduct(Map<String, dynamic> productMap, int id) async {
     final db = testDb ?? await AppDatabase.database;
 
-    return await db.update(
+    final result = await db.update(
         'products', productMap, where: 'id=?', whereArgs: [id]);
+    log(result.toString());
+    return result;
+  }
+
+  Future<int> deleteProduct(int id) async {
+    final db = testDb ?? await AppDatabase.database;
+
+    return await db.delete('products', where: 'id=?', whereArgs: [id]);
   }
 }

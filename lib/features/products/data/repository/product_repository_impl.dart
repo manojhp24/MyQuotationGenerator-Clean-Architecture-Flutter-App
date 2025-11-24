@@ -67,8 +67,17 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<DataState<int>> deleteProduct(int productId) {
-    // TODO: implement deleteProduct
-    throw UnimplementedError();
+  Future<DataState<int>> deleteProduct(int productId) async {
+    try {
+      final rowDeleted = await productLocalDataSource.deleteProduct(productId);
+
+      if (rowDeleted > 0) {
+        return DataSuccess<int>(rowDeleted);
+      } else {
+        return DataFailed<int>(Exception("No Product found to delete"));
+      }
+    } catch (e) {
+      return DataFailed<int>(Exception("Failed to delete product:$e"));
+    }
   }
 }
