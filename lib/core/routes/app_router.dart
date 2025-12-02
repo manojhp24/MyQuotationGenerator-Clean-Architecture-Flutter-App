@@ -15,6 +15,7 @@ import 'package:my_quotation_generator/features/settings/presentation/pages/sett
 
 import '../../features/customer/domain/entities/customer.dart';
 import '../../features/dashboard/presentation/pages/dashboard_nav.dart';
+import '../../features/quotation/presentation/pages/add_new_quotation.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -68,6 +69,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         builder: (context, state) => SettingsPage(),
+      ), GoRoute(
+        path: '/create-quotation',
+        builder: (context, state) => AddNewQuotation(),
       ),
     ],
   );

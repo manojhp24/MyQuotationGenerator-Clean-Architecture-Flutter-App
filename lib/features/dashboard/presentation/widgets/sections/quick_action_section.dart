@@ -44,7 +44,7 @@ class QuickActionSection extends ConsumerWidget {
             SizedBox(height: AppSizes.sm(context)),
 
             QuickActionButton(
-              onTap: () {},
+              onTap: () => context.push('/create-quotation'),
               icon: Icons.receipt_long_outlined,
               label: "Generate Quotation",
             ),
