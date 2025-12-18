@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../config/theme/app_colors.dart';
-import '../../../../config/theme/app_text_styles.dart';
-import '../../../../config/utils/app_sizes.dart';
+import '../../../../config/constants/app_strings.dart';
 
 class QuotationCard extends StatelessWidget {
   final String quotationNumber;
@@ -9,7 +7,7 @@ class QuotationCard extends StatelessWidget {
   final String amount;
   final String date;
   final bool isRecent;
-  final VoidCallback? onTap; // optional tap handler
+  final VoidCallback? onTap;
 
   const QuotationCard({
     super.key,
@@ -23,41 +21,44 @@ class QuotationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(AppSizes.cardRadius);
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Card(
-      color: AppColors.white,
-      elevation: 2,
+      color: scheme.surfaceContainer,
+      elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: borderRadius,
+        borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isRecent ? AppColors.black : AppColors.border,
-          width: isRecent ? 1.5 : 1,
+          color: isRecent ? scheme.primary : scheme.outlineVariant,
         ),
       ),
-      shadowColor: AppColors.black.withValues(alpha: 0.05),
       child: InkWell(
-        borderRadius: borderRadius,
+        borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Padding(
-          padding: EdgeInsets.all(AppSizes.md(context)),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              // Leading icon box
+              // Leading icon
               Container(
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: isRecent ? AppColors.black : AppColors.surface,
+                  color: isRecent
+                      ? scheme.primaryContainer
+                      : scheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.description_outlined,
-                  color: isRecent ? AppColors.white : AppColors.black,
+                  color: isRecent
+                      ? scheme.onPrimaryContainer
+                      : scheme.onSurfaceVariant,
                 ),
               ),
 
-              SizedBox(width: AppSizes.md(context)),
+              const SizedBox(width: 16),
 
               // Quotation info
               Expanded(
@@ -68,47 +69,46 @@ class QuotationCard extends StatelessWidget {
                       children: [
                         Text(
                           quotationNumber,
-                          style: AppTextStyle.bodyMedium(context).copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         if (isRecent) ...[
-                          SizedBox(width: AppSizes.xs(context)),
+                          const SizedBox(width: 8),
                           Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSizes.xs(context),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.black,
-                              borderRadius: BorderRadius.circular(4),
+                              color: scheme.primary,
+                              borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
-                              "NEW",
-                              style: AppTextStyle.bodySmall(context).copyWith(
-                                color: AppColors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
+                              AppStrings.newQuotation,
+                              style: textTheme.labelSmall?.copyWith(
+                                color: scheme.onPrimary,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ],
                       ],
                     ),
-                    SizedBox(height: AppSizes.xs(context) / 2),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
                         Text(
                           customerName,
-                          style: AppTextStyle.bodySmall(context).copyWith(
-                            color: AppColors.textSecondary,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
                           ),
                         ),
-                        SizedBox(width: AppSizes.sm(context)),
+                        const SizedBox(width: 8),
                         Text(
                           "• $date",
-                          style: AppTextStyle.bodySmall(context).copyWith(
-                            color: AppColors.textTertiary,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -117,12 +117,11 @@ class QuotationCard extends StatelessWidget {
                 ),
               ),
 
-              // Amount (trailing)
+              // Amount
               Text(
                 amount,
-                style: AppTextStyle.bodyMedium(context).copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.black,
+                style: textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],

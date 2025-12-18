@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../config/theme/app_text_styles.dart';
-import '../../../config/utils/app_sizes.dart';
-
 class AppFormField extends StatelessWidget {
   final String label;
   final bool readOnly;
   final IconData? suffixIcon;
   final IconData? prefixIcon;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
   final FormFieldValidator<String?>? validator;
   final TextInputType? keyboardType;
   final int? maxLength;
@@ -26,48 +23,60 @@ class AppFormField extends StatelessWidget {
     required this.label,
     this.readOnly = false,
     this.suffixIcon,
+    this.prefixIcon,
     this.onTap,
     this.keyboardType,
     this.maxLength,
     this.controller,
-    this.maxLines,
+    this.maxLines = 1,
     this.alignLabelWithHint,
     this.validator,
-    this.prefixIcon, this.onPrefixPressed, this.onSuffixPressed,
-    this.focusNode, this.textInputAction, this.nextFocusNode
+    this.onPrefixPressed,
+    this.onSuffixPressed,
+    this.focusNode,
+    this.textInputAction,
+    this.nextFocusNode,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          focusNode: focusNode,
-          textInputAction: textInputAction,
-          controller: controller,
-          maxLength: maxLength,
-          keyboardType: keyboardType,
-          readOnly: readOnly,
-          maxLines: maxLines,
-          validator: validator,
-          style: AppTextStyle.bodyRegular(context),
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: AppTextStyle.bodyRegular(context),
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-            suffixIcon: suffixIcon != null
-                ? IconButton(
-              icon: Icon(suffixIcon),
-              onPressed: onSuffixPressed, // your callback
-            )
-                : null,
-            alignLabelWithHint: alignLabelWithHint,
-          ),
-          onTap: onTap,
-        ),
+    final textTheme = Theme.of(context).textTheme;
 
-        SizedBox(height: AppSizes.sectionVertical(context)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: TextFormField(
+        controller: controller,
+        focusNode: focusNode,
+        textInputAction: textInputAction,
+        keyboardType: keyboardType,
+        maxLength: maxLength,
+        maxLines: maxLines,
+        readOnly: readOnly,
+        validator: validator,
+        style: textTheme.bodyLarge,
+        onTap: onTap,
+        onFieldSubmitted: (_) {
+          if (nextFocusNode != null) {
+            FocusScope.of(context).requestFocus(nextFocusNode);
+          }
+        },
+        decoration: InputDecoration(
+          labelText: label,
+          alignLabelWithHint: alignLabelWithHint,
+          prefixIcon: prefixIcon != null
+              ? IconButton(
+            icon: Icon(prefixIcon),
+            onPressed: onPrefixPressed,
+          )
+              : null,
+          suffixIcon: suffixIcon != null
+              ? IconButton(
+            icon: Icon(suffixIcon),
+            onPressed: onSuffixPressed,
+          )
+              : null,
+        ),
+      ),
     );
   }
 }

@@ -1,117 +1,134 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 
-import '../../../../../config/theme/app_colors.dart';
-import '../../../../../config/theme/app_text_styles.dart';
+import '../../../domain/entities/product.dart';
 import '../../providers/product_provider.dart';
 
 class ProductCard extends ConsumerWidget {
   final ProductEntity product;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Card(
+      elevation: 0,
+      color: scheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.grey),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.06),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        side: BorderSide(color: scheme.outlineVariant),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            // Product Icon
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: const Icon(
-                Icons.inventory_2_rounded,
-                color: AppColors.primary,
-                size: 26,
-              ),
-            ),
-            const SizedBox(width: 14),
-
-            // Product Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.productName,
-                    style: AppTextStyle.h3(context)
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.currency_rupee,
-                        size: 15,
-                        color: AppColors.textSecondary,
-                      ),
-                      Text(
-                        product.price,
-                        style: AppTextStyle.bodyMedium(
-                          context,
-                        ).copyWith(color: AppColors.textSecondary),
-                      ),
-                      const SizedBox(width: 12),
-                      Icon(
-                        Icons.receipt_long,
-                        size: 15,
-                        color: AppColors.textSecondary,
-                      ),
-                      Text(
-                        "10%",
-                        style: AppTextStyle.bodyMedium(
-                          context,
-                        ).copyWith(color: AppColors.textSecondary),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            // Edit Button
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: .08),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconButton(
-                onPressed: () async {
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  final result = await context.push(
-                      '/update-product', extra: product);
-                  if (result == true) {
-                    ref.read(productNotifierProvider.notifier).fetchProduct();
-                  }
-                },
-                icon: const Icon(
-                  Icons.edit_outlined,
-                  color: AppColors.primary,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () async {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          final result = await context.push(
+            '/update-product',
+            extra: product,
+          );
+          if (result == true) {
+            ref.read(productNotifierProvider.notifier).fetchProduct();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+          child: Row(
+            children: [
+              // Icon (tonal)
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: scheme.primaryContainer,
+                child: Icon(
+                  Icons.inventory_2_outlined,
+                  color: scheme.onPrimaryContainer,
                   size: 22,
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(width: 14),
+
+              // Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.productName,
+                      style: textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    Row(
+                      children: [
+                        _MetaText(
+                          icon: Icons.currency_rupee,
+                          text: product.price,
+                        ),
+                        const SizedBox(width: 12),
+                        _MetaText(
+                          icon: Icons.percent,
+                          text: "10%",
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // Chevron (subtle)
+              Icon(
+                Icons.chevron_right,
+                color: scheme.onSurfaceVariant,
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _MetaText extends StatelessWidget {
+  const _MetaText({
+    required this.icon,
+    required this.text,
+  });
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 14,
+          color: scheme.onSurfaceVariant,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          text,
+          style: textTheme.bodySmall?.copyWith(
+            color: scheme.onSurfaceVariant,
+          ),
+        ),
+      ],
     );
   }
 }

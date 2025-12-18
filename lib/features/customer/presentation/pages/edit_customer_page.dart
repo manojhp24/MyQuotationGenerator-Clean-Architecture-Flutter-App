@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
-import 'package:my_quotation_generator/config/theme/app_colors.dart';
 import 'package:my_quotation_generator/core/common/App_snack_bar/custom_snack_bar.dart';
 import 'package:my_quotation_generator/core/enums/customer_message.dart';
 import 'package:my_quotation_generator/core/resource/data_state.dart';
 
-import '../../../../config/utils/app_sizes.dart';
 import '../../domain/entities/customer.dart';
 import '../provider/customer_provider.dart';
 import '../widgets/card/customer_alert_dialog.dart';
@@ -27,28 +25,25 @@ class EditCustomerPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Customer"),
+        title: const Text(AppStrings.editCustomerAppBarTitle),
       ),
       body: Padding(
-        padding: AppSizes.pagePadding(context),
+        padding: EdgeInsets.all(16),
         child: SingleChildScrollView(
-          child: CustomerForm(
-            isUpdate: true,
-            customer: customer,
-          ),
+          child: CustomerForm(isUpdate: true,customer: customer,),
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(AppSizes.lg(context)), child: Row(
-        children: [
-          Expanded(
-            child: CustomerRemoveButton(
-              label: AppStrings.remove,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return CustomerAlertDialogBox(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomerRemoveButton(
+                label: AppStrings.remove,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => CustomerAlertDialogBox(
                       title: AppStrings.deleteCustomer,
                       message: AppStrings.deleteMessage,
                       onPressed: () async {
@@ -58,50 +53,53 @@ class EditCustomerPage extends ConsumerWidget {
                           customer.id!,
                         );
                         if (!context.mounted) return;
-                        final isDeleted = result is DataSuccess;
-                        showCustomSnackBar(context,
-                            message: isDeleted ? CustomerMessages.deleteSuccess
-                                .message : CustomerMessages.deleteError.message,
-                          durationSeconds: 2,
-                          backgroundColor: AppColors.darkGrey2
-                        );
-                        if (isDeleted) context.pop(true);
 
+                        final isDeleted = result is DataSuccess;
+
+                        showCustomSnackBar(
+                          context,
+                          message: isDeleted
+                              ? CustomerMessages.deleteSuccess.message
+                              : CustomerMessages.deleteError.message,
+                          durationSeconds: 2,
+                        );
+
+                        if (isDeleted) context.pop(true);
                       },
-                    );
-                  },
-                );
-              },
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          SizedBox(width: AppSizes.sm(context)),
-          Expanded(
-            child: CustomerFormButton(
-              label: AppStrings.update,
-              isLoading: state.isLoading,
-              onPressed: () async {
-                final result = await notifier.updateCustomer(
-                  context,
-                  customer.id!,
-                );
-                if (!context.mounted) return;
-                final isSuccess = result is DataSuccess;
-                showCustomSnackBar(context, message: isSuccess
-                    ? CustomerMessages.updateSuccess.message
-                    : CustomerMessages.updateError.message,
-                    backgroundColor: AppColors.darkGrey2,
-                    durationSeconds: 2
-                );
-                if (isSuccess) context.pop(true);
-              },
+            const SizedBox(width: 12),
+            Expanded(
+              child: CustomerFormButton(
+                label: AppStrings.update,
+                isLoading: state.isLoading,
+                onPressed: () async {
+                  final result = await notifier.updateCustomer(
+                    context,
+                    customer.id!,
+                  );
+                  if (!context.mounted) return;
+
+                  final isSuccess = result is DataSuccess;
+
+                  showCustomSnackBar(
+                    context,
+                    message: isSuccess
+                        ? CustomerMessages.updateSuccess.message
+                        : CustomerMessages.updateError.message,
+                    durationSeconds: 2,
+                  );
+
+                  if (isSuccess) context.pop(true);
+                },
+              ),
             ),
-          ),
-        ],
+          ],
         ),
       ),
     );
   }
 }
-
-
-

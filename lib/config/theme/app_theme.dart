@@ -1,40 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:my_quotation_generator/config/theme/themes/app_bar_theme.dart';
-import 'package:my_quotation_generator/config/theme/themes/bottom_navigation_theme.dart';
-import 'package:my_quotation_generator/config/theme/themes/elevated_button_theme.dart';
-import 'package:my_quotation_generator/config/theme/themes/floating_button_theme.dart';
-import 'package:my_quotation_generator/config/theme/themes/input_theme.dart';
-import 'package:my_quotation_generator/config/theme/themes/outlined_button_theme.dart';
-import 'package:my_quotation_generator/config/theme/themes/show_modal_bottom_sheet_theme.dart';
-import 'package:my_quotation_generator/config/theme/themes/text_selection_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import 'app_colors.dart';
-import 'app_text_styles.dart';
+import 'colors.dart';
+import 'components/elevated_button_theme.dart';
+import 'components/input_theme.dart';
 
+
+/// Central theme configuration for the gym management system.
+///
+/// Provides both light and dark theme configurations using Material 3 design
+/// with Poppins font family and custom color schemes.
 class AppTheme {
-  ///Light Theme
-  static ThemeData lightTheme(BuildContext context) {
-    return ThemeData(
-      brightness: Brightness.light,
-      primaryColor: AppColors.black,
-      scaffoldBackgroundColor: AppColors.background,
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      appBarTheme: AppAppBarTheme.light(context),
-      inputDecorationTheme: AppInputTheme.light(context),
-      textSelectionTheme: AppTextSelectionTheme.light(context),
-      elevatedButtonTheme: AppElevatedButtonTheme.light(context),
-      textTheme: TextTheme(
-        bodyLarge: AppTextStyle.bodyLarge(context),
-        bodyMedium: AppTextStyle.bodyMedium(context),
-        bodySmall: AppTextStyle.bodySmall(context),
-        displayMedium: AppTextStyle.h3(context),
-        displayLarge: AppTextStyle.h1(context),
-      ),
-      bottomNavigationBarTheme: BottomNavBarTheme.light(context),
-      floatingActionButtonTheme: AppFloatingButtonTheme.light(context),
-      outlinedButtonTheme: AppOutlinedButtonTheme.light(context),
-      bottomSheetTheme: AppBottomSheetTheme.light(context)
-    );
-  }
+  // Private constructor to prevent instantiation
+  AppTheme._();
+
+  /// Light theme configuration for the application.
+  ///
+  /// Uses Material 3 design with a light color scheme and Poppins typography.
+  static ThemeData get lightTheme => ThemeData(
+        useMaterial3: true,
+        colorScheme: AppColors.lightColorScheme,
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        fontFamily: GoogleFonts.poppins().fontFamily,
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.lightColorScheme.surfaceContainerLow,
+          foregroundColor: AppColors.lightColorScheme.onSurface,
+          elevation: 0,
+        ),
+        elevatedButtonTheme: AppElevatedButtonTheme.elevated(
+          AppColors.lightColorScheme,
+        ),
+        inputDecorationTheme: AppInputTheme.inputDecorationTheme(
+          AppColors.lightColorScheme,
+        ),
+      );
+
+  /// Dark theme configuration for the application.
+  ///
+  /// Uses Material 3 design with a dark color scheme and Poppins typography.
+  /// Optimized for low-light environments with appropriate contrast ratios.
+  static ThemeData get darkTheme => ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        colorScheme: AppColors.darkColorScheme,
+        textTheme: GoogleFonts.poppinsTextTheme(
+          ThemeData.dark().textTheme,
+        ),
+        fontFamily: GoogleFonts.poppins().fontFamily,
+        scaffoldBackgroundColor: AppColors.darkColorScheme.surface,
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.darkColorScheme.surfaceContainerLow,
+          foregroundColor: AppColors.darkColorScheme.onSurface,
+          elevation: 0,
+        ),
+        elevatedButtonTheme: AppElevatedButtonTheme.elevated(
+          AppColors.darkColorScheme,
+        ),
+        inputDecorationTheme: AppInputTheme.inputDecorationTheme(
+          AppColors.darkColorScheme,
+        ),
+      );
 }

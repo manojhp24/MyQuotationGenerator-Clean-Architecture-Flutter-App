@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotation_generator/config/constants/app_strings.dart';
 
 Future<T?> showSelectBottomSheet<T>({
   required BuildContext context,
@@ -19,7 +20,7 @@ Future<T?> showSelectBottomSheet<T>({
         expand: false,
         builder: (context, controller) {
           if (items.isEmpty) {
-            return Center(child: Text("No items found"));
+            return Center(child: Text(AppStrings.noItemsFound));
           }
 
           return Column(

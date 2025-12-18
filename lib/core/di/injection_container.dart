@@ -22,6 +22,12 @@ import 'package:my_quotation_generator/features/products/domain/usecases/add_pro
 import 'package:my_quotation_generator/features/products/domain/usecases/delete_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/get_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/update_product_usecase.dart';
+import 'package:my_quotation_generator/features/quotation/data/data_sources/quotation_local_data_source.dart';
+
+import '../../features/quotation/data/repository/quotation_repository_impl.dart';
+import '../../features/quotation/domain/repository/quotation_repository.dart';
+import '../../features/quotation/domain/usecases/create_quotation_usecase.dart';
+import '../../features/quotation/domain/usecases/generate_quotation_pdf_use_case.dart';
 
 // Global helpers locator instance (GetIt)
 final sl = GetIt.instance;
@@ -53,4 +59,28 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton(() => GetProductUseCase(sl()));
   sl.registerLazySingleton(() => UpdateProductUseCase(sl()));
   sl.registerLazySingleton(() => DeleteProductUseCase(sl()));
+
+
+  /// QUOTATION
+  sl.registerLazySingleton<QuotationLocalDataSource>(
+        () => QuotationLocalDataSource(),
+  );
+
+  sl.registerLazySingleton<QuotationRepository>(
+        () =>
+        QuotationRepositoryImpl(
+          sl<QuotationLocalDataSource>(),
+          sl<CustomerLocalDataSource>(),
+        ),
+  );
+
+
+  sl.registerLazySingleton(
+        () => CreateQuotationUsecase(sl()),
+  );
+
+  sl.registerLazySingleton(
+        () => GenerateQuotationPdfUseCase(sl()),
+  );
+
 }

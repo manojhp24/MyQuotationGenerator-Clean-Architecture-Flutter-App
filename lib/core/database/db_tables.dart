@@ -44,3 +44,34 @@ const String createProductTable = '''
         hsn TEXT
         )
     ''';
+
+const String createQuotationTable = '''
+CREATE TABLE quotations(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  quoteNo TEXT NOT NULL,
+  customerId INTEGER NOT NULL,
+  quoteDate TEXT NOT NULL,
+  subTotal REAL NOT NULL,
+  taxTotal REAL NOT NULL,
+  grandTotal REAL NOT NULL,
+  status TEXT,
+  createdAt TEXT,
+  FOREIGN KEY (customerId) REFERENCES customer(id)
+)
+''';
+
+const String createQuotationItemsTable = '''
+CREATE TABLE quotation_items(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  quotationId INTEGER NOT NULL,
+  productId INTEGER NOT NULL,
+  productName TEXT NOT NULL,
+  quantity INTEGER NOT NULL,
+  unitPrice REAL NOT NULL,
+  gstPercent REAL NOT NULL,
+  gstAmount REAL NOT NULL,
+  totalPrice REAL NOT NULL,
+  FOREIGN KEY (quotationId) REFERENCES quotations(id),
+  FOREIGN KEY (productId) REFERENCES products(id)
+)
+''';

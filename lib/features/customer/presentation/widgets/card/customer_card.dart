@@ -1,108 +1,135 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../../config/theme/app_colors.dart';
-import '../../../../../config/theme/app_text_styles.dart';
 import '../../../domain/entities/customer.dart';
 
 class CustomerCard extends StatelessWidget {
-  const CustomerCard({super.key, required this.customer});
+  const CustomerCard({
+    super.key,
+    required this.customer,
+  });
 
   final CustomerEntity customer;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Card(
+      elevation: 0,
+      color: scheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: scheme.outlineVariant),
       ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
-        title: Text(
-          customer.customerName ?? '',
-          style: AppTextStyle.h3(
-            context,
-          ).copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          context.push('/edit-customer', extra: customer);
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+          child: Row(
             children: [
-              if (customer.mobile?.isNotEmpty ?? false)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.phone_outlined,
-                        size: 16,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        customer.mobile!,
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+              // Avatar (tonal, no gradient)
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: scheme.primaryContainer,
+                child: Text(
+                  _initial(customer.customerName),
+                  style: textTheme.titleMedium?.copyWith(
+                    color: scheme.onPrimaryContainer,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              if (customer.email?.isNotEmpty ?? false)
-                Row(
+              ),
+
+              const SizedBox(width: 14),
+
+              // Content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.email_outlined,
-                      size: 16,
-                      color: AppColors.textSecondary,
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        customer.email!,
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 14,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                    Text(
+                      customer.customerName ?? '',
+                      style: textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
+
+                    const SizedBox(height: 6),
+
+                    if (customer.mobile?.isNotEmpty ?? false)
+                      _MetaRow(
+                        icon: Icons.phone_outlined,
+                        text: customer.mobile!,
+                      ),
+
+                    if (customer.email?.isNotEmpty ?? false)
+                      _MetaRow(
+                        icon: Icons.email_outlined,
+                        text: customer.email!,
+                      ),
                   ],
                 ),
+              ),
+
+              // Chevron
+              Icon(
+                Icons.chevron_right,
+                color: scheme.onSurfaceVariant,
+              ),
             ],
           ),
         ),
-        trailing: Container(
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(8),
+      ),
+    );
+  }
+
+  String _initial(String? name) {
+    if (name == null || name.isEmpty) return '?';
+    return name.trim().characters.first.toUpperCase();
+  }
+}
+
+class _MetaRow extends StatelessWidget {
+  const _MetaRow({
+    required this.icon,
+    required this.text,
+  });
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            size: 16,
+            color: scheme.onSurfaceVariant,
           ),
-          child: IconButton(
-            icon: const Icon(
-              Icons.edit_outlined,
-              color: AppColors.primary,
-              size: 20,
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text,
+              style: textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).clearSnackBars();
-              context.push('/edit-customer', extra: customer);
-            },
           ),
-        ),
+        ],
       ),
     );
   }

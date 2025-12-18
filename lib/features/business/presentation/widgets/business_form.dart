@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/core/common/validators/input_validators.dart';
@@ -48,7 +47,7 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
 
           /// Business Details Section
           SectionTitle(title: AppStrings.businessDetails),
-          SizedBox(height: AppSizes.sectionVertical(context)),
+          SizedBox(height: AppSizes.spaceM(context)),
           Column(
             children: [
               AppFormField(
@@ -56,7 +55,7 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
                 controller: notifier.businessNameController,
                 prefixIcon: Icons.business,
                 validator: (value) =>
-                    Validators.requiredField("Business name", value),
+                    Validators.requiredField(AppStrings.businessName, value),
               ),
 
               AppFormField(
@@ -65,7 +64,7 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
                 label: AppStrings.selectCategory,
                 validator: (value) =>
                     Validators.requiredField(
-                        "", value, customMessage: "Select Category"),
+                        "", value, customMessage: AppStrings.selectCategory),
                 readOnly: true,
                 onTap: () async {
                   final selected =
@@ -93,7 +92,7 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
                 controller: notifier.stateController,
                 validator: (value) =>
                     Validators.requiredField(
-                        "", value, customMessage: "Select State"),
+                        "", value, customMessage: AppStrings.state),
                 label: AppStrings.state,
                 prefixIcon: Icons.location_city,
                 onTap: () async {
@@ -121,7 +120,7 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
 
           /// Contact Details Section
           SectionTitle(title: AppStrings.contactDetails),
-          SizedBox(height: AppSizes.sectionVertical(context)),
+          SizedBox(height: AppSizes.spaceM(context)),
 
           Column(
             children: [
@@ -129,21 +128,21 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
                 label: AppStrings.contactName,
                 controller: notifier.contactNameController,
                 prefixIcon: Icons.person,
-                validator: (value) => Validators.requiredField("Name", value),
+                validator: (value) =>
+                    Validators.requiredField(AppStrings.contactName, value),
               ),
               AppFormField(
                 controller: notifier.mobileNumberController,
                 label: AppStrings.mobileNumber,
                 validator: (value) =>
-                    Validators.validateMobileNumber("Mobile number", value),
+                    Validators.validateMobileNumber(
+                        AppStrings.mobileNumber, value),
                 keyboardType: TextInputType.numberWithOptions(),
                 maxLength: 13,
                 prefixIcon: Icons.phone,
                 suffixIcon: Icons.contact_page,
                 onSuffixPressed: () {
-                  if (kDebugMode) {
-                    print("Button pressed");
-                  }
+
                 },
               ),
               AppFormField(
@@ -157,7 +156,7 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
                 controller: notifier.address1Controller,
                 prefixIcon: Icons.home,
                 validator: (value) =>
-                    Validators.requiredField("Address 1", value),
+                    Validators.requiredField(AppStrings.address1, value),
               ),
               AppFormField(
                 label: AppStrings.address2,
@@ -170,7 +169,7 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
 
           /// Bank Details Section
           SectionTitle(title: AppStrings.bankDetails),
-          SizedBox(height: AppSizes.sectionVertical(context)),
+          SizedBox(height: AppSizes.spaceM(context)),
           Column(
             children: [
               AppFormField(

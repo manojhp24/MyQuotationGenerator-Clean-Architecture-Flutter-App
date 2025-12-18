@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotation_generator/config/constants/app_strings.dart';
 
-import '../../../../../config/utils/app_sizes.dart';
 import '../quotation_card.dart';
 import '../section_title.dart';
 
@@ -10,25 +10,43 @@ class RecentQuotationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: EdgeInsets.all(AppSizes.md(context)),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       sliver: SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DashboardSectionTitle(title: "Recent Quotations"),
+            // Header row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const DashboardSectionTitle(
+                  title: AppStrings.recentQuotations,
+                ),
+                TextButton(
+                  onPressed: () {
+                    // TODO: navigate to full quotation list
+                  },
+                  child: const Text('View all'),
+                ),
+              ],
+            ),
+
+
+
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 5,
-              separatorBuilder: (context, index) =>
-                  SizedBox(height: AppSizes.sm(context)),
-              itemBuilder: (context, index) => QuotationCard(
-                quotationNumber: "Q-${1000 + index}",
-                customerName: "Customer ${index + 1}",
-                amount: "₹${(1200 + index * 350)}",
-                date: "Oct ${23 - index}",
-                isRecent: index == 0,
-              ),
+              itemCount: 3,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                return QuotationCard(
+                  quotationNumber: "Q-${1000 + index}",
+                  customerName: "Customer ${index + 1}",
+                  amount: "₹${1200 + index * 350}",
+                  date: "Oct ${23 - index}",
+                  isRecent: index == 0,
+                );
+              },
             ),
           ],
         ),

@@ -12,8 +12,9 @@ class Validators {
       return "$label is Required";
     }
 
-    final mobileNumberPattern = RegExp(r'^(\+91|91)?[6-9]\d{9}$');
-    if (!mobileNumberPattern.hasMatch(value)) {
+    final Pattern mobileNumberPattern = r'^(\+91|91)?[6-9]\d{9}$';
+
+    if (!RegExp(mobileNumberPattern.toString()).hasMatch(value)) {
       return "Invalid Mobile Number";
     }
 

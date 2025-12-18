@@ -26,7 +26,7 @@ class UpdateBusinessPage extends ConsumerWidget {
         leading: IconButton(onPressed: () =>context.pop(), icon: Icon(Icons.arrow_back)),
       ),
       body: Padding(
-          padding: AppSizes.pagePadding(context),
+          padding: EdgeInsets.all(AppSizes.screenPadding(context)),
           child: Column(
             children: [
               if (state.isLoading) LinearProgressIndicator(),

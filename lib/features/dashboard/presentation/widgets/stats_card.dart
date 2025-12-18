@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/theme/app_colors.dart';
-import '../../../../config/theme/app_text_styles.dart';
-import '../../../../config/utils/app_sizes.dart';
-
 class StatsCard extends StatelessWidget {
   final String title;
   final String value;
@@ -18,47 +14,61 @@ class StatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
-      padding: EdgeInsets.all(AppSizes.md(context)),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.black,
-        borderRadius: BorderRadius.circular(AppSizes.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.1),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: scheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: scheme.outlineVariant),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // Icon
           Container(
-            padding: EdgeInsets.all(AppSizes.sm(context)),
+            height: 40,
+            width: 40,
             decoration: BoxDecoration(
-              color: AppColors.white.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(10),
+              color: scheme.primary,
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               icon,
-              color: AppColors.white,
-              size: AppSizes.iconMedium(context),
+              color: scheme.onPrimary,
+              size: 20,
             ),
           ),
-          SizedBox(height: AppSizes.md(context)),
-          Text(
-            value,
-            style: AppTextStyle.h2(context).copyWith(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
+
+          const SizedBox(width: 12),
+
+          // Text (flexible)
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: AppSizes.xs(context) / 2),
-          Text(
-            title,
-            style: AppTextStyle.bodySmall(context)
-                .copyWith(color: AppColors.white.withValues(alpha: 0.8)),
           ),
         ],
       ),

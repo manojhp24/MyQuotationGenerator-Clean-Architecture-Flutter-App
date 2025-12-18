@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../config/theme/app_colors.dart';
-import '../../../../../config/theme/app_text_styles.dart';
-
 class CustomAlertDialogBox extends StatelessWidget {
   final String title;
   final String message;
@@ -17,16 +14,23 @@ class CustomAlertDialogBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      backgroundColor: AppColors.surface,
-      // use your theme color
-      title: Text(title, style: AppTextStyle.h3(context)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      backgroundColor: scheme.surfaceContainerHigh,
+      title: Text(
+        title,
+        style: textTheme.titleLarge,
+      ),
       content: Text(
         message,
-        style: AppTextStyle.bodyMedium(
-          context,
-        ).copyWith(color: AppColors.textSecondary),
+        style: textTheme.bodyMedium?.copyWith(
+          color: scheme.onSurfaceVariant,
+        ),
       ),
       actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       actions: [
@@ -35,25 +39,20 @@ class CustomAlertDialogBox extends StatelessWidget {
             Expanded(
               child: TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text(
-                  "Cancel",
-                  style: AppTextStyle.bodyMedium(context).copyWith(
-                    color: AppColors.accent,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: const Text("Cancel"),
               ),
             ),
             Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.error,
+              child: FilledButton(
+                onPressed: onPressed,
+                style: FilledButton.styleFrom(
+                  backgroundColor: scheme.error,
+                  foregroundColor: scheme.onError,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: onPressed,
-                child: Text("Confirm", style: AppTextStyle.buttonText(context)),
+                child: const Text("Confirm"),
               ),
             ),
           ],

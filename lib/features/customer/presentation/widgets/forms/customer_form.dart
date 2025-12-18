@@ -8,7 +8,6 @@ import 'package:my_quotation_generator/features/customer/domain/entities/custome
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 
 import '../../../../../config/constants/app_strings.dart';
-import '../../../../../config/utils/app_sizes.dart';
 import '../../../../../core/common/widgets/category_bottom_sheet.dart';
 import '../../../../../core/common/widgets/form_text_field.dart';
 import '../../../../../core/enums/state_enum.dart';
@@ -71,12 +70,11 @@ class _CustomerFormState extends ConsumerState<CustomerForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: AppSizes.sectionVertical(context)),
           AppFormField(
             label: AppStrings.customerName,
             controller: notifier.customerNameController,
             validator: (value) =>
-                Validators.requiredField("Customer Name", value),
+                Validators.requiredField(AppStrings.customerName, value),
             prefixIcon: Icons.person,
             maxLines: 1,
             textInputAction: TextInputAction.next,
@@ -96,13 +94,11 @@ class _CustomerFormState extends ConsumerState<CustomerForm> {
             keyboardType: const TextInputType.numberWithOptions(),
             controller: notifier.mobileNumberController,
             validator: (value) =>
-                Validators.validateMobileNumber('Mobile Number', value),
+                Validators.validateMobileNumber(AppStrings.mobileNumber, value),
             prefixIcon: Icons.phone,
             suffixIcon: Icons.contact_page,
             onSuffixPressed: () async {
-              bool granted = await FlutterContacts.requestPermission();
-              print("Permission granted: $granted");
-
+              await FlutterContacts.requestPermission();
               final phone = await ContactPickerHelper.pickPhoneNumber();
               if (phone != null) notifier.mobileNumberController.text = phone;
             },

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/theme/app_colors.dart';
-import '../../../../config/theme/app_text_styles.dart';
-import '../../../../config/utils/app_sizes.dart';
-
 class QuickActionButton extends StatelessWidget {
   final VoidCallback onTap;
   final String label;
@@ -18,59 +14,60 @@ class QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppSizes.cardRadius),
-      splashColor: AppColors.white,
-      highlightColor: AppColors.black.withValues(alpha: 0.1),
-      child: Ink(
-        padding: EdgeInsets.all(AppSizes.md(context)),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          border: Border.all(color: AppColors.border, width: 1.2),
-          borderRadius: BorderRadius.circular(AppSizes.cardRadius),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(AppSizes.sm(context)),
-              decoration: BoxDecoration(
-                color: AppColors.black,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                icon,
-                color: AppColors.white,
-                size: AppSizes.iconSmall(context) * 1.2,
-              ),
-            ),
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-            SizedBox(width: AppSizes.md(context)),
-
-            // Text
-            Expanded(
-              child: Text(
-                label,
-                style: AppTextStyle.bodyMedium(context).copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+    return Card(
+      elevation: 0,
+      color: scheme.surfaceContainer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: scheme.outlineVariant),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              // Icon block
+              Container(
+                height: 44,
+                width: 44,
+                decoration: BoxDecoration(
+                  color: scheme.primary,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  icon,
+                  color: scheme.onPrimary,
+                  size: 22,
                 ),
               ),
-            ),
 
-            Icon(
-              Icons.arrow_forward_ios,
-              size: AppSizes.iconSmall(context),
-              color: AppColors.textSecondary,
-            ),
-          ],
+              const SizedBox(width: 16),
+
+              // Text
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
+              // Arrow
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 18,
+                color: scheme.onSurfaceVariant,
+              ),
+            ],
+          ),
         ),
       ),
     );

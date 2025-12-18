@@ -1,48 +1,112 @@
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
+import 'package:my_quotation_generator/features/quotation/domain/entities/quotation_entity.dart';
+import 'package:my_quotation_generator/features/quotation/domain/entities/quotation_item_entity.dart';
 import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_state.dart';
 
-class QuotationNotifier extends StateNotifier<QuotationState> {
-  QuotationNotifier() : super(const QuotationState());
+import '../../../../core/di/injection_container.dart';
+import '../../../../core/resource/data_state.dart';
+import '../../domain/usecases/create_quotation_usecase.dart';
+import '../../domain/usecases/generate_quotation_pdf_use_case.dart';
+import '../../domain/entities/quotation_data.dart';
 
+class QuotationNotifier extends StateNotifier<QuotationState> {
+  QuotationNotifier() : super(QuotationState.initial());
+
+
+
+  // Date
   void setDate(DateTime date) {
     state = state.copyWith(date: date);
   }
 
-  void dateReset() {
-    state = const QuotationState();
+  void reset() {
+    state = QuotationState.initial();
   }
 
-  void selectedProducts(ProductEntity products) {
-    final updatedProducts = [...state.selectedProduct, products];
-    state = state.copyWith(selectedProduct: updatedProducts);
+  // Customer
+  void selectCustomer(CustomerEntity customer) {
+    state = state.copyWith(selectedCustomer: customer);
   }
 
-  void selectedCustomer(CustomerEntity customers) {
-    final updatedCustomers = [customers];
-    state = state.copyWith(selectedCustomer: updatedCustomers);
+  void removeCustomer() {
+    state = state.copyWith(selectedCustomer: null);
   }
 
-  void removeCustomer(int id) {
-    final updatedCustomerList = state.selectedCustomer
-        .where((c) => c.id != id)
-        .toList();
-    state = state.copyWith(selectedCustomer: updatedCustomerList);
+  // Products → Quotation Items
+  void addProduct(ProductEntity product, int quantity) {
+    final alreadyExists =
+    state.items.any((e) => e.productId == product.id);
+
+    if (alreadyExists) return;
+
+    final unitPrice = double.tryParse(product.price) ?? 0;
+    final gstPercent = double.tryParse(product.gst) ?? 0;
+
+    final gstAmount =
+        (unitPrice * quantity) * (gstPercent / 100);
+
+    final item = QuotationItemEntity(
+      productId: product.id!,
+      productName: product.productName,
+      quantity: quantity,
+      unitPrice: unitPrice,
+      gstPercent: gstPercent,
+      gstAmount: gstAmount,
+      totalPrice: (unitPrice * quantity) + gstAmount,
+    );
+
+    state = state.copyWith(
+      items: [...state.items, item],
+    );
   }
 
-  void removeProduct(int id) {
-    final updatedProductList = state.selectedProduct
-        .where((p) => p.id != id)
-        .toList();
-    state = state.copyWith(selectedProduct: updatedProductList);
+  void removeItem(int productId) {
+    state = state.copyWith(
+      items: state.items.where((e) => e.productId != productId).toList(),
+    );
   }
 
-  void updateProduct(ProductEntity updated) {
-    final updatedList = state.selectedProduct.map((p) {
-      return p.id == updated.id ? updated : p;
-    }).toList();
+  // Save + PDF
+  Future<DataState<String>> generateQuotationAndPdf() async {
+    if (state.selectedCustomer == null) {
+      return DataFailed(Exception("Please select a customer"));
+    }
 
-    state = state.copyWith(selectedProduct: updatedList);
+    if (state.items.isEmpty) {
+      return DataFailed(Exception("Please add at least one product"));
+    }
+
+    final quotation = QuotationEntity(
+      quoteNo: "QUOT-001",
+      customerId: state.selectedCustomer!.id!,
+      quoteDate: state.date,
+      subTotal: state.subTotal,
+      taxTotal: state.taxTotal,
+      grandTotal: state.grandTotal, status: 'Active',
+    );
+
+    final saveResult = await sl<CreateQuotationUsecase>()(
+      QuotationData(
+        quotation: quotation,
+        items: state.items,
+      ),
+    );
+
+    if (saveResult is! DataSuccess<int>) {
+      return DataFailed(Exception("Failed to save quotation"));
+    }
+
+    final quotationId = saveResult.data!;
+
+    final pdfResult =
+    await sl<GenerateQuotationPdfUseCase>()(quotationId);
+
+    if (pdfResult is! DataSuccess<String>) {
+      return DataFailed(Exception("Failed to generate PDF"));
+    }
+
+    return DataSuccess(pdfResult.data!);
   }
 }

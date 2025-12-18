@@ -27,6 +27,12 @@ class CustomerLocalDataSource {
     }
   }
 
+  Future<Map<String, dynamic>> getCustomerById(int id) async {
+    final db = await AppDatabase.database;
+    final result = await db.query("customer", where: 'id=?', whereArgs: [id],);
+    return result.first;
+  }
+
   /// UPDATE
   Future<int> updateCustomer(Map<String, dynamic> customerMap, int id) async {
     try {
@@ -58,4 +64,6 @@ class CustomerLocalDataSource {
       rethrow;
     }
   }
+
+
 }

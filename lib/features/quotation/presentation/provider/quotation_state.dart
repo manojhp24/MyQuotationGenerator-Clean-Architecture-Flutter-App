@@ -1,20 +1,26 @@
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
-import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
+import 'package:my_quotation_generator/features/quotation/domain/entities/quotation_item_entity.dart';
 
 class QuotationState {
   final bool isLoading;
-  final DateTime? date;
+  final DateTime date;
   final String? error;
-  final List<ProductEntity> selectedProduct;
-  final List<CustomerEntity> selectedCustomer;
+  final List<QuotationItemEntity> items;
+  final CustomerEntity? selectedCustomer;
 
   const QuotationState({
     this.isLoading = false,
-    this.date,
+    required this.date,
     this.error,
-    this.selectedProduct = const [],
-    this.selectedCustomer = const [],
+    this.items = const [],
+    this.selectedCustomer,
   });
+
+  factory QuotationState.initial() {
+    return QuotationState(
+      date: DateTime.now(),
+    );
+  }
 
   QuotationState copyWith({
     bool? isLoading,
@@ -22,15 +28,23 @@ class QuotationState {
     String? quotationNo,
     String? referenceNote,
     String? error,
-    List<ProductEntity>? selectedProduct,
-    List<CustomerEntity>? selectedCustomer,
+    List<QuotationItemEntity>? items,
+    CustomerEntity? selectedCustomer,
   }) {
     return QuotationState(
       isLoading: isLoading ?? this.isLoading,
       date: date ?? this.date,
       error: error,
-      selectedProduct: selectedProduct ?? this.selectedProduct,
-      selectedCustomer: selectedCustomer ?? this.selectedCustomer,
+      items: items ?? this.items,
+      selectedCustomer: selectedCustomer ?? this.selectedCustomer ,
     );
   }
+
+  double get subTotal =>
+      items.fold(0, (sum, e) => sum + (e.unitPrice * e.quantity));
+
+  double get taxTotal =>
+      items.fold(0, (sum, e) => sum + e.gstAmount);
+
+  double get grandTotal => subTotal + taxTotal;
 }
