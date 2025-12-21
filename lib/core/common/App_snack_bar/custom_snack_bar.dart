@@ -11,13 +11,19 @@ void showCustomSnackBar(
   final snackBar = SnackBar(
     behavior: SnackBarBehavior.floating,
     duration: Duration(seconds: durationSeconds),
+    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
     backgroundColor: isSuccess
         ? scheme.inverseSurface
         : scheme.errorContainer,
     content: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(
-          isSuccess ? Icons.check_circle : Icons.error_outline,
+          isSuccess ? Icons.check_circle_rounded : Icons.error_rounded,
+          size: 22,
           color: isSuccess
               ? scheme.onInverseSurface
               : scheme.onErrorContainer,
@@ -26,7 +32,9 @@ void showCustomSnackBar(
         Expanded(
           child: Text(
             message,
-            style: TextStyle(
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: isSuccess
                   ? scheme.onInverseSurface
                   : scheme.onErrorContainer,

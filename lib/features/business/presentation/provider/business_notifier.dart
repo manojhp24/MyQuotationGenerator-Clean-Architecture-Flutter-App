@@ -4,12 +4,14 @@ import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/business/domain/entities/business.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/add_business_usecase.dart';
 import 'package:my_quotation_generator/features/business/domain/usecases/get_business_usecase.dart';
+import 'package:my_quotation_generator/features/business/domain/usecases/update_business_usecase.dart';
 
 import 'business_state.dart';
 
 class BusinessNotifier extends StateNotifier<BusinessState> {
   final AddBusinessUseCase addBusinessUseCase;
   final GetBusinessUseCase getBusinessUseCase;
+  final UpdateBusinessUseCase updateBusinessUseCase;
 
   final businessNameController = TextEditingController();
   final selectCategoryController = TextEditingController();
@@ -27,7 +29,8 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
   final upiIdController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  BusinessNotifier(this.addBusinessUseCase, this.getBusinessUseCase)
+  BusinessNotifier(this.addBusinessUseCase, this.getBusinessUseCase,
+      this.updateBusinessUseCase)
     : super(BusinessState());
 
   @override
@@ -87,6 +90,44 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
 
   }
 
+  Future<DataState<int>> updateBusiness(int customerId) async {
+
+    if (!formKey.currentState!.validate()) {
+      return DataFailed<int>(Exception("Validation Error"));
+    }
+
+
+    state = state.copyWith(isLoading: true);
+
+    final newBusinessData = BusinessEntity(
+      id: customerId,
+      businessName: businessNameController.text,
+      businessCategory: selectCategoryController.text,
+      gstIn: gstInController.text,
+      state: stateController.text,
+      otherInfo: otherInfoController.text,
+      contactName: contactNameController.text,
+      mobileNumber: mobileNumberController.text,
+      email: emailController.text,
+      address1: address1Controller.text,
+      address2: address2Controller.text,
+      accountName: accountNameController.text,
+      accountNumber: accountNumberController.text,
+      bankName: bankNameController.text,
+      upiId: upiIdController.text,
+    );
+
+    final result = await updateBusinessUseCase(newBusinessData);
+
+    if (result is DataSuccess) {
+      state = state.copyWith(isLoading: false);
+      await fetchBusiness();
+    } else {
+      state = state.copyWith(isLoading: false, error: result.error?.toString());
+    }
+    return result;
+  }
+
   Future<void> fetchBusiness() async {
     state = state.copyWith(isLoading: true);
 
@@ -108,25 +149,29 @@ class BusinessNotifier extends StateNotifier<BusinessState> {
   }
 
   void initializeForm({required bool isUpdate, BusinessEntity? business}) {
-    if (isUpdate && business != null) {
-      businessNameController.text = business.businessName ?? '';
-      contactNameController.text = business.contactName ?? '';
-      mobileNumberController.text = business.mobileNumber ?? '';
-      emailController.text = business.email ?? '';
-      address1Controller.text = business.address1 ?? '';
-      address2Controller.text = business.address2 ?? '';
-      otherInfoController.text = business.otherInfo ?? '';
-      gstInController.text = business.gstIn ?? '';
-      stateController.text = business.state ?? '';
-      selectCategoryController.text = business.businessCategory ?? '';
-      accountNameController.text = business.accountName ?? '';
-      accountNumberController.text = business.accountNumber ?? '';
-      bankNameController.text = business.bankName ?? '';
-      upiIdController.text = business.upiId ?? '';
-    } else {
+    if (!isUpdate) {
       clearForm();
+      return;
     }
+
+    if (business == null) return;
+
+    businessNameController.text = business.businessName ?? '';
+    contactNameController.text = business.contactName ?? '';
+    mobileNumberController.text = business.mobileNumber ?? '';
+    emailController.text = business.email ?? '';
+    address1Controller.text = business.address1 ?? '';
+    address2Controller.text = business.address2 ?? '';
+    otherInfoController.text = business.otherInfo ?? '';
+    gstInController.text = business.gstIn ?? '';
+    stateController.text = business.state ?? '';
+    selectCategoryController.text = business.businessCategory ?? '';
+    accountNameController.text = business.accountName ?? '';
+    accountNumberController.text = business.accountNumber ?? '';
+    bankNameController.text = business.bankName ?? '';
+    upiIdController.text = business.upiId ?? '';
   }
+
 
   void clearForm() {
     businessNameController.clear();

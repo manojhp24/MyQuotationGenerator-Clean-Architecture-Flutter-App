@@ -14,41 +14,39 @@ class StatsSection extends ConsumerWidget {
     final customerState = ref.watch(customerNotifierProvider);
     final productState = ref.watch(productNotifierProvider);
 
-    final totalCustomer = customerState.customer.length;
-    final totalProducts = productState.product.length;
+    final items = [
+      StatsCard(
+        title: AppStrings.customer,
+        value: customerState.customer.length.toString(),
+        icon: Icons.people_outline,
+      ),
+      StatsCard(
+        title: AppStrings.products,
+        value: productState.product.length.toString(),
+        icon: Icons.shopping_cart_outlined,
+      ),
+      const StatsCard(
+        title: AppStrings.quotations,
+        value: "10",
+        icon: Icons.description_outlined,
+      ),
+      const StatsCard(
+        title: AppStrings.pending,
+        value: "5",
+        icon: Icons.schedule_outlined,
+      ),
+    ];
 
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      sliver: SliverGrid(
-        delegate: SliverChildListDelegate(
-          [
-            StatsCard(
-              title: AppStrings.customer,
-              value: totalCustomer.toString(),
-              icon: Icons.people_outline,
-            ),
-            StatsCard(
-              title: AppStrings.products,
-              value: totalProducts.toString(),
-              icon: Icons.shopping_cart_outlined,
-            ),
-            const StatsCard(
-              title: AppStrings.quotations,
-              value: "10",
-              icon: Icons.description_outlined,
-            ),
-            const StatsCard(
-              title: AppStrings.pending,
-              value: "5",
-              icon: Icons.schedule_outlined,
-            ),
-          ],
-        ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      sliver: SliverGrid.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) => items[index],
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 2.2,
+          childAspectRatio: 2.3,
         ),
       ),
     );

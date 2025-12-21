@@ -66,31 +66,42 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       return DataFailed<int>(Exception("Validation Failed"));
     }
 
-    state = state.copyWith(isLoading: true);
-      final customer = CustomerEntity(
-        customerName: customerNameController.text,
-        email: emailController.text,
-        mobile: mobileNumberController.text,
-        address1: address1Controller.text,
-        address2: address2Controller.text,
-        otherInfo: otherInfoController.text,
-        gstIn: gstInController.text,
-        state: stateController.text,
-        shippingAddress: shippingAddressController.text,
+    final newCustomer = CustomerEntity(
+      customerName: customerNameController.text,
+      email: emailController.text,
+      mobile: mobileNumberController.text,
+      address1: address1Controller.text,
+      address2: address2Controller.text,
+      otherInfo: otherInfoController.text,
+      gstIn: gstInController.text,
+      state: stateController.text,
+      shippingAddress: shippingAddressController.text,
+    );
+
+
+    final previousCustomers =
+    List<CustomerEntity>.from(state.customer);
+
+    state = state.copyWith(
+      customer: [...state.customer, newCustomer],
+    );
+
+
+    final result = await addCustomerUseCase(newCustomer);
+
+
+    if (result is DataSuccess<int>) {
+      clearForm();
+      return result;
+    } else {
+      state = state.copyWith(customer: previousCustomers);
+      state = state.copyWith(
+        error: result.error?.toString() ?? "Something went wrong",
       );
-
-      final result = await addCustomerUseCase(customer);
-
-      if (result is DataSuccess<int>) {
-        clearForm();
-      } else if (result is DataFailed<int>) {
-        state = state.copyWith(
-          error: result.error?.toString() ?? "Something went wrong",
-        );
-      }
-    state = state.copyWith(isLoading: false);
-    return result;
+      return result;
+    }
   }
+
 
   /// Fetching Customer
   Future<void> fetchCustomer() async {
@@ -106,7 +117,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
   }
 
   /// Update Customer
-  Future<DataState<int>> updateCustomer(BuildContext context,
+  Future<DataState<int>> updateCustomer(
       int customerId) async {
     if (!formKey.currentState!.validate()) {
       state = state.copyWith(error: "Validation Error");
@@ -115,7 +126,7 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
 
     state = state.copyWith(isLoading: true);
 
-    final customer = CustomerEntity(
+    final updatedCustomer = CustomerEntity(
         id: customerId,
         customerName: customerNameController.text,
         email: emailController.text,
@@ -128,13 +139,25 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
         shippingAddress: shippingAddressController.text,
       );
 
-      final result = await updateCustomerUseCase(customer);
+    final previousCustomers = List<CustomerEntity>.from(state.customer);
+
+    final updatedList = state.customer.map((c) {
+      if (c.id == customerId) {
+        return updatedCustomer;
+      }
+      return c;
+    }).toList();
+
+    state = state.copyWith(customer: updatedList);
+
+    final result = await updateCustomerUseCase(updatedCustomer);
 
       if (result is DataSuccess<int>) {
-        fetchCustomer();
+        state = state.copyWith(isLoading: false);
         return result;
       } else if (result is DataFailed<int>) {
         state = state.copyWith(
+          customer: previousCustomers,
           error: result.error?.toString() ?? "Something went wrong",
         );
       }
@@ -147,13 +170,21 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
       int customerId) async {
     state = state.copyWith(isLoading: true);
 
+    final previousCustomers = List<CustomerEntity>.from(state.customer);
+
+    final updatedList = state.customer
+        .where((c) => c.id != customerId)
+        .toList();
+
+    state = state.copyWith(customer: updatedList);
     final result = await deleteCustomerUseCase(customerId);
 
       if (result is DataSuccess<int>) {
-        fetchCustomer();
+        state = state.copyWith(isLoading: false);
         return result;
       } else if (result is DataFailed<int>) {
         state = state.copyWith(
+            customer: previousCustomers,
             error: result.error?.toString() ?? 'Something went wrong');
       }
     state = state.copyWith(isLoading: false);

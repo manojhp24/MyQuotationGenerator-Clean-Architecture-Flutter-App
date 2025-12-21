@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 
 class SettingsHeading extends StatelessWidget {
   final String title;
@@ -14,7 +15,8 @@ class SettingsHeading extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 8),
+      padding: EdgeInsets.only(
+        top: AppSizes.spaceS(context), bottom: AppSizes.spaceS(context),),
       child: Text(
         title,
         style: textTheme.titleSmall?.copyWith(

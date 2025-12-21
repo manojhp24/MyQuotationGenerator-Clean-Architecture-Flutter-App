@@ -13,52 +13,73 @@ class QuickActionSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
       sliver: SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 12),
-
             const DashboardSectionTitle(
               title: AppStrings.quickActions,
             ),
 
+            const SizedBox(height: 16),
 
-            QuickActionButton(
-              onTap: () async {
-                final result = await context.push('/add-customer');
-                if (result == true) {
-                  ref
-                      .read(customerNotifierProvider.notifier)
-                      .fetchCustomer();
-                }
+            // Quick actions with staggered animation
+            TweenAnimationBuilder<double>(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeOutCubic,
+              tween: Tween(begin: 0.0, end: 1.0),
+              builder: (context, value, child) {
+                return Transform.translate(
+                  offset: Offset(0, 20 * (1 - value)),
+                  child: Opacity(
+                    opacity: value,
+                    child: child,
+                  ),
+                );
               },
-              icon: Icons.person_add_alt_outlined,
-              label: AppStrings.addCustomer,
-            ),
+              child: Column(
+                children: [
+                  QuickActionButton(
+                    onTap: () async {
+                      final result = await context.push('/add-customer');
+                      if (result == true) {
+                        ref
+                            .read(customerNotifierProvider.notifier)
+                            .fetchCustomer();
+                      }
+                    },
+                    icon: Icons.person_add_alt_outlined,
+                    label: AppStrings.addCustomer,
 
-            const SizedBox(height: 12),
+                  ),
 
-            QuickActionButton(
-              onTap: () async {
-                final result = await context.push('/add-products');
-                if (result == true) {
-                  ref
-                      .read(productNotifierProvider.notifier)
-                      .fetchProduct();
-                }
-              },
-              icon: Icons.add_shopping_cart_outlined,
-              label: AppStrings.addProduct,
-            ),
+                  const SizedBox(height: 12),
 
-            const SizedBox(height: 12),
+                  QuickActionButton(
+                    onTap: () async {
+                      final result = await context.push('/add-products');
+                      if (result == true) {
+                        ref
+                            .read(productNotifierProvider.notifier)
+                            .fetchProduct();
+                      }
+                    },
+                    icon: Icons.add_shopping_cart_outlined,
+                    label: AppStrings.addProduct,
 
-            QuickActionButton(
-              onTap: () => context.push('/create-quotation'),
-              icon: Icons.receipt_long_outlined,
-              label: AppStrings.generateQuotation,
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  QuickActionButton(
+                    onTap: () => context.push('/create-quotation'),
+                    icon: Icons.receipt_long_outlined,
+                    label: AppStrings.generateQuotation,
+
+                  ),
+                ],
+              ),
             ),
           ],
         ),

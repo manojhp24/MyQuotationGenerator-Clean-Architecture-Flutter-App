@@ -28,27 +28,30 @@ class ProductSelectSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final hasItems = quotationState.items.isNotEmpty;
 
     return Card(
       elevation: 0,
+      color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: scheme.outlineVariant),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   AppStrings.products,
-                  style: textTheme.titleMedium,
+                  style: textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                OutlinedButton.icon(
+                const Spacer(),
+                TextButton.icon(
                   onPressed: onPressed,
                   icon: const Icon(Icons.add),
                   label: const Text(AppStrings.addNewProduct),
@@ -56,18 +59,20 @@ class ProductSelectSection extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
-            // Select / add product tile
+            // Add / Select product (primary action)
             InkWell(
+              borderRadius: BorderRadius.circular(14),
               onTap: () async {
-                final selectedProduct = await showSelectBottomSheet(
+                final selectedProduct =
+                await showSelectBottomSheet(
                   context: context,
                   title: AppStrings.selectProduct,
                   items: productState.product,
                   tileBuilder: (product) => SelectableTile(
                     title: product.productName,
-                    subtitle: "₹${product.price}",
+                    subtitle: '₹${product.price}',
                     icon: Icons.shopping_cart,
                   ),
                 );
@@ -78,30 +83,54 @@ class ProductSelectSection extends StatelessWidget {
                       .addProduct(selectedProduct, 1);
                 }
               },
-              child: ActionTile(
-                title: quotationState.items.isNotEmpty
-                    ? AppStrings.addMoreProducts
-                    : AppStrings.selectProduct,
-                subtitle: quotationState.items.isNotEmpty
-                    ? AppStrings.tapToAddMore
-                    : AppStrings.tapToSelectProducts,
-                icon: Icons.shopping_cart,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: scheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: ActionTile(
+                  title: hasItems
+                      ? AppStrings.addMoreProducts
+                      : AppStrings.selectProduct,
+                  subtitle: hasItems
+                      ? AppStrings.tapToAddMore
+                      : AppStrings.tapToSelectProducts,
+                  icon: Icons.shopping_cart,
+                ),
               ),
             ),
 
-            // Selected products list
-            if (quotationState.items.isNotEmpty) ...[
-              const SizedBox(height: 12),
+            // Selected products
+            if (hasItems) ...[
+              const SizedBox(height: 16),
+
+              Text(
+                "Selected products",
+                style: textTheme.labelLarge?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
               ...quotationState.items.map(
                     (item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: SelectedProductTile(
-                    item: item,
-                    onDelete: () {
-                      ref
-                          .read(quotationNotifierProvider.notifier)
-                          .removeItem(item.productId);
-                    },
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Card(
+                    elevation: 0,
+                    color: scheme.surfaceContainerHighest,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: SelectedProductTile(
+                      item: item,
+                      onDelete: () {
+                        ref
+                            .read(quotationNotifierProvider.notifier)
+                            .removeItem(item.productId);
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -112,3 +141,4 @@ class ProductSelectSection extends StatelessWidget {
     );
   }
 }
+

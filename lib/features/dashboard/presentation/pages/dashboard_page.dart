@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
-import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 
 import '../widgets/sections/dashboard_app_bar.dart';
 import '../widgets/sections/quick_action_section.dart';
@@ -17,21 +15,13 @@ class DashboardPage extends ConsumerStatefulWidget {
 
 class _DashboardPageState extends ConsumerState<DashboardPage> {
   @override
-  void initState() {
-    super.initState();
-
-    // Trigger initial fetch for stats
-    Future.microtask(() {
-      ref.read(customerNotifierProvider.notifier).fetchCustomer();
-      ref.read(productNotifierProvider.notifier).fetchProduct();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           slivers: const [
             /// App Bar
             DashboardAppBar(),
@@ -44,6 +34,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
             /// Recent Quotations
             RecentQuotationSection(),
+
+            /// Extra spacing at bottom
+            SliverToBoxAdapter(
+              child: SizedBox(height: 24),
+            ),
           ],
         ),
       ),

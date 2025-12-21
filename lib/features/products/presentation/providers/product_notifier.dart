@@ -28,7 +28,9 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
   ProductNotifier(this.addProductUseCase, this.getProductUseCase,
       this.updateProductUseCase, this.deleteProductUseCase)
-      : super(ProductState());
+      : super(ProductState()) {
+    fetchProduct();
+  }
 
   @override
   void dispose() {

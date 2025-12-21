@@ -1,63 +1,41 @@
 import 'package:flutter/material.dart';
 
-class CustomAlertDialogBox extends StatelessWidget {
-  final String title;
-  final String message;
-  final VoidCallback onPressed;
-
-  const CustomAlertDialogBox({
-    super.key,
-    required this.title,
-    required this.message,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      backgroundColor: scheme.surfaceContainerHigh,
-      title: Text(
-        title,
-        style: textTheme.titleLarge,
-      ),
-      content: Text(
-        message,
-        style: textTheme.bodyMedium?.copyWith(
-          color: scheme.onSurfaceVariant,
+Future<void> customAlertDialog({
+  required BuildContext context,
+  required ColorScheme scheme,
+  required String title,
+  required String content,
+  required VoidCallback onConfirm,
+}) {
+  return showDialog(
+    context: context,
+    builder: (dialogContext) {
+      return AlertDialog(
+        icon: Icon(
+          Icons.warning_amber_rounded,
+          color: scheme.error,
         ),
-      ),
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      actions: [
-        Row(
-          children: [
-            Expanded(
-              child: TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
-              ),
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text("Cancel"),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: scheme.error,
+              foregroundColor: scheme.onError,
             ),
-            Expanded(
-              child: FilledButton(
-                onPressed: onPressed,
-                style: FilledButton.styleFrom(
-                  backgroundColor: scheme.error,
-                  foregroundColor: scheme.onError,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text("Confirm"),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              onConfirm();
+            },
+            child: const Text("Delete"),
+          ),
+        ],
+      );
+    },
+  );
 }
+

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
+import 'package:my_quotation_generator/config/utils/app_sizes.dart';
+import 'package:my_quotation_generator/core/common/widgets/custom_app_bar.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_provider.dart';
@@ -43,96 +45,87 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
         "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppStrings.createQuotationAppBarTitle),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Header
-                  QuotationHeaderCard(
-                    quotationNo: "QUOT-001",
-                    dateText: formattedDate,
-                    onTap: () => DatePickerHelper.selectDate(context, ref),
-                  ),
+      appBar: CustomAppBar(title: AppStrings.createQuotationAppBarTitle),
 
-                  const SizedBox(height: 24),
-
-                  /// Customer section
-                  CustomerSelectSection(
-                    customerState: customerState,
-                    quotationState: quotationState,
-                    ref: ref,
-                    onPressed: () async {
-                      final result = await context.push('/add-customer');
-                      if (result == true) {
-                        ref
-                            .read(customerNotifierProvider.notifier)
-                            .fetchCustomer();
-                      }
-                    },
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  /// Product section
-                  ProductSelectSection(
-                    productState: productState,
-                    quotationState: quotationState,
-                    ref: ref,
-                    onPressed: () async {
-                      final result = await context.push('/add-products');
-                      if (result == true) {
-                        ref
-                            .read(productNotifierProvider.notifier)
-                            .fetchProduct();
-                      }
-                    },
-                  ),
-
-                  const SizedBox(height: 32),
-                ],
-              ),
+      // ✅ Scrollable content only
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(AppSizes.screenPadding(context)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            QuotationHeaderCard(
+              quotationNo: "QUOT-001",
+              dateText: formattedDate,
+              onDateTap: () => DatePickerHelper.selectDate(context, ref),
             ),
-          ),
 
-          /// Bottom bar
-          QuotationBottomBar(
-            amount: quotationState.grandTotal.toStringAsFixed(2),
-            onGenerate: () async {
-              final result = await ref
-                  .read(quotationNotifierProvider.notifier)
-                  .generateQuotationAndPdf();
+            const SizedBox(height: 24),
 
-              if (!context.mounted) return;
+            CustomerSelectSection(
+              customerState: customerState,
+              quotationState: quotationState,
+              ref: ref,
+              onAddPressed: () async {
+                final result = await context.push('/add-customer');
+                if (result == true) {
+                  ref
+                      .read(customerNotifierProvider.notifier)
+                      .fetchCustomer();
+                }
+              },
+            ),
 
-              final isSuccess = result is DataSuccess<String>;
+            const SizedBox(height: 24),
 
-              showCustomSnackBar(
-                context,
-                message: isSuccess
-                    ? "Quotation generated successfully"
-                    : result.error
-                    .toString()
-                    .replaceFirst('Exception: ', ''),
-                durationSeconds: 2,
-              );
+            ProductSelectSection(
+              productState: productState,
+              quotationState: quotationState,
+              ref: ref,
+              onPressed: () async {
+                final result = await context.push('/add-products');
+                if (result == true) {
+                  ref
+                      .read(productNotifierProvider.notifier)
+                      .fetchProduct();
+                }
+              },
+            ),
 
-              if (isSuccess) {
-                context.push(
-                  '/quotation-pdf-view',
-                  extra: result.data,
-                );
-              }
-            },
-          ),
-        ],
+            const SizedBox(height: 96),
+          ],
+        ),
+      ),
+
+
+      bottomNavigationBar: QuotationBottomBar(
+        amount: quotationState.grandTotal.toStringAsFixed(2),
+        onGenerate: () async {
+          final result = await ref
+              .read(quotationNotifierProvider.notifier)
+              .generateQuotationAndPdf();
+
+          if (!context.mounted) return;
+
+          final isSuccess = result is DataSuccess<String>;
+
+          showCustomSnackBar(
+            context,
+            isSuccess: isSuccess,
+            message: isSuccess
+                ? "Quotation generated successfully"
+                : result.error
+                .toString()
+                .replaceFirst('Exception: ', ''),
+            durationSeconds: 2,
+          );
+
+          if (isSuccess) {
+            context.push(
+              '/quotation-pdf-view',
+              extra: result.data,
+            );
+          }
+        },
       ),
     );
   }

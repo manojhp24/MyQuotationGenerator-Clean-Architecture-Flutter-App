@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class SettingsList extends StatelessWidget {
   final IconData leadingIcon;
-  final IconData trailingIcon;
   final String title;
   final String subTitle;
   final VoidCallback onTap;
@@ -10,7 +9,6 @@ class SettingsList extends StatelessWidget {
   const SettingsList({
     super.key,
     required this.leadingIcon,
-    required this.trailingIcon,
     required this.title,
     required this.subTitle,
     required this.onTap,
@@ -27,34 +25,33 @@ class SettingsList extends StatelessWidget {
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: scheme.outlineVariant.withValues(alpha: 0.6),
-        ),
+        side: BorderSide(color: scheme.outlineVariant),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              // Leading icon container
+              // Icon
               Container(
-                padding: const EdgeInsets.all(10),
+                height: 40,
+                width: 40,
                 decoration: BoxDecoration(
                   color: scheme.primaryContainer,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   leadingIcon,
-                  size: 22,
+                  size: 20,
                   color: scheme.onPrimaryContainer,
                 ),
               ),
 
               const SizedBox(width: 16),
 
-              // Title & subtitle
+              // Text
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,10 +73,8 @@ class SettingsList extends StatelessWidget {
                 ),
               ),
 
-              // Trailing icon
               Icon(
-                trailingIcon,
-                size: 20,
+                Icons.chevron_right,
                 color: scheme.onSurfaceVariant,
               ),
             ],
@@ -89,4 +84,3 @@ class SettingsList extends StatelessWidget {
     );
   }
 }
-

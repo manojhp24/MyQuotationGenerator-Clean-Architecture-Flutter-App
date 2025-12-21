@@ -14,7 +14,7 @@ class AppSizes {
 
   // Layout padding
   static double screenPadding(BuildContext context) =>
-      screenWidth(context) * 0.04;
+      screenWidth(context) * 0.02;
 
   static double cardPadding(BuildContext context) =>
       screenWidth(context) * 0.04;

@@ -22,11 +22,11 @@ class ProductCard extends ConsumerWidget {
       elevation: 0,
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         side: BorderSide(color: scheme.outlineVariant),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         onTap: () async {
           ScaffoldMessenger.of(context).clearSnackBars();
           final result = await context.push(
@@ -38,56 +38,46 @@ class ProductCard extends ConsumerWidget {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              // Icon (tonal)
-              CircleAvatar(
-                radius: 22,
-                backgroundColor: scheme.primaryContainer,
+              Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: scheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: Icon(
                   Icons.inventory_2_outlined,
+                  size: 20,
                   color: scheme.onPrimaryContainer,
-                  size: 22,
                 ),
               ),
 
-              const SizedBox(width: 14),
+              const SizedBox(width: 12),
 
-              // Details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       product.productName,
-                      style: textTheme.titleMedium?.copyWith(
+                      style: textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-
-                    const SizedBox(height: 6),
-
-                    Row(
-                      children: [
-                        _MetaText(
-                          icon: Icons.currency_rupee,
-                          text: product.price,
-                        ),
-                        const SizedBox(width: 12),
-                        _MetaText(
-                          icon: Icons.percent,
-                          text: "10%",
-                        ),
-                      ],
+                    const SizedBox(height: 4),
+                    Text(
+                      '₹${product.price}',
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: scheme.primary,
+                      ),
                     ),
                   ],
                 ),
               ),
 
-              // Chevron (subtle)
               Icon(
                 Icons.chevron_right,
                 color: scheme.onSurfaceVariant,
@@ -96,39 +86,6 @@ class ProductCard extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _MetaText extends StatelessWidget {
-  const _MetaText({
-    required this.icon,
-    required this.text,
-  });
-
-  final IconData icon;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 14,
-          color: scheme.onSurfaceVariant,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: textTheme.bodySmall?.copyWith(
-            color: scheme.onSurfaceVariant,
-          ),
-        ),
-      ],
     );
   }
 }

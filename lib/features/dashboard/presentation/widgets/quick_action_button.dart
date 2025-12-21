@@ -19,51 +19,45 @@ class QuickActionButton extends StatelessWidget {
 
     return Card(
       elevation: 0,
-      color: scheme.surfaceContainer,
+      color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         side: BorderSide(color: scheme.outlineVariant),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
         onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              // Icon block
               Container(
-                height: 44,
-                width: 44,
+                height: 40,
+                width: 40,
                 decoration: BoxDecoration(
-                  color: scheme.primary,
-                  borderRadius: BorderRadius.circular(14),
+                  color: scheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   icon,
-                  color: scheme.onPrimary,
-                  size: 22,
+                  size: 20,
+                  color: scheme.onPrimaryContainer,
                 ),
               ),
 
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
 
-              // Text
               Expanded(
                 child: Text(
                   label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                   style: textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
 
-              // Arrow
               Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 18,
+                Icons.chevron_right_rounded,
                 color: scheme.onSurfaceVariant,
               ),
             ],

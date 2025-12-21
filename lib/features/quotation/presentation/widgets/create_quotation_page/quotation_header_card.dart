@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:my_quotation_generator/config/constants/app_strings.dart';
 
 class QuotationHeaderCard extends StatelessWidget {
   final String dateText;
   final String quotationNo;
-  final VoidCallback? onTap;
+  final VoidCallback? onDateTap;
 
   const QuotationHeaderCard({
     super.key,
     required this.dateText,
     required this.quotationNo,
-    this.onTap,
+    this.onDateTap,
   });
 
   @override
@@ -18,98 +17,114 @@ class QuotationHeaderCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    return Card(
+      elevation: 0,
+      color: scheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: scheme.outlineVariant.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Date
-            Expanded(
-              child: Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: scheme.outlineVariant),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: onTap,
+            // Header label
+            Text(
+              'Quotation Details',
+              style: textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: scheme.onSurface,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Date and Quote number row
+            Row(
+              children: [
+                // Date
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: scheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "DATE",
-                          style: textTheme.labelSmall?.copyWith(
-                            color: scheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
                         Row(
                           children: [
                             Icon(
                               Icons.calendar_today_outlined,
-                              size: 16,
-                              color: scheme.onSurfaceVariant,
+                              size: 18,
+                              color: scheme.primary,
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              dateText,
-                              style: textTheme.bodyMedium,
+                              'Date',
+                              style: textTheme.labelMedium?.copyWith(
+                                color: scheme.onSurfaceVariant,
+                              ),
                             ),
                           ],
+                        ),
+                        const SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: onDateTap,
+                          child: Text(
+                            dateText,
+                            style: textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: scheme.onSurface,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ),
 
-            const SizedBox(width: 12),
+                const SizedBox(width: 12),
 
-            /// Quotation number
-            Expanded(
-              child: Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: scheme.outlineVariant),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "QUOTE NO",
-                        style: textTheme.labelSmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
+                // Quote Number
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: scheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Quote No.',
+                          style: textTheme.labelMedium?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        quotationNo,
-                        style: textTheme.bodyMedium,
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        Text(
+                          quotationNo,
+                          style: textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: scheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
-
-        const SizedBox(height: 16),
-
-        /// Reference field
-        TextField(
-          decoration: const InputDecoration(
-            hintText: AppStrings.reference,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

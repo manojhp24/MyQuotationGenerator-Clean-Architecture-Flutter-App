@@ -12,7 +12,7 @@ class AppColors {
   ///
   /// This color is used as the base for generating harmonious color palettes
   /// for both light and dark themes following Material 3 guidelines.
-  static const Color seed = Colors.blue;
+  static const Color seed = Colors.blueAccent;
 
   /// Light theme color scheme.
   ///

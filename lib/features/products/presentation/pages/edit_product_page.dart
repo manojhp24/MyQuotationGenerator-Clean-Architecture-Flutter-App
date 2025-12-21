@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_quotation_generator/core/common/widgets/alert_dialog.dart';
 import 'package:my_quotation_generator/core/common/widgets/custom_app_bar.dart';
 
 import '../../../../config/constants/app_strings.dart';
@@ -25,6 +26,9 @@ class EditProductPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(productNotifierProvider.notifier);
+    final scheme = Theme
+        .of(context)
+        .colorScheme;
 
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.editProductAppBarTitle),
@@ -43,12 +47,11 @@ class EditProductPage extends ConsumerWidget {
               child: ProductRemoveButton(
                 label: AppStrings.remove,
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => CustomerAlertDialogBox(
-                      title: "Delete",
-                      message: AppStrings.deleteMessage,
-                      onPressed: () async {
+                  customAlertDialog(context: context,
+                      scheme: scheme,
+                      title: "Delete Product",
+                      content: AppStrings.deleteProductMessage,
+                      onConfirm: () async {
                         notifier.selectedProductId = products.id;
 
                         final result = await notifier.deleteProduct();
@@ -69,9 +72,9 @@ class EditProductPage extends ConsumerWidget {
                           context.pop(); // close dialog
                           context.pop(true); // return to previous page
                         }
-                      },
-                    ),
+                      }
                   );
+
                 },
               ),
             ),
@@ -105,3 +108,4 @@ class EditProductPage extends ConsumerWidget {
     );
   }
 }
+

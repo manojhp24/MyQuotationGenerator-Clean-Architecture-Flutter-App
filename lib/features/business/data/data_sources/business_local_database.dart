@@ -32,6 +32,7 @@ class BusinessLocalDataSource {
 
   /// Update an existing business record
   Future<int> updateBusiness(Map<String, dynamic> businessMap, int id) async {
+
     try {
       final db = testDb ?? await AppDatabase.database;
 

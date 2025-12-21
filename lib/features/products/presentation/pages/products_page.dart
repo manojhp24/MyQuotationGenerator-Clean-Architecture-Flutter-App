@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
+import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/core/common/widgets/custom_app_bar.dart';
 
 import '../../../../core/common/widgets/empty_state_widget.dart';
@@ -26,36 +27,78 @@ class _ProductPageState extends ConsumerState<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final state = ref.watch(productNotifierProvider);
 
     return Scaffold(
-      appBar:CustomAppBar(title: AppStrings.productListAppBarTitle,showBack: false,),
-      body: Builder(
-        builder: (_) {
-          if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (state.product.isEmpty) {
-            return const EmptyStateWidget(
-              icon: Icons.inbox_outlined,
-              message: AppStrings.noProductsFound,
-            );
-          }
-
-          return ProductListView(products: state.product);
-        },
+      appBar: CustomAppBar(
+        title: AppStrings.productListAppBarTitle,
+        showBack: false,
       ),
-      floatingActionButton: FloatingActionButton(
+      body: Padding(
+        padding: EdgeInsets.all(AppSizes.screenPadding(context)),
+        child: Builder(
+          builder: (_) {
+            if (state.isLoading) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      color: scheme.primary,
+                      strokeWidth: 2,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Loading products...',
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            if (state.product.isEmpty) {
+              return EmptyStateWidget(
+                icon: Icons.inbox_outlined,
+                message: AppStrings.noProductsFound,
+                actionText: 'Add First Product',
+                onAction: () => context.push('/add-products'),
+              );
+            }
+
+            return RefreshIndicator(
+              color: scheme.primary,
+              backgroundColor: scheme.surface,
+              onRefresh: () async {
+                ref.read(productNotifierProvider.notifier).fetchProduct();
+              },
+              child: ProductListView(products: state.product),
+            );
+          },
+        ),
+      ),
+      floatingActionButton: state.product.isEmpty
+          ? null
+          : FloatingActionButton.extended(
         onPressed: () async {
           final result = await context.push('/add-products');
           if (result == true) {
             ref.read(productNotifierProvider.notifier).fetchProduct();
           }
         },
-        child: const Icon(Icons.inventory_2_rounded),
+        icon: const Icon(Icons.inventory_2_rounded),
+        label: const Text('Add Product'),
+        backgroundColor: scheme.primary,
+        foregroundColor: scheme.onPrimary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 4,
+        highlightElevation: 8,
       ),
     );
   }

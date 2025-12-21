@@ -39,6 +39,7 @@ class AppStrings {
   static const String remove = "Remove";
   static const String update = "Update";
   static const String deleteCustomer = "Delete Customer?";
+  static const String selectedCustomer = "Selected Customer";
   static const String deleteMessage =
       "Are you sure you want to delete this customer? This action cannot be undone.";
 
@@ -48,7 +49,7 @@ class AppStrings {
 
 
   //Dashboard
-  static const String dashboard = "Dashboard";
+  static const String dashboard = "Home";
   static const String welcomeGreeting = "Welcome back 👋";
   static const String quickActions  = "Quick Actions";
   static const String addCustomer  = "Add Customer";
@@ -59,7 +60,7 @@ class AppStrings {
   static const String products  = "Products";
   static const String quotations  = "Quotations";
   static const String pending  = "Pending";
-  static const String newQuotation  = "NEW";
+  static const String newQuotation  = "New Quotation";
 
   //Product
   static const String productAppBarTitle = "Add Product";
@@ -72,12 +73,14 @@ class AppStrings {
   static const String description = "Description";
   static const String productHsn = "HSN";
   static const String productGST = "GST";
+  static const String deleteProductMessage =
+      "Are you sure you want to delete this product? This action cannot be undone.";
 
   //Settings
   static const String settingsAppBarTitle = "Settings";
   static const String document = "Document";
   static const String documentSettingsSubtitle = "Manage your documents settings";
-  static const String documentSettingsTitle = "Manage Document";
+  static const String documentSettingsTitle = "PDF Settings";
   static const String businessInfoTitle = "Business info";
   static const String business = "Business";
   static const String businessInfoSubtitle = "Update,Manage your business info";
@@ -104,6 +107,7 @@ class AppStrings {
   static const String amountPrice = "Amount Price";
   static const String generate = "Generate";
   static const String reference = "Reference note (Optional)";
+  static const String date = "date";
 
   // Bottom Sheet
   static const String noItemsFound = "No items found";

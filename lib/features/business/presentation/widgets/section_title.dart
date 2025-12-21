@@ -11,19 +11,14 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scale = AppSizes.textScale(context);
+    final textTheme =Theme.of(context).textTheme;
 
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: AppSizes.spaceS(context),
       ),
       child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16 * scale,
-          fontWeight: FontWeight.w600,
-          color: Colors.black87,
-        ),
+        title,style:textTheme.titleMedium ,
       ),
     );
   }

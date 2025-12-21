@@ -7,63 +7,97 @@ Future<T?> showSelectBottomSheet<T>({
   required List<T> items,
   required Widget Function(T item) tileBuilder,
 }) {
-  return showModalBottomSheet(
+  final scheme = Theme.of(context).colorScheme;
+  final textTheme = Theme.of(context).textTheme;
+
+  return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
+    backgroundColor: scheme.surfaceContainerLow,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (context) {
       return DraggableScrollableSheet(
+        expand: false,
         initialChildSize: 0.5,
         maxChildSize: 0.9,
-        expand: false,
         builder: (context, controller) {
           if (items.isEmpty) {
-            return Center(child: Text(AppStrings.noItemsFound));
+            return Padding(
+              padding: const EdgeInsets.all(24),
+              child: Center(
+                child: Text(
+                  AppStrings.noItemsFound,
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            );
           }
 
           return Column(
             children: [
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
 
-              // Drag Handle
+              // Drag handle
               Container(
-                width: 40,
+                width: 36,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(10),
+                  color: scheme.onSurfaceVariant.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
 
               const SizedBox(height: 16),
 
-              Text(
-                "$title (${items.length})",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+              // Title
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      title,
+                      style: textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '(${items.length})',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
-              const Divider(),
+              const SizedBox(height: 12),
 
+              // List
               Expanded(
                 child: ListView.separated(
                   controller: controller,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   itemCount: items.length,
-                  separatorBuilder: (_, _) => const Divider(height: 1),
+                  separatorBuilder: (_, _) =>
+                  const SizedBox(height: 4),
                   itemBuilder: (_, index) {
                     final item = items[index];
 
                     return InkWell(
+                      borderRadius: BorderRadius.circular(12),
                       onTap: () => Navigator.pop(context, item),
                       child: tileBuilder(item),
                     );
                   },
                 ),
               ),
+
+              const SizedBox(height: 12),
             ],
           );
         },

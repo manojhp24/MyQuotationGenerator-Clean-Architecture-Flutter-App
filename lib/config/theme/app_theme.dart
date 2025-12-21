@@ -18,6 +18,7 @@ class AppTheme {
   ///
   /// Uses Material 3 design with a light color scheme and Poppins typography.
   static ThemeData get lightTheme => ThemeData(
+    scaffoldBackgroundColor: AppColors.lightColorScheme.surface,
         useMaterial3: true,
         colorScheme: AppColors.lightColorScheme,
         textTheme: GoogleFonts.poppinsTextTheme(),
@@ -47,7 +48,7 @@ class AppTheme {
           ThemeData.dark().textTheme,
         ),
         fontFamily: GoogleFonts.poppins().fontFamily,
-        scaffoldBackgroundColor: AppColors.darkColorScheme.surface,
+        scaffoldBackgroundColor: AppColors.darkColorScheme.surfaceContainerLowest,
         appBarTheme: AppBarTheme(
           backgroundColor: AppColors.darkColorScheme.surfaceContainerLow,
           foregroundColor: AppColors.darkColorScheme.onSurface,

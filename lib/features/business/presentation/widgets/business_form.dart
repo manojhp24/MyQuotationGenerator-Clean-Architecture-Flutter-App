@@ -5,7 +5,6 @@ import 'package:my_quotation_generator/features/business/domain/entities/busines
 import 'package:my_quotation_generator/features/business/presentation/provider/business_provider.dart';
 
 import '../../../../config/constants/app_strings.dart';
-import '../../../../config/utils/app_sizes.dart';
 import '../../../../core/common/widgets/category_bottom_sheet.dart';
 import '../../../../core/common/widgets/form_text_field.dart';
 import '../../../../core/enums/business_category_enum.dart';
@@ -30,6 +29,7 @@ class BusinessForm extends ConsumerStatefulWidget {
 class _BusinessFormState extends ConsumerState<BusinessForm> {
   late final BusinessNotifier notifier;
 
+
   @override
   void initState() {
     super.initState();
@@ -38,16 +38,17 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
         isUpdate: widget.isUpdate, business: widget.business);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: notifier.formKey,
+
       child: Column(
         children: [
 
           /// Business Details Section
           SectionTitle(title: AppStrings.businessDetails),
-          SizedBox(height: AppSizes.spaceM(context)),
           Column(
             children: [
               AppFormField(
@@ -120,7 +121,6 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
 
           /// Contact Details Section
           SectionTitle(title: AppStrings.contactDetails),
-          SizedBox(height: AppSizes.spaceM(context)),
 
           Column(
             children: [
@@ -169,7 +169,6 @@ class _BusinessFormState extends ConsumerState<BusinessForm> {
 
           /// Bank Details Section
           SectionTitle(title: AppStrings.bankDetails),
-          SizedBox(height: AppSizes.spaceM(context)),
           Column(
             children: [
               AppFormField(

@@ -16,21 +16,17 @@ class BackupAndRestoreHelper {
 
       final dbPath = await _databasePath();
       final dbFile = File(dbPath);
-
       if (!await dbFile.exists()) return null;
 
-      final now = DateTime.now();
-      final formatted =
-          "${now.year}-${now.month}-${now.day}_${now.hour}-${now.minute}-${now.second}";
-
-      final backupPath = join(folder, "Quotation_Backup_$formatted.db");
+      final backupPath = join(folder, "Quotation_Backup.db");
 
       await dbFile.copy(backupPath);
       return backupPath;
-    } catch (_) {
+    } catch (e) {
       return null;
     }
   }
+
 
   Future<bool> restoreDataBase() async {
     try {

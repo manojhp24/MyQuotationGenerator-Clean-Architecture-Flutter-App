@@ -71,6 +71,7 @@ Future<void> setupDependencies() async {
         QuotationRepositoryImpl(
           sl<QuotationLocalDataSource>(),
           sl<CustomerLocalDataSource>(),
+          sl<BusinessLocalDataSource>(),
         ),
   );
 

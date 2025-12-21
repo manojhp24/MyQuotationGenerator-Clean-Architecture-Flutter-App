@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
+import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/core/common/widgets/custom_app_bar.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 
@@ -21,9 +22,11 @@ class AddProductPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.productAppBarTitle,),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: ProductForm(isUpdate: false),
+      body: Padding(
+        padding: EdgeInsets.all(AppSizes.screenPadding(context)),
+        child: SingleChildScrollView(
+          child: ProductForm(isUpdate: false),
+        ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16),

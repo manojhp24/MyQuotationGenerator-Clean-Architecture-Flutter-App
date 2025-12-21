@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 
-
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
   final bool showBack;
   final double? titleSpacing;
-  final PreferredSizeWidget? bottom; // 👈 added
+  final PreferredSizeWidget? bottom;
 
   const CustomAppBar({
     super.key,
@@ -15,14 +14,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.showBack = true,
     this.titleSpacing = 16.0,
-    this.bottom, // 👈 added
+    this.bottom,
   });
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return AppBar(
+      backgroundColor: scheme.surfaceContainer,
       elevation: 0,
       scrolledUnderElevation: 1,
       centerTitle: false,
@@ -42,11 +43,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       title: Text(
         title,
-        style: TextStyle(
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: textTheme.titleLarge?.copyWith(
           color: scheme.onSurface,
           fontWeight: FontWeight.w600,
-          fontSize: 22,
-          letterSpacing: 0.15,
         ),
       ),
 
@@ -55,7 +56,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         SizedBox(width: AppSizes.spaceS(context)),
       ],
 
-      bottom: bottom, // 👈 added
+      bottom: bottom,
     );
   }
 

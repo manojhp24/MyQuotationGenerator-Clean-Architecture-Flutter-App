@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
@@ -102,9 +103,10 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
 
     final pdfResult =
     await sl<GenerateQuotationPdfUseCase>()(quotationId);
-
+    debugPrint(pdfResult.error.toString());
     if (pdfResult is! DataSuccess<String>) {
-      return DataFailed(Exception("Failed to generate PDF"));
+      return DataFailed(Exception("Failed to generate PDF ${pdfResult.error}"));
+
     }
 
     return DataSuccess(pdfResult.data!);

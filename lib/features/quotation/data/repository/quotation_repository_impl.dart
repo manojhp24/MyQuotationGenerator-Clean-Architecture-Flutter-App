@@ -1,3 +1,5 @@
+import 'package:my_quotation_generator/features/business/data/data_sources/business_local_database.dart';
+import 'package:my_quotation_generator/features/business/data/models/business.dart';
 import 'package:my_quotation_generator/features/customer/data/data_sources/customer_local_database.dart';
 
 import '../../../../core/helpers/pdf/quotation_pdf_helper.dart';
@@ -13,10 +15,11 @@ import '../models/quotation_model.dart';
 class QuotationRepositoryImpl implements QuotationRepository {
   final QuotationLocalDataSource _quotationLocalDataSource;
   final CustomerLocalDataSource _customerLocalDataSource;
+  final BusinessLocalDataSource _businessLocalDataSource;
 
   QuotationRepositoryImpl(
     this._quotationLocalDataSource,
-    this._customerLocalDataSource,
+    this._customerLocalDataSource, this._businessLocalDataSource,
   );
 
   @override
@@ -72,14 +75,21 @@ class QuotationRepositoryImpl implements QuotationRepository {
       );
       final customer = CustomerModel.fromMap(customerMap).toEntity();
 
+      final  businessList = await _businessLocalDataSource.getBusiness();
+      final businesses = businessList
+          .map((map) => BusinessModel.fromMap(map).toEntity())
+          .toList();
+
+
       final path = await generateQuotationPdfFile(
         customer: customer,
         items: items,
         quotation: quotation,
+        business: businesses
       );
       return DataSuccess(path);
     } catch (e) {
-      return DataFailed(Exception("Failed to generate PDF"));
+      return DataFailed(Exception("Failed to generate PDF: ${e.toString()}"));
     }
   }
 }

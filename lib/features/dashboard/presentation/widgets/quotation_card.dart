@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../../config/constants/app_strings.dart';
 
 class QuotationCard extends StatelessWidget {
   final String quotationNumber;
   final String customerName;
   final String amount;
   final String date;
+  final String status; // 'draft', 'sent', 'paid'
   final bool isRecent;
   final VoidCallback? onTap;
 
@@ -15,6 +15,7 @@ class QuotationCard extends StatelessWidget {
     required this.customerName,
     required this.amount,
     required this.date,
+    required this.status,
     this.isRecent = false,
     this.onTap,
   });
@@ -24,106 +25,177 @@ class QuotationCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
+    // Simple status handling
+    final Color statusColor = status == 'sent'
+        ? scheme.primaryContainer
+        : scheme.surfaceContainerHighest;
+    final Color statusTextColor = status == 'sent'
+        ? scheme.onPrimaryContainer
+        : scheme.onSurfaceVariant;
+
     return Card(
-      color: scheme.surfaceContainer,
       elevation: 0,
+      color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         side: BorderSide(
-          color: isRecent ? scheme.primary : scheme.outlineVariant,
+          color: scheme.outlineVariant,
+          width: 1,
         ),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
+        splashColor: scheme.primary.withValues(alpha: 0.08),
+        highlightColor: Colors.transparent,
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Leading icon
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: isRecent
-                      ? scheme.primaryContainer
-                      : scheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.description_outlined,
-                  color: isRecent
-                      ? scheme.onPrimaryContainer
-                      : scheme.onSurfaceVariant,
-                ),
+              // Status and number row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Status badge
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      status.toUpperCase(),
+                      style: textTheme.labelSmall?.copyWith(
+                        color: statusTextColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+
+                  // Quotation number
+                  Text(
+                    quotationNumber,
+                    style: textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: scheme.onSurface,
+                    ),
+                  ),
+                ],
               ),
 
-              const SizedBox(width: 16),
+              const SizedBox(height: 12),
 
-              // Quotation info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          quotationNumber,
-                          style: textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        if (isRecent) ...[
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: scheme.primary,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              AppStrings.newQuotation,
-                              style: textTheme.labelSmall?.copyWith(
-                                color: scheme.onPrimary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
+              // Customer info
+              Row(
+                children: [
+                  // Avatar
+                  Container(
+                    height: 36,
+                    width: 36,
+                    decoration: BoxDecoration(
+                      color: scheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    const SizedBox(height: 4),
-                    Row(
+                    child: Center(
+                      child: Text(
+                        customerName.isNotEmpty ? customerName[0] : 'C',
+                        style: textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  // Name and date
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           customerName,
-                          style: textTheme.bodySmall?.copyWith(
-                            color: scheme.onSurfaceVariant,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: scheme.onSurface,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(height: 2),
                         Text(
-                          "• $date",
+                          date,
                           style: textTheme.bodySmall?.copyWith(
                             color: scheme.onSurfaceVariant,
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // Amount
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: scheme.primary.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total Amount',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                    Text(
+                      amount,
+                      style: textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: scheme.primary,
+                      ),
                     ),
                   ],
                 ),
               ),
 
-              // Amount
-              Text(
-                amount,
-                style: textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
+              // Recent indicator
+              if (isRecent)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 6,
+                        width: 6,
+                        decoration: BoxDecoration(
+                          color: scheme.primary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'New • Updated recently',
+                        style: textTheme.labelSmall?.copyWith(
+                          color: scheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),
