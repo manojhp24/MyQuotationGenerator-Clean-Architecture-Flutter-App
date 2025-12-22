@@ -92,8 +92,6 @@ class _ProductPageState extends ConsumerState<ProductPage> {
         },
         icon: const Icon(Icons.inventory_2_rounded),
         label: const Text('Add Product'),
-        backgroundColor: scheme.primary,
-        foregroundColor: scheme.onPrimary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),

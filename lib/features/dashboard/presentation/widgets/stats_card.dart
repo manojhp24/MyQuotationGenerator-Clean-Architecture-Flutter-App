@@ -22,7 +22,7 @@ class StatsCard extends StatelessWidget {
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: scheme.outlineVariant)
+
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

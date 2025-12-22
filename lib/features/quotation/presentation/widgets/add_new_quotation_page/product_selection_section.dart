@@ -5,7 +5,6 @@ import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import '../../../../products/presentation/providers/product_state.dart';
 import '../../provider/quotation_provider.dart';
 import '../../provider/quotation_state.dart';
-import '../create_quotation_page/action_tiles.dart';
 import '../create_quotation_page/product_details_card.dart';
 import '../shared/selectable_tile.dart';
 import '../shared/selection_bottom_sheet.dart';
@@ -35,85 +34,124 @@ class ProductSelectSection extends StatelessWidget {
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: scheme.outlineVariant.withValues(alpha: 0.3),
+          width: 1,
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
             Row(
               children: [
+                Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 20,
+                  color: scheme.primary,
+                ),
+                const SizedBox(width: 8),
                 Text(
                   AppStrings.products,
                   style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
+                    color: scheme.onSurface,
                   ),
                 ),
                 const Spacer(),
-                TextButton.icon(
+                TextButton(
                   onPressed: onPressed,
-                  icon: const Icon(Icons.add),
-                  label: const Text(AppStrings.addNewProduct),
+                  child: const Text(AppStrings.addNewProduct),
                 ),
               ],
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
 
-            // Add / Select product (primary action)
-            InkWell(
-              borderRadius: BorderRadius.circular(14),
-              onTap: () async {
-                final selectedProduct =
-                await showSelectBottomSheet(
-                  context: context,
-                  title: AppStrings.selectProduct,
-                  items: productState.product,
-                  tileBuilder: (product) => SelectableTile(
-                    title: product.productName,
-                    subtitle: '₹${product.price}',
-                    icon: Icons.shopping_cart,
+            // Select product card (same as customer)
+            Card(
+              elevation: 0,
+              color: scheme.surfaceContainerHighest,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () async {
+                  final selectedProduct = await showSelectBottomSheet(
+                    context: context,
+                    title: AppStrings.selectProduct,
+                    items: productState.product,
+                    tileBuilder: (product) => SelectableTile(
+                      title: product.productName,
+                      subtitle: '₹${product.price}',
+                      icon: Icons.shopping_cart_outlined,
+                    ),
+                  );
+
+                  if (selectedProduct != null) {
+                    ref
+                        .read(quotationNotifierProvider.notifier)
+                        .addProduct(selectedProduct, 1);
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: scheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.shopping_cart,
+                          size: 20,
+                          color: scheme.onPrimaryContainer,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              hasItems
+                                  ? AppStrings.addMoreProducts
+                                  : AppStrings.selectProduct,
+                              style: textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              hasItems
+                                  ? AppStrings.tapToAddMore
+                                  : AppStrings.tapToSelectProducts,
+                              style: textTheme.bodySmall?.copyWith(
+                                color: scheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ],
                   ),
-                );
-
-                if (selectedProduct != null) {
-                  ref
-                      .read(quotationNotifierProvider.notifier)
-                      .addProduct(selectedProduct, 1);
-                }
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: scheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: ActionTile(
-                  title: hasItems
-                      ? AppStrings.addMoreProducts
-                      : AppStrings.selectProduct,
-                  subtitle: hasItems
-                      ? AppStrings.tapToAddMore
-                      : AppStrings.tapToSelectProducts,
-                  icon: Icons.shopping_cart,
                 ),
               ),
             ),
 
-            // Selected products
+            // Selected products (unchanged)
             if (hasItems) ...[
               const SizedBox(height: 16),
-
-              Text(
-                "Selected products",
-                style: textTheme.labelLarge?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
               ...quotationState.items.map(
                     (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 10),
@@ -141,4 +179,3 @@ class ProductSelectSection extends StatelessWidget {
     );
   }
 }
-

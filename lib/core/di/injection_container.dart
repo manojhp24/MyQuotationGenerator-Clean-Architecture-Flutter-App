@@ -23,6 +23,7 @@ import 'package:my_quotation_generator/features/products/domain/usecases/delete_
 import 'package:my_quotation_generator/features/products/domain/usecases/get_product_usecase.dart';
 import 'package:my_quotation_generator/features/products/domain/usecases/update_product_usecase.dart';
 import 'package:my_quotation_generator/features/quotation/data/data_sources/quotation_local_data_source.dart';
+import 'package:my_quotation_generator/features/quotation/domain/usecases/get_quotations_use_case.dart';
 
 import '../../features/quotation/data/repository/quotation_repository_impl.dart';
 import '../../features/quotation/domain/repository/quotation_repository.dart';
@@ -83,5 +84,8 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton(
         () => GenerateQuotationPdfUseCase(sl()),
   );
+
+  sl.registerLazySingleton<GetQuotationsUseCase>(() =>
+      GetQuotationsUseCase(sl()));
 
 }

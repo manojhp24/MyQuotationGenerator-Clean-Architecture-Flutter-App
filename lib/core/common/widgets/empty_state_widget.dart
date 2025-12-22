@@ -79,8 +79,7 @@ class EmptyStateWidget extends StatelessWidget {
               ElevatedButton(
                 onPressed: onAction,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: scheme.primary,
-                  foregroundColor: scheme.onPrimary,
+
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 16,

@@ -1,4 +1,5 @@
 import 'package:my_quotation_generator/core/database/app_database.dart';
+import 'package:my_quotation_generator/core/database/db_tables.dart';
 import 'package:sqflite/sqflite.dart';
 
 class QuotationLocalDataSource {
@@ -17,7 +18,7 @@ class QuotationLocalDataSource {
     await db.insert('quotation_items', quotationItemsMap);
   }
 
-  Future<Map<String, dynamic>> getQuotation(int id) async {
+  Future<Map<String, dynamic>> getQuotationById(int id) async {
     final db = testDb ?? await AppDatabase.database;
     final res =
     await db.query('quotations', where: 'id=?', whereArgs: [id]);
@@ -32,4 +33,10 @@ class QuotationLocalDataSource {
       whereArgs: [id],
     );
   }
+
+  Future<List<Map<String, dynamic>>> getQuotationList() async {
+    final db = await AppDatabase.database;
+    return db.rawQuery(getQuotationListQuery);
+  }
+
 }

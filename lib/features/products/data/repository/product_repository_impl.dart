@@ -1,4 +1,4 @@
-import 'package:my_quotation_generator/core/resource/data_state.dart';
+  import 'package:my_quotation_generator/core/resource/data_state.dart';
 import 'package:my_quotation_generator/features/products/data/data_sources/product_local_database.dart';
 import 'package:my_quotation_generator/features/products/domain/repository/product_repository.dart';
 

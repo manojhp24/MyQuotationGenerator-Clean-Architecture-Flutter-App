@@ -15,8 +15,7 @@ class SettingsHeading extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: EdgeInsets.only(
-        top: AppSizes.spaceS(context), bottom: AppSizes.spaceS(context),),
+      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
       child: Text(
         title,
         style: textTheme.titleSmall?.copyWith(

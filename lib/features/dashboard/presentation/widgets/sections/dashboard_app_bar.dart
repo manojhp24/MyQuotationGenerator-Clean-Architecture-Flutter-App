@@ -19,7 +19,7 @@ class DashboardAppBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Title + subtitle
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -40,16 +40,7 @@ class DashboardAppBar extends StatelessWidget {
                 ],
               ),
 
-              // Settings action
-              IconButton.filledTonal(
-                onPressed: () => context.push('/settings'),
-                icon: const Icon(Icons.tune_rounded),
-                style: IconButton.styleFrom(
-                  backgroundColor: scheme.surfaceContainerHighest,
-                  foregroundColor: scheme.onSurfaceVariant,
-                ),
-                tooltip: AppStrings.settingsAppBarTitle,
-              ),
+
             ],
           ),
         ),

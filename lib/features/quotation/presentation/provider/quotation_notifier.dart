@@ -1,19 +1,24 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
 import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 import 'package:my_quotation_generator/features/quotation/domain/entities/quotation_entity.dart';
 import 'package:my_quotation_generator/features/quotation/domain/entities/quotation_item_entity.dart';
+import 'package:my_quotation_generator/features/quotation/domain/usecases/get_quotations_use_case.dart';
 import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_state.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/resource/data_state.dart';
+import '../../domain/entities/quotation_data.dart';
 import '../../domain/usecases/create_quotation_usecase.dart';
 import '../../domain/usecases/generate_quotation_pdf_use_case.dart';
-import '../../domain/entities/quotation_data.dart';
 
 class QuotationNotifier extends StateNotifier<QuotationState> {
-  QuotationNotifier() : super(QuotationState.initial());
+  QuotationNotifier(this.getQuotationsUseCase)
+      : super(QuotationState.initial());
+
+  final GetQuotationsUseCase getQuotationsUseCase;
 
 
 
@@ -34,8 +39,18 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
   void removeCustomer() {
     state = state.copyWith(selectedCustomer: null);
   }
+  void resetForm() {
+    state = state.copyWith(
+      date: DateTime.now(),
+      items: [],
+      selectedCustomer: null,
+      error: null,
+    );
+  }
 
-  // Products → Quotation Items
+
+
+
   void addProduct(ProductEntity product, int quantity) {
     final alreadyExists =
     state.items.any((e) => e.productId == product.id);
@@ -111,4 +126,19 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
 
     return DataSuccess(pdfResult.data!);
   }
+
+  Future<void> getQuotations() async {
+    state = state.copyWith(isLoading: true);
+
+    final result = await getQuotationsUseCase();
+
+    if (result is DataSuccess) {
+      final quotationData = result.data ?? [];
+      state = state.copyWith(quotations: quotationData, isLoading: false);
+    } else {
+      state = state.copyWith(error: result.error.toString(), isLoading: false);
+    }
+  }
+
+
 }

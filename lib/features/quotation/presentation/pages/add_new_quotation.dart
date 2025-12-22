@@ -7,6 +7,7 @@ import 'package:my_quotation_generator/core/common/widgets/custom_app_bar.dart';
 import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 import 'package:my_quotation_generator/features/products/presentation/providers/product_provider.dart';
 import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_provider.dart';
+import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_state.dart';
 import 'package:my_quotation_generator/features/quotation/presentation/widgets/shared/date_picker_helper.dart';
 
 import '../../../../core/common/App_snack_bar/custom_snack_bar.dart';
@@ -30,7 +31,6 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
     Future.microtask(() {
       ref.read(customerNotifierProvider.notifier).fetchCustomer();
       ref.read(productNotifierProvider.notifier).fetchProduct();
-      ref.read(quotationNotifierProvider.notifier).reset();
     });
   }
 
@@ -54,7 +54,7 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             QuotationHeaderCard(
-              quotationNo: "QUOT-001",
+              quotationNo: quotationState.nextQuotationNo,
               dateText: formattedDate,
               onDateTap: () => DatePickerHelper.selectDate(context, ref),
             ),
@@ -108,6 +108,7 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
 
           final isSuccess = result is DataSuccess<String>;
 
+
           showCustomSnackBar(
             context,
             isSuccess: isSuccess,
@@ -120,6 +121,9 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
           );
 
           if (isSuccess) {
+            ref.read(quotationNotifierProvider.notifier).getQuotations();
+
+            ref.read(quotationNotifierProvider.notifier).resetForm();
             context.push(
               '/quotation-pdf-view',
               extra: result.data,

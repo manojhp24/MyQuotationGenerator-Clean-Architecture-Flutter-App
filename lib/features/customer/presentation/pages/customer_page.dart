@@ -103,8 +103,6 @@ class _CustomerPageState extends ConsumerState<CustomerPage> {
         },
         icon: const Icon(Icons.person_add_alt_outlined),
         label: const Text('Add Customer'),
-        backgroundColor: scheme.primary,
-        foregroundColor: scheme.onPrimary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),

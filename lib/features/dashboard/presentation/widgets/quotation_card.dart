@@ -38,10 +38,6 @@ class QuotationCard extends StatelessWidget {
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(
-          color: scheme.outlineVariant,
-          width: 1,
-        ),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),

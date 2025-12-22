@@ -75,3 +75,22 @@ CREATE TABLE quotation_items(
   FOREIGN KEY (productId) REFERENCES products(id)
 )
 ''';
+
+const String getQuotationListQuery = '''
+SELECT 
+q.id  AS quotationId,
+q.quoteNo,
+q.quoteDate,
+q.subTotal,
+q.taxTotal,
+q.grandTotal,
+q.status,
+
+c.id AS customerId,
+c.customerName,
+c.email,
+c.mobile
+
+FROM quotations q
+INNER JOIN customer c ON c.id  = q.customerId
+''';

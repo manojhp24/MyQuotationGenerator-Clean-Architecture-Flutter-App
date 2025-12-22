@@ -13,7 +13,7 @@ class DashboardSectionTitle extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
       child: Text(
         title,
         style: textTheme.titleMedium?.copyWith(

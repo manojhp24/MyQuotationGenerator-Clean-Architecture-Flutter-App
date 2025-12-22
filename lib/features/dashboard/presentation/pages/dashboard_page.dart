@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 
 import '../widgets/sections/dashboard_app_bar.dart';
 import '../widgets/sections/quick_action_section.dart';
@@ -18,28 +19,31 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          slivers: const [
-            /// App Bar
-            DashboardAppBar(),
-
-            /// Stats Grid
-            StatsSection(),
-
-            /// Quick Actions
-            QuickActionSection(),
-
-            /// Recent Quotations
-            RecentQuotationSection(),
-
-            /// Extra spacing at bottom
-            SliverToBoxAdapter(
-              child: SizedBox(height: 24),
+        child: Padding(
+          padding: EdgeInsets.all(AppSizes.screenPadding(context)),
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
             ),
-          ],
+            slivers: const [
+              /// App Bar
+              DashboardAppBar(),
+          
+              /// Stats Grid
+              StatsSection(),
+          
+              /// Quick Actions
+              QuickActionSection(),
+          
+              /// Recent Quotations
+              RecentQuotationSection(),
+          
+              /// Extra spacing at bottom
+              SliverToBoxAdapter(
+                child: SizedBox(height: 24),
+              ),
+            ],
+          ),
         ),
       ),
     );

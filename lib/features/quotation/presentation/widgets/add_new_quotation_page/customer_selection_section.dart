@@ -185,7 +185,6 @@ class CustomerSelectSection extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Customer list
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,

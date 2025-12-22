@@ -8,6 +8,7 @@ import '../../../customer/data/models/customer.dart';
 import '../../domain/entities/quotation_entity.dart';
 import '../../domain/entities/quotation_item_entity.dart';
 import '../../domain/repository/quotation_repository.dart';
+import '../../presentation/provider/quotation_list_ui_model.dart';
 import '../data_sources/quotation_local_data_source.dart';
 import '../models/quotation_item_model.dart';
 import '../models/quotation_model.dart';
@@ -60,7 +61,7 @@ class QuotationRepositoryImpl implements QuotationRepository {
   @override
   Future<DataState<String>> generateQuotationPdf(int quotationId) async {
     try {
-      final quotationMap = await _quotationLocalDataSource.getQuotation(
+      final quotationMap = await _quotationLocalDataSource.getQuotationById(
         quotationId,
       );
       final quotation = QuotationModel.fromMap(quotationMap).toEntity();
@@ -92,4 +93,32 @@ class QuotationRepositoryImpl implements QuotationRepository {
       return DataFailed(Exception("Failed to generate PDF: ${e.toString()}"));
     }
   }
+
+  @override
+  Future<DataState<List<QuotationListItem>>> getQuotationList() async {
+    try {
+      final data = await _quotationLocalDataSource.getQuotationList();
+
+      final quotationList = data.map((e) => QuotationListItem(
+        quotationId: e['quotationId'],
+        quoteNo: e['quoteNo'],
+        quoteDate: DateTime.parse(e['quoteDate']),
+
+        subTotal: e['subTotal'],
+        taxTotal: e['taxTotal'] ,
+        grandTotal: e['grandTotal'] ,
+        status: e['status'] ,
+
+        customerId: e['customerId'],
+        customerName: e['customerName'],
+        email: e['email'] ,
+        mobile: e['mobile'],
+      )).toList();
+
+      return DataSuccess(quotationList);
+    } catch (e) {
+      return DataFailed(Exception(e.toString()));
+    }
+  }
+
 }
