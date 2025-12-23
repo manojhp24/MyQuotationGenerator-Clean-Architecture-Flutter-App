@@ -12,7 +12,6 @@ import '../../domain/entities/product.dart';
 import '../providers/product_provider.dart';
 import '../widgets/form/product_form.dart';
 import '../widgets/form/product_remove_button.dart';
-import '../../../customer/presentation/widgets/card/customer_alert_dialog.dart';
 import '../../../customer/presentation/widgets/forms/customer_form_button.dart';
 
 class EditProductPage extends ConsumerWidget {

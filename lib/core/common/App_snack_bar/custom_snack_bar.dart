@@ -16,7 +16,7 @@ void showCustomSnackBar(
       borderRadius: BorderRadius.circular(12),
     ),
     backgroundColor: isSuccess
-        ? scheme.inverseSurface
+        ? scheme.primaryContainer
         : scheme.errorContainer,
     content: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -25,7 +25,7 @@ void showCustomSnackBar(
           isSuccess ? Icons.check_circle_rounded : Icons.error_rounded,
           size: 22,
           color: isSuccess
-              ? scheme.onInverseSurface
+              ? scheme.onPrimaryContainer
               : scheme.onErrorContainer,
         ),
         const SizedBox(width: 12),
@@ -36,7 +36,7 @@ void showCustomSnackBar(
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: isSuccess
-                  ? scheme.onInverseSurface
+                  ? scheme.onPrimaryContainer
                   : scheme.onErrorContainer,
               fontWeight: FontWeight.w500,
             ),

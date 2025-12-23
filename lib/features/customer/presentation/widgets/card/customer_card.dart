@@ -26,6 +26,9 @@ class CustomerCard extends StatelessWidget {
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),

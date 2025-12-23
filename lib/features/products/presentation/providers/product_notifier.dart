@@ -172,4 +172,18 @@ class ProductNotifier extends StateNotifier<ProductState> {
     descriptionController.clear();
     hsnController.clear();
   }
+
+  void updateSearch(String value) {
+    state = state.copyWith(searchQuery: value);
+  }
+
+  List<ProductEntity> get filteredProducts{
+    if(state.searchQuery.isEmpty) return state.product;
+
+    final query = state.searchQuery.toLowerCase();
+
+    return state.product.where((p){
+      return p.productName.toLowerCase().contains(query);
+    }).toList();
+  }
 }

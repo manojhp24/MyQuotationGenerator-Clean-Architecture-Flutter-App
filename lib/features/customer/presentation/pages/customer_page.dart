@@ -35,6 +35,9 @@ class _CustomerPageState extends ConsumerState<CustomerPage> {
         .of(context)
         .textTheme;
     final state = ref.watch(customerNotifierProvider);
+    final customer = ref
+        .watch(customerNotifierProvider.notifier)
+        .filteredCustomer;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -45,52 +48,79 @@ class _CustomerPageState extends ConsumerState<CustomerPage> {
         padding: EdgeInsets.all(AppSizes.screenPadding(context)),
         child: Builder(
           builder: (context) {
-            if (state.isLoading) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      color: scheme.primary,
-                      strokeWidth: 2,
+            return Column(
+              children: [
+                SearchBar(
+                  leading: const Icon(Icons.search),
+                  hintText: "Search customers...",
+                  elevation: WidgetStateProperty.all(0),
+                  shape: WidgetStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSizes.radius(context)),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Loading customers...',
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+                  ),
+                  onChanged: (value) {
+                    ref.read(customerNotifierProvider.notifier).updateSearch(
+                        value);
+                  },
                 ),
-              );
-            }
 
-            if (state.customer.isEmpty) {
-              return EmptyStateWidget(
-                actionText: "Add First Customer",
-                icon: Icons.people_alt_outlined,
-                message: AppStrings.noCustomersFound,
-                onAction: () async {
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  final result = await context.push('/add-customer');
-                  if (result == true) {
-                    ref.read(customerNotifierProvider.notifier).fetchCustomer();
-                  }
-                },
-              );
-            }
+                SizedBox(height: AppSizes.spaceM(context)),
 
-            return RefreshIndicator(
-              color: scheme.primary,
-              backgroundColor: scheme.surface,
-              onRefresh: () async {
-                ref.read(customerNotifierProvider.notifier).fetchCustomer();
-              },
-              child: CustomerListView(customers: state.customer),
+                Expanded(
+                  child: () {
+                    if (state.isLoading) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              color: scheme.primary,
+                              strokeWidth: 2,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Loading customers...',
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: scheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    if (state.customer.isEmpty) {
+                      return EmptyStateWidget(
+                        actionText: "Add First Customer",
+                        icon: Icons.people_alt_outlined,
+                        message: AppStrings.noCustomersFound,
+                        onAction: () async {
+                          final result = await context.push('/add-customer');
+                          if (result == true) {
+                            ref
+                                .read(customerNotifierProvider.notifier)
+                                .fetchCustomer();
+                          }
+                        },
+                      );
+                    }
+
+                    return RefreshIndicator(
+                      color: scheme.primary,
+                      backgroundColor: scheme.surface,
+                      onRefresh: () async {
+                        ref
+                            .read(customerNotifierProvider.notifier)
+                            .fetchCustomer();
+                      },
+                      child: CustomerListView(customers: customer),
+                    );
+                  }(),
+                ),
+              ],
             );
-          },
-        ),
+          })
       ),
       floatingActionButton: state.customer.isEmpty ? null : FloatingActionButton
           .extended(

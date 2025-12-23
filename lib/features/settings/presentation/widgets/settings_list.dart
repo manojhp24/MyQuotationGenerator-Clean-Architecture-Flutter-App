@@ -25,7 +25,9 @@ class SettingsList extends StatelessWidget {
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),

@@ -9,6 +9,7 @@ class QuotationState {
   final List<QuotationItemEntity> items;
   final List<QuotationListItem> quotations;
   final CustomerEntity? selectedCustomer;
+  final String searchQuery;
 
   const QuotationState({
     this.isLoading = false,
@@ -17,6 +18,7 @@ class QuotationState {
     this.items = const [],
     this.quotations = const [],
     this.selectedCustomer,
+    this.searchQuery = ''
   });
 
   factory QuotationState.initial() {
@@ -34,6 +36,7 @@ class QuotationState {
     List<QuotationItemEntity>? items,
     List<QuotationListItem>? quotations,
     Object? selectedCustomer = _noChange,
+    String? searchQuery,
   }) {
     return QuotationState(
       isLoading: isLoading ?? this.isLoading,
@@ -44,6 +47,7 @@ class QuotationState {
       selectedCustomer: selectedCustomer == _noChange
           ? this.selectedCustomer
           : selectedCustomer as CustomerEntity?,
+      searchQuery: searchQuery ?? this.searchQuery,
     );
   }
 

@@ -4,18 +4,22 @@ class CustomerState {
   final bool isLoading;
   final List<CustomerEntity> customer;
   final String? error;
+  final String searchQuery;
 
-  CustomerState({this.isLoading = false, this.customer = const [], this.error});
+  CustomerState({this.isLoading = false, this.customer = const [
+  ], this.error, this.searchQuery = ''});
 
   CustomerState copyWith({
     bool? isLoading,
     List<CustomerEntity>? customer,
     String? error,
+    String? searchQuery
   }) {
     return CustomerState(
       isLoading: isLoading ?? this.isLoading,
       customer: customer ?? this.customer,
       error: error ?? this.error,
+        searchQuery: searchQuery ?? this.searchQuery
     );
   }
 }

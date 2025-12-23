@@ -223,4 +223,19 @@ class CustomerNotifier extends StateNotifier<CustomerState> {
     state = state.copyWith(customer: []);
   }
 
+  void updateSearch(String query) {
+    state = state.copyWith(searchQuery: query);
+  }
+
+  List<CustomerEntity> get filteredCustomer {
+    if (state.searchQuery.isEmpty) return state.customer;
+
+    final query = state.searchQuery.toLowerCase();
+
+    return state.customer.where((c){
+      return c.customerName!.toLowerCase().contains(query);
+    }).toList();
+
+  }
+
 }

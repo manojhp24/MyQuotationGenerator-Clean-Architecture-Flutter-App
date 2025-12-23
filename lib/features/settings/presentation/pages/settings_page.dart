@@ -43,6 +43,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     return Scaffold(
       appBar: CustomAppBar(
         title: AppStrings.settingsAppBarTitle,
+        showBack: false,
       ),
       body: Padding(
         padding: EdgeInsets.all(AppSizes.screenPadding(context)),

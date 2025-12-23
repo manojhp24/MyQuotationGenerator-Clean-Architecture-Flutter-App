@@ -45,6 +45,8 @@ class AddBusinessPage extends ConsumerWidget {
           if (!context.mounted) return;
           final isSuccess = result is DataSuccess;
 
+          context.pop(true);
+
           showCustomSnackBar(
             context,
             message: isSuccess

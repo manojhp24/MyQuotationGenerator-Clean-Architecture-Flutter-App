@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 
 class SettingsHeading extends StatelessWidget {
   final String title;

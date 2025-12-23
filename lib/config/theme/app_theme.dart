@@ -18,23 +18,28 @@ class AppTheme {
   ///
   /// Uses Material 3 design with a light color scheme and Poppins typography.
   static ThemeData get lightTheme => ThemeData(
+    useMaterial3: true,
+    colorScheme: AppColors.lightColorScheme,
     scaffoldBackgroundColor: AppColors.lightColorScheme.surface,
-        useMaterial3: true,
-        colorScheme: AppColors.lightColorScheme,
-        textTheme: GoogleFonts.poppinsTextTheme(),
-        fontFamily: GoogleFonts.poppins().fontFamily,
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.lightColorScheme.surfaceContainerLow,
-          foregroundColor: AppColors.lightColorScheme.onSurface,
-          elevation: 0,
-        ),
-        elevatedButtonTheme: AppElevatedButtonTheme.elevated(
-          AppColors.lightColorScheme,
-        ),
-        inputDecorationTheme: AppInputTheme.inputDecorationTheme(
-          AppColors.lightColorScheme,
-        ),
-      );
+    textTheme: GoogleFonts.poppinsTextTheme(),
+    fontFamily: GoogleFonts.poppins().fontFamily,
+
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.lightColorScheme.surface,
+      foregroundColor: AppColors.lightColorScheme.onSurface,
+      elevation: 0,
+      surfaceTintColor: AppColors.lightColorScheme.primary.withValues(alpha: 0.08),
+    ),
+
+    elevatedButtonTheme: AppElevatedButtonTheme.elevated(
+      AppColors.lightColorScheme,
+    ),
+
+    inputDecorationTheme: AppInputTheme.inputDecorationTheme(
+      AppColors.lightColorScheme,
+    ),
+  );
+
 
   /// Dark theme configuration for the application.
   ///

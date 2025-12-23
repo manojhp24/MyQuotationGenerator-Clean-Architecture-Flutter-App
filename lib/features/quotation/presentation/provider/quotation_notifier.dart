@@ -6,6 +6,7 @@ import 'package:my_quotation_generator/features/products/domain/entities/product
 import 'package:my_quotation_generator/features/quotation/domain/entities/quotation_entity.dart';
 import 'package:my_quotation_generator/features/quotation/domain/entities/quotation_item_entity.dart';
 import 'package:my_quotation_generator/features/quotation/domain/usecases/get_quotations_use_case.dart';
+import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_list_ui_model.dart';
 import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_state.dart';
 
 import '../../../../core/di/injection_container.dart';
@@ -48,6 +49,21 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
     );
   }
 
+  void updateSearch(String value) {
+    state = state.copyWith(searchQuery: value);
+  }
+
+  List<QuotationListItem> get filteredQuotation {
+    if (state.searchQuery.isEmpty) {
+      return state.quotations;
+    }
+    final query = state.searchQuery.toLowerCase();
+
+    return state.quotations.where((q) {
+      return q.quoteNo.toLowerCase().contains(query) ||
+          q.customerName.toLowerCase().contains(query);
+    }).toList();
+  }
 
 
 
@@ -95,7 +111,7 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
     }
 
     final quotation = QuotationEntity(
-      quoteNo: "QUOT-001",
+      quoteNo: state.nextQuotationNo,
       customerId: state.selectedCustomer!.id!,
       quoteDate: state.date,
       subTotal: state.subTotal,

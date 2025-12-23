@@ -30,6 +30,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final state = ref.watch(productNotifierProvider);
+    final product = ref.watch(productNotifierProvider.notifier).filteredProducts;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -39,44 +40,73 @@ class _ProductPageState extends ConsumerState<ProductPage> {
       body: Padding(
         padding: EdgeInsets.all(AppSizes.screenPadding(context)),
         child: Builder(
-          builder: (_) {
-            if (state.isLoading) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      color: scheme.primary,
-                      strokeWidth: 2,
+          builder: (context) {
+            return Column(
+              children: [
+                // Search bar
+                SearchBar(
+                  hintText: 'Search products',
+                  leading: const Icon(Icons.search),
+                  elevation: WidgetStateProperty.all(0),
+                  shape: WidgetStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          AppSizes.radius(context)),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Loading products...',
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+                  ),
+                  onChanged: (value) {
+                    ref.read(productNotifierProvider.notifier).updateSearch(
+                        value);
+                  },
                 ),
-              );
-            }
 
-            if (state.product.isEmpty) {
-              return EmptyStateWidget(
-                icon: Icons.inbox_outlined,
-                message: AppStrings.noProductsFound,
-                actionText: 'Add First Product',
-                onAction: () => context.push('/add-products'),
-              );
-            }
+                const SizedBox(height: 12),
 
-            return RefreshIndicator(
-              color: scheme.primary,
-              backgroundColor: scheme.surface,
-              onRefresh: () async {
-                ref.read(productNotifierProvider.notifier).fetchProduct();
-              },
-              child: ProductListView(products: state.product),
+                Expanded(
+                  child: () {
+                    if (state.isLoading) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              color: scheme.primary,
+                              strokeWidth: 2,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Loading products...',
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: scheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    if (state.product.isEmpty) {
+                      return EmptyStateWidget(
+                        icon: Icons.inbox_outlined,
+                        message: AppStrings.noProductsFound,
+                        actionText: 'Add First Product',
+                        onAction: () => context.push('/add-products'),
+                      );
+                    }
+
+                    return RefreshIndicator(
+                      color: scheme.primary,
+                      backgroundColor: scheme.surface,
+                      onRefresh: () async {
+                        ref
+                            .read(productNotifierProvider.notifier)
+                            .fetchProduct();
+                      },
+                      child: ProductListView(products: product),
+                    );
+                  }(),
+                ),
+              ],
             );
           },
         ),
