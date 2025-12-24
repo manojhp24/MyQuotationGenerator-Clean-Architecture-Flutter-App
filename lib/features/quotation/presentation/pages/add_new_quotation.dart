@@ -47,7 +47,6 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.createQuotationAppBarTitle),
 
-      // ✅ Scrollable content only
       body: SingleChildScrollView(
         padding: EdgeInsets.all(AppSizes.screenPadding(context)),
         child: Column(
@@ -59,7 +58,8 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
               onDateTap: () => DatePickerHelper.selectDate(context, ref),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: AppSizes.spaceM(context)),
+
 
             CustomerSelectSection(
               customerState: customerState,
@@ -75,7 +75,7 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
               },
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: AppSizes.spaceM(context)),
 
             ProductSelectSection(
               productState: productState,
@@ -90,8 +90,6 @@ class _AddNewQuotationState extends ConsumerState<AddNewQuotation> {
                 }
               },
             ),
-
-            const SizedBox(height: 96),
           ],
         ),
       ),

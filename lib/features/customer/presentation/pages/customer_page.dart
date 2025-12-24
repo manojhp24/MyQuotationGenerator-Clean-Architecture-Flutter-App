@@ -106,6 +106,13 @@ class _CustomerPageState extends ConsumerState<CustomerPage> {
                       );
                     }
 
+                    if (customer.isEmpty) {
+                      return EmptyStateWidget(icon: Icons.search_off_outlined,
+                          message: "Oops! Customer not found",
+                        actionText: "",
+                      );
+                    }
+
                     return RefreshIndicator(
                       color: scheme.primary,
                       backgroundColor: scheme.surface,

@@ -6,12 +6,12 @@ import '../../../domain/entities/product.dart';
 import '../../providers/product_provider.dart';
 
 class ProductCard extends ConsumerWidget {
-  final ProductEntity product;
-
   const ProductCard({
     super.key,
     required this.product,
   });
+
+  final ProductEntity product;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,9 +23,7 @@ class ProductCard extends ConsumerWidget {
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
+        side: BorderSide(color: scheme.outlineVariant),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
@@ -40,52 +38,142 @@ class ProductCard extends ConsumerWidget {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              /// Icon block
               Container(
-                height: 40,
-                width: 40,
+                height: 48,
+                width: 48,
                 decoration: BoxDecoration(
                   color: scheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
                   Icons.inventory_2_outlined,
-                  size: 20,
+                  size: 22,
                   color: scheme.onPrimaryContainer,
                 ),
               ),
 
-              const SizedBox(width: 12),
+              const SizedBox(width: 14),
 
+              /// Product details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    /// Name
                     Text(
                       product.productName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
+
                     const SizedBox(height: 4),
-                    Text(
-                      '₹${product.price}',
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: scheme.primary,
+
+                    /// Price (highlight)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
                       ),
+                      decoration: BoxDecoration(
+                        color: scheme.primary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '₹ ${product.price} / ${product.unitMeasure}',
+                        style: textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: scheme.primary,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    /// GST + HSN
+                    Row(
+                      children: [
+                        _MetaChip(text: 'GST ${product.gst}%'),
+                        const SizedBox(width: 6),
+                        _MetaChip(text: 'HSN ${product.hsn}'),
+                      ],
                     ),
                   ],
                 ),
               ),
 
-              Icon(
-                Icons.chevron_right,
-                color: scheme.onSurfaceVariant,
+              /// Arrow
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: scheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  Icons.chevron_right,
+                  size: 20,
+                  color: scheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class _MetaText extends StatelessWidget {
+  const _MetaText({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: textTheme.bodySmall?.copyWith(
+        color: scheme.onSurfaceVariant,
+      ),
+    );
+  }
+}
+
+class _MetaChip extends StatelessWidget {
+  const _MetaChip({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        text,
+        style: textTheme.labelSmall?.copyWith(
+          fontWeight: FontWeight.w600,
+          color: scheme.onSurfaceVariant,
         ),
       ),
     );

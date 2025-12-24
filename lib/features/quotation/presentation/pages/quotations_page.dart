@@ -5,7 +5,6 @@ import 'package:my_quotation_generator/config/constants/app_strings.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/core/common/widgets/custom_app_bar.dart';
 import 'package:my_quotation_generator/core/common/widgets/empty_state_widget.dart';
-import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_list_ui_model.dart';
 import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_provider.dart';
 
 import '../widgets/quotation_page/quotation_list_card.dart';
@@ -28,6 +27,13 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme
+        .of(context)
+        .colorScheme;
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
+
     final state = ref.watch(quotationNotifierProvider);
     final quotations = ref
         .watch(quotationNotifierProvider.notifier)
@@ -42,85 +48,132 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
         padding: EdgeInsets.all(AppSizes.screenPadding(context)),
         child: Column(
           children: [
+
+            /// Search
             SearchBar(
-              elevation: WidgetStateProperty.all(0),
               leading: const Icon(Icons.search),
               hintText: "Search quotations...",
+              elevation: WidgetStateProperty.all(0),
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppSizes.radius(context),
+                  ),
+                ),
+              ),
               onChanged: (value) {
                 ref
                     .read(quotationNotifierProvider.notifier)
                     .updateSearch(value);
               },
-              shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSizes.radius(context))
-              )),
             ),
+
             SizedBox(height: AppSizes.spaceM(context)),
+
+            /// Content
             Expanded(
-              child: _buildBody(
-                context,
-                state.isLoading,
-                quotations,
-              ),
+              child: () {
+                if (state.isLoading) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: scheme.primary,
+                          strokeWidth: 2,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Loading quotations...',
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                if (state.quotations.isEmpty) {
+                  return EmptyStateWidget(
+                    icon: Icons.description_outlined,
+                    message: 'No quotations found',
+                    actionText: 'Create quotation',
+                    onAction: () async {
+                      final result =
+                      await context.push('/create-quotation');
+                      if (result == true) {
+                        ref
+                            .read(quotationNotifierProvider.notifier)
+                            .getQuotations();
+                      }
+                    },
+                  );
+                }
+
+                if (quotations.isEmpty) {
+                  return EmptyStateWidget(icon: Icons.search_off_outlined,
+                      message: "Oops! Quotation not found",
+                    actionText: "",
+                  );
+                }
+                return RefreshIndicator(
+                  color: scheme.primary,
+                  backgroundColor: scheme.surface,
+                  onRefresh: () async {
+                    ref
+                        .read(quotationNotifierProvider.notifier)
+                        .getQuotations();
+                  },
+                  child: ListView.separated(
+                    itemCount: quotations.length,
+                    separatorBuilder: (_, __) =>
+                        SizedBox(height: AppSizes.spaceS(context)),
+                    itemBuilder: (context, index) {
+                      final quotation = quotations[index];
+
+                      return Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(
+                            color: scheme.outlineVariant,
+                          ),
+                        ),
+                        child: QuotationListCard(
+                          quotation: quotation,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }(),
             ),
           ],
         ),
       ),
+
+      /// FAB
       floatingActionButton: state.quotations.isEmpty
           ? null
-          : FloatingActionButton(
-        onPressed: () => context.push('/create-quotation'),
-        child: const Icon(Icons.note_add_outlined),
+          : FloatingActionButton.extended(
+        onPressed: () async {
+          final result =
+          await context.push('/create-quotation');
+          if (result == true) {
+            ref
+                .read(quotationNotifierProvider.notifier)
+                .getQuotations();
+          }
+        },
+        icon: const Icon(Icons.note_add_outlined),
+        label: const Text('Create Quotation'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 4,
+        highlightElevation: 8,
       ),
     );
   }
-}
-
-
-Widget _buildBody(BuildContext context,
-    bool isLoading,
-    List<QuotationListItem> quotations,) {
-  if (isLoading) {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-  if (quotations.isEmpty) {
-    return EmptyStateWidget(
-      icon: Icons.description_outlined,
-      message: 'No quotations found',
-      actionText: 'Create quotation',
-      onAction: () => context.push('/create-quotation'),
-    );
-  }
-
-  return ListView.separated(
-    itemCount: quotations.length,
-    separatorBuilder: (_, _) =>
-        SizedBox(height: AppSizes.spaceS(context)),
-    itemBuilder: (context, index) {
-      final quotation = quotations[index];
-
-      return Card(
-        elevation: 0,
-        color: Theme
-            .of(context)
-            .colorScheme
-            .surfaceContainerLow,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: Theme
-                .of(context)
-                .colorScheme
-                .outlineVariant,
-          ),
-        ),
-        child: QuotationListCard(
-          quotation: quotation,
-        ),
-      );
-    },
-  );
 }

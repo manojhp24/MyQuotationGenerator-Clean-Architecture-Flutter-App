@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/core/helpers/date_formatter.dart';
+
 import '../../provider/quotation_list_ui_model.dart';
 
 class QuotationListCard extends StatelessWidget {
@@ -7,14 +9,13 @@ class QuotationListCard extends StatelessWidget {
 
   final QuotationListItem quotation;
 
-  String get initials {
-    return quotation.customerName
-        .split(' ')
-        .map((e) => e[0])
-        .take(2)
-        .join()
-        .toUpperCase();
-  }
+  String get initials =>
+      quotation.customerName
+          .split(' ')
+          .map((e) => e[0])
+          .take(2)
+          .join()
+          .toUpperCase();
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +23,16 @@ class QuotationListCard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(AppSizes.screenPadding(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// HEADER
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _AvatarCircle(text: initials),
-
-              const SizedBox(width: 14),
+              const SizedBox(width: 12),
 
               Expanded(
                 child: Column(
@@ -58,38 +59,39 @@ class QuotationListCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
 
-          /// STATUS + DATE + AMOUNT
+          /// DATE + AMOUNT (clean single meta row)
           Row(
             children: [
-              const _InfoChip(
-                text: 'Sent',
-                icon: Icons.edit_outlined,
+              Icon(
+                Icons.calendar_today_outlined,
+                size: 14,
+                color: scheme.onSurfaceVariant,
               ),
-
-              const Spacer(),
-
+              const SizedBox(width: 6),
               _MetaText(
                 text: DateFormatter.toReadableDate(
                   quotation.quoteDate.toString(),
                 ),
               ),
 
-              const SizedBox(width: 16),
+              const Spacer(),
 
               _AmountBadge(amount: quotation.grandTotal),
             ],
           ),
 
-          const SizedBox(height: 16),
+
+          const SizedBox(height: 10),
 
           Divider(
             height: 1,
-            color: scheme.outlineVariant.withValues(alpha: 0.1),
+            thickness: 0.8,
+            color: scheme.outlineVariant.withValues(alpha: 0.15),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           /// ACTIONS
           Row(
@@ -113,6 +115,7 @@ class QuotationListCard extends StatelessWidget {
     );
   }
 }
+
 
 /* -------------------------------------------------------------------------- */
 /*                               SMALL WIDGETS                                */

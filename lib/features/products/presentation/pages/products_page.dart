@@ -85,12 +85,20 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                       );
                     }
 
-                    if (state.product.isEmpty) {
+                    if(state.product.isEmpty){
                       return EmptyStateWidget(
                         icon: Icons.inbox_outlined,
                         message: AppStrings.noProductsFound,
                         actionText: 'Add First Product',
                         onAction: () => context.push('/add-products'),
+                      );
+                    }
+
+                    if (product.isEmpty) {
+                      return EmptyStateWidget(
+                        icon: Icons.inbox_outlined,
+                        message: "Oops! no products found",
+                        actionText: "",
                       );
                     }
 

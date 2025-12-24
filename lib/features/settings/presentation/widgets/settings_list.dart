@@ -4,6 +4,7 @@ class SettingsList extends StatelessWidget {
   final IconData leadingIcon;
   final String title;
   final String subTitle;
+  final Widget? trailing;
   final VoidCallback onTap;
 
   const SettingsList({
@@ -11,7 +12,7 @@ class SettingsList extends StatelessWidget {
     required this.leadingIcon,
     required this.title,
     required this.subTitle,
-    required this.onTap,
+    required this.onTap, this.trailing,
   });
 
   @override
@@ -75,10 +76,12 @@ class SettingsList extends StatelessWidget {
                 ),
               ),
 
-              Icon(
-                Icons.chevron_right,
-                color: scheme.onSurfaceVariant,
-              ),
+              trailing ??
+                  Icon(
+                    Icons.chevron_right,
+                    color: scheme.onSurfaceVariant,
+                  ),
+
             ],
           ),
         ),

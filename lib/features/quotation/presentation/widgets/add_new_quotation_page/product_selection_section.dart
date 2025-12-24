@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
+import 'package:my_quotation_generator/features/products/domain/entities/product.dart';
 
 import '../../../../products/presentation/providers/product_state.dart';
 import '../../provider/quotation_provider.dart';
@@ -80,22 +81,14 @@ class ProductSelectSection extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: () async {
-                  final selectedProduct = await showSelectBottomSheet(
-                    context: context,
-                    title: AppStrings.selectProduct,
-                    items: productState.product,
-                    tileBuilder: (product) => SelectableTile(
-                      title: product.productName,
-                      subtitle: '₹${product.price}',
-                      icon: Icons.shopping_cart_outlined,
-                    ),
-                  );
+                  final selectedProduct = await _showProductSelection(context);
 
                   if (selectedProduct != null) {
                     ref
                         .read(quotationNotifierProvider.notifier)
                         .addProduct(selectedProduct, 1);
                   }
+
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -178,4 +171,70 @@ class ProductSelectSection extends StatelessWidget {
       ),
     );
   }
+  Future<ProductEntity?> _showProductSelection(BuildContext context) async {
+    return await showModalBottomSheet<ProductEntity>(
+      isScrollControlled: true,
+      context: context,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        final scheme = Theme.of(context).colorScheme;
+        final textTheme = Theme.of(context).textTheme;
+
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              /// Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppStrings.selectProduct,
+                    style: textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              /// Product list (same behavior as customer)
+              Expanded(
+                child: ListView.separated(
+
+                  itemCount: productState.product.length,
+                  separatorBuilder: (_, __) =>
+                      Divider(color: scheme.outlineVariant.withValues(alpha: 0.3)),
+                  itemBuilder: (context, index) {
+                    final product = productState.product[index];
+
+                    return SelectableTile(
+                      title: product.productName,
+                      subtitle: '₹ ${product.price} / ${product.unitMeasure}',
+                      icon: Icons.shopping_cart_outlined,
+                      onTap: () => Navigator.pop(context, product),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
 }
+
+
+

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
+import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/features/customer/domain/entities/customer.dart';
+import 'package:my_quotation_generator/features/customer/presentation/provider/customer_provider.dart';
 
 import '../../../../customer/presentation/provider/customer_state.dart';
 import '../../provider/quotation_provider.dart';
@@ -153,59 +155,104 @@ class CustomerSelectSection extends StatelessWidget {
       ),
     );
   }
-
   Future<CustomerEntity?> _showCustomerSelection(BuildContext context) async {
     return await showModalBottomSheet<CustomerEntity>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Select Customer',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
+      builder: (context) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final textTheme = Theme.of(context).textTheme;
 
-            const SizedBox(height: 16),
 
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: customerState.customer.length,
-                itemBuilder: (context, index) {
-                  final customer = customerState.customer[index];
-                  return SelectableTile(
-                    title: customer.customerName ?? 'Unknown',
-                    subtitle: customer.mobile ?? customer.email ?? '',
-                    icon: Icons.person_outline,
-                    isSelected: quotationState.selectedCustomer?.id == customer.id,
-                    onTap: () => Navigator.pop(context, customer),
-                  );
-                },
+            ref.watch(customerNotifierProvider);
+            final filteredCustomers =
+                ref.read(customerNotifierProvider.notifier).filteredCustomer;
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
               ),
-            ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Select Customer',
+                        style: textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
 
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+                  SizedBox(height: AppSizes.spaceM(context)),
+
+                  /// Search
+                  SearchBar(
+                    elevation: WidgetStateProperty.all(0),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppSizes.radius(context)),
+                      ),
+                    ),
+                    leading: const Icon(Icons.search),
+                    hintText: 'Search customer...',
+                    onChanged: (value) {
+                      ref
+                          .read(customerNotifierProvider.notifier)
+                          .updateSearch(value);
+                    },
+                  ),
+
+                  SizedBox(height: AppSizes.spaceM(context)),
+
+                  Expanded(
+                    child: filteredCustomers.isEmpty
+                        ? const Center(
+                      child: Text('Oops! Customer not found'),
+                    )
+                        : ListView.builder(
+                      itemCount: filteredCustomers.length,
+                      itemBuilder: (context, index) {
+                        final customer = filteredCustomers[index];
+
+                        return SelectableTile(
+                          title:
+                          customer.customerName ?? 'Unknown',
+                          subtitle:
+                          customer.mobile ?? customer.email ?? '',
+                          icon: Icons.person_outline,
+                          isSelected:
+                          quotationState.selectedCustomer?.id ==
+                              customer.id,
+                          onTap: () =>
+                              Navigator.pop(context, customer),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
+
+
 }

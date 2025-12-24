@@ -63,9 +63,7 @@ class EmptyStateWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                actionText != null
-                    ? 'Tap the button below to add your first item'
-                    : 'Add items to see them appear here',
+                actionText!,
                 textAlign: TextAlign.center,
                 style: textTheme.bodyMedium?.copyWith(
                   color: scheme.onSurfaceVariant,

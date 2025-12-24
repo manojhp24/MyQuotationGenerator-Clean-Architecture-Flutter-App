@@ -11,6 +11,7 @@ import 'package:my_quotation_generator/features/customer/presentation/provider/c
 import 'package:my_quotation_generator/features/settings/presentation/widgets/settings_heading.dart';
 import 'package:my_quotation_generator/features/settings/presentation/widgets/settings_list.dart';
 
+import '../../../../config/theme/theme_provider.dart';
 import '../../../../core/common/widgets/alert_dialog.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -156,6 +157,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 );
               },
             ),
+            // THEME
+            const SettingsHeading(title: "Appearance"),
+            SettingsList(
+              leadingIcon: Icons.dark_mode_outlined,
+              title: "Dark Mode",
+              subTitle: "Switch between light and dark theme",
+              trailing: Switch(
+                value: Theme.of(context).brightness == Brightness.dark,
+                onChanged: (value) {
+                  ref.read(themeModeProvider.notifier).toggleTheme(value);
+                },
+              ), onTap: () {  },
+            ),
+
           ],
         ),
       ),
