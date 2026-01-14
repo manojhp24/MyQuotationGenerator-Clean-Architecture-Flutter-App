@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:my_quotation_generator/features/quotation/domain/entities/quotation_item_entity.dart';
 
-class SelectedProductTile extends StatelessWidget {
+import '../../provider/quotation_provider.dart';
+
+class SelectedProductTile extends ConsumerWidget {
   final QuotationItemEntity item;
   final VoidCallback onDelete;
+  final VoidCallback onIncreaseQty;
+  final VoidCallback onDecreaseQty;
+
 
   const SelectedProductTile({
     super.key,
     required this.item,
     required this.onDelete,
+    required this.onIncreaseQty,
+    required this.onDecreaseQty,
   });
 
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final formatter = NumberFormat("#,##0");
@@ -49,12 +58,52 @@ class SelectedProductTile extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            _detailRow(
-              context,
-              label: "Price",
-              value:
-              "${item.quantity} × ${formatter.format(item.unitPrice)}",
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Price",
+                  style: textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Row(
+                  children: [
+                    // Decrease
+                    IconButton(
+                      icon: const Icon(Icons.remove_circle_outline),
+                      onPressed: (){
+                        ref
+                            .read(quotationNotifierProvider.notifier)
+                            .decreaseQuantity(item.productId);
+                      },
+                      visualDensity: VisualDensity.compact,
+                    ),
+
+                    Text(
+                      "${item.quantity}",
+                      style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+
+                    // Increase
+                    IconButton(
+                      icon: const Icon(Icons.add_circle_outline),
+                      onPressed: (){
+                        ref
+                            .read(quotationNotifierProvider.notifier)
+                            .increaseQuantity(item.productId);
+                      },
+                      visualDensity: VisualDensity.compact,
+                    ),
+
+                    const SizedBox(width: 6),
+                    Text("× ${formatter.format(item.unitPrice)}"),
+                  ],
+                ),
+              ],
             ),
+
             _detailRow(
               context,
               label: "GST",

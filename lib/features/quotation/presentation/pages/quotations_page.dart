@@ -7,7 +7,7 @@ import 'package:my_quotation_generator/core/common/widgets/custom_app_bar.dart';
 import 'package:my_quotation_generator/core/common/widgets/empty_state_widget.dart';
 import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_provider.dart';
 
-import '../widgets/quotation_page/quotation_list_card.dart';
+import '../widgets/quotation_page/quotation_list_view.dart';
 
 class QuotationsPage extends ConsumerStatefulWidget {
   const QuotationsPage({super.key});
@@ -35,9 +35,10 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
         .textTheme;
 
     final state = ref.watch(quotationNotifierProvider);
-    final quotations = ref
-        .watch(quotationNotifierProvider.notifier)
-        .filteredQuotation;
+    final quotations =
+        ref
+            .watch(quotationNotifierProvider.notifier)
+            .filteredQuotation;
 
     return Scaffold(
       appBar: const CustomAppBar(
@@ -48,11 +49,10 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
         padding: EdgeInsets.all(AppSizes.screenPadding(context)),
         child: Column(
           children: [
-
             /// Search
             SearchBar(
               leading: const Icon(Icons.search),
-              hintText: "Search quotations...",
+              hintText: 'Search quotations...',
               elevation: WidgetStateProperty.all(0),
               shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
@@ -94,6 +94,7 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
                   );
                 }
 
+                /// 2️⃣ No quotations in DB
                 if (state.quotations.isEmpty) {
                   return EmptyStateWidget(
                     icon: Icons.description_outlined,
@@ -104,7 +105,8 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
                       await context.push('/create-quotation');
                       if (result == true) {
                         ref
-                            .read(quotationNotifierProvider.notifier)
+                            .read(
+                            quotationNotifierProvider.notifier)
                             .getQuotations();
                       }
                     },
@@ -112,43 +114,27 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
                 }
 
                 if (quotations.isEmpty) {
-                  return EmptyStateWidget(icon: Icons.search_off_outlined,
-                      message: "Oops! Quotation not found",
+                  return const EmptyStateWidget(
+                    icon: Icons.search_off_outlined,
+                    message: 'Oops! Quotation not found',
                     actionText: "",
                   );
                 }
+
                 return RefreshIndicator(
                   color: scheme.primary,
                   backgroundColor: scheme.surface,
                   onRefresh: () async {
                     ref
-                        .read(quotationNotifierProvider.notifier)
+                        .read(
+                        quotationNotifierProvider.notifier)
                         .getQuotations();
                   },
-                  child: ListView.separated(
-                    itemCount: quotations.length,
-                    separatorBuilder: (_, __) =>
-                        SizedBox(height: AppSizes.spaceS(context)),
-                    itemBuilder: (context, index) {
-                      final quotation = quotations[index];
-
-                      return Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(
-                            color: scheme.outlineVariant,
-                          ),
-                        ),
-                        child: QuotationListCard(
-                          quotation: quotation,
-                        ),
-                      );
-                    },
-                  ),
+                  child: QuotationListView(quotations: quotations),
                 );
               }(),
             ),
+
           ],
         ),
       ),
@@ -162,7 +148,8 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
           await context.push('/create-quotation');
           if (result == true) {
             ref
-                .read(quotationNotifierProvider.notifier)
+                .read(
+                quotationNotifierProvider.notifier)
                 .getQuotations();
           }
         },
@@ -177,3 +164,5 @@ class _QuotationsPageState extends ConsumerState<QuotationsPage> {
     );
   }
 }
+
+

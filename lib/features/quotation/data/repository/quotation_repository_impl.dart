@@ -81,6 +81,11 @@ class QuotationRepositoryImpl implements QuotationRepository {
           .map((map) => BusinessModel.fromMap(map).toEntity())
           .toList();
 
+      if (businesses.isEmpty) {
+        return DataFailed(Exception(
+            'Please add your business details before generating a quotations'),);
+      }
+
 
       final path = await generateQuotationPdfFile(
         customer: customer,
@@ -88,9 +93,12 @@ class QuotationRepositoryImpl implements QuotationRepository {
         quotation: quotation,
         business: businesses
       );
+
+      await _quotationLocalDataSource.updateQuotation(quotationId, path);
+      
       return DataSuccess(path);
     } catch (e) {
-      return DataFailed(Exception("Failed to generate PDF: ${e.toString()}"));
+      return DataFailed(Exception("Failed to generate PDF. Try again later"));
     }
   }
 
@@ -107,7 +115,7 @@ class QuotationRepositoryImpl implements QuotationRepository {
         subTotal: e['subTotal'],
         taxTotal: e['taxTotal'] ,
         grandTotal: e['grandTotal'] ,
-        status: e['status'] ,
+        pdfPath: e['pdfPath'] ,
 
         customerId: e['customerId'],
         customerName: e['customerName'],

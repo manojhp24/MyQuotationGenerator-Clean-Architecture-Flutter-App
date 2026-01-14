@@ -11,6 +11,7 @@ import 'package:my_quotation_generator/features/quotation/presentation/provider/
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/resource/data_state.dart';
+import '../../../business/domain/usecases/get_business_usecase.dart';
 import '../../domain/entities/quotation_data.dart';
 import '../../domain/usecases/create_quotation_usecase.dart';
 import '../../domain/usecases/generate_quotation_pdf_use_case.dart';
@@ -66,7 +67,6 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
   }
 
 
-
   void addProduct(ProductEntity product, int quantity) {
     final alreadyExists =
     state.items.any((e) => e.productId == product.id);
@@ -102,12 +102,18 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
 
   // Save + PDF
   Future<DataState<String>> generateQuotationAndPdf() async {
+    // Basic validations
     if (state.selectedCustomer == null) {
-      return DataFailed(Exception("Please select a customer"));
+      return DataFailed(Exception("Please select a customer."));
     }
 
     if (state.items.isEmpty) {
-      return DataFailed(Exception("Please add at least one product"));
+      return DataFailed(Exception("Please add at least one product."));
+    }
+
+    final businessList = await sl<GetBusinessUseCase>()();
+    if (businessList.data!.isEmpty) {
+      return DataFailed("Please add business details first.");
     }
 
     final quotation = QuotationEntity(
@@ -116,32 +122,32 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
       quoteDate: state.date,
       subTotal: state.subTotal,
       taxTotal: state.taxTotal,
-      grandTotal: state.grandTotal, status: 'Active',
+      grandTotal: state.grandTotal,
+      pdfPath: '',
     );
 
+    // Save quotation
     final saveResult = await sl<CreateQuotationUsecase>()(
-      QuotationData(
-        quotation: quotation,
-        items: state.items,
-      ),
+      QuotationData(quotation: quotation, items: state.items),
     );
 
     if (saveResult is! DataSuccess<int>) {
-      return DataFailed(Exception("Failed to save quotation"));
+      return DataFailed(Exception("Saving quotation failed. Try again."));
     }
 
     final quotationId = saveResult.data!;
 
-    final pdfResult =
-    await sl<GenerateQuotationPdfUseCase>()(quotationId);
-    debugPrint(pdfResult.error.toString());
-    if (pdfResult is! DataSuccess<String>) {
-      return DataFailed(Exception("Failed to generate PDF ${pdfResult.error}"));
+    // Generate PDF
+    final pdfResult = await sl<GenerateQuotationPdfUseCase>()(quotationId);
 
+    if (pdfResult is! DataSuccess<String>) {
+      final message = pdfResult.error?.toString() ?? "PDF generation failed.";
+      return DataFailed(message);
     }
 
     return DataSuccess(pdfResult.data!);
   }
+
 
   Future<void> getQuotations() async {
     state = state.copyWith(isLoading: true);
@@ -150,11 +156,56 @@ class QuotationNotifier extends StateNotifier<QuotationState> {
 
     if (result is DataSuccess) {
       final quotationData = result.data ?? [];
+
+      for(final q in quotationData){
+        debugPrint( 'QuoteNo: ${q.quoteNo}, Customer: ${q.customerName}, Total: ${q.grandTotal}, Pdf: ${q.pdfPath}');
+      }
+
       state = state.copyWith(quotations: quotationData, isLoading: false);
     } else {
       state = state.copyWith(error: result.error.toString(), isLoading: false);
     }
   }
+
+
+  void increaseQuantity(int productId) {
+    final updatedItems = state.items.map((item) {
+      if (item.productId == productId) {
+        final newQty = item.quantity + 1;
+        final gstAmount =
+            (item.unitPrice * newQty) * (item.gstPercent / 100);
+
+        return item.copyWith(
+          quantity: newQty,
+          gstAmount: gstAmount,
+          totalPrice: (item.unitPrice * newQty) + gstAmount,
+        );
+      }
+      return item;
+    }).toList();
+
+    state = state.copyWith(items: updatedItems);
+  }
+
+  void decreaseQuantity(int productId) {
+    final updatedItems = state.items.map((item) {
+      if (item.productId == productId && item.quantity > 1) {
+        final newQty = item.quantity - 1;
+        final gstAmount =
+            (item.unitPrice * newQty) * (item.gstPercent / 100);
+
+        return item.copyWith(
+          quantity: newQty,
+          gstAmount: gstAmount,
+          totalPrice: (item.unitPrice * newQty) + gstAmount,
+        );
+      }
+      return item;
+    }).toList();
+
+    state = state.copyWith(items: updatedItems);
+  }
+
 
 
 }

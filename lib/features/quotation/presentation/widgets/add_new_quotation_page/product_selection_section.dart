@@ -8,7 +8,6 @@ import '../../provider/quotation_provider.dart';
 import '../../provider/quotation_state.dart';
 import '../create_quotation_page/product_details_card.dart';
 import '../shared/selectable_tile.dart';
-import '../shared/selection_bottom_sheet.dart';
 
 class ProductSelectSection extends StatelessWidget {
   const ProductSelectSection({
@@ -160,7 +159,7 @@ class ProductSelectSection extends StatelessWidget {
                         ref
                             .read(quotationNotifierProvider.notifier)
                             .removeItem(item.productId);
-                      },
+                      }, onIncreaseQty: () {}, onDecreaseQty: () {},
                     ),
                   ),
                 ),

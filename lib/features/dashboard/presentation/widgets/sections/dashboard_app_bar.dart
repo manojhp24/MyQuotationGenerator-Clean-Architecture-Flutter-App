@@ -36,6 +36,8 @@ class DashboardAppBar extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+
+
                 ],
               ),
 

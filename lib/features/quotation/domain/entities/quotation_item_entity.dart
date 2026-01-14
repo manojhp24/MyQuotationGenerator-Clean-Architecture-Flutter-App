@@ -23,6 +23,31 @@ class QuotationItemEntity extends Equatable {
     required this.totalPrice,
   });
 
+  // ✅ ADD THIS METHOD
+  QuotationItemEntity copyWith({
+    int? id,
+    int? quotationId,
+    int? productId,
+    String? productName,
+    int? quantity,
+    double? unitPrice,
+    double? gstPercent,
+    double? gstAmount,
+    double? totalPrice,
+  }) {
+    return QuotationItemEntity(
+      id: id ?? this.id,
+      quotationId: quotationId ?? this.quotationId,
+      productId: productId ?? this.productId,
+      productName: productName ?? this.productName,
+      quantity: quantity ?? this.quantity,
+      unitPrice: unitPrice ?? this.unitPrice,
+      gstPercent: gstPercent ?? this.gstPercent,
+      gstAmount: gstAmount ?? this.gstAmount,
+      totalPrice: totalPrice ?? this.totalPrice,
+    );
+  }
+
   @override
   List<Object?> get props => [
     id,

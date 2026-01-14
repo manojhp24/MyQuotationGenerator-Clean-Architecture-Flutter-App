@@ -5,7 +5,7 @@ class QuotationListItem {
   final double subTotal;
   final double taxTotal;
   final double grandTotal;
-  final String status;
+  final String pdfPath;
 
   final int customerId;
   final String customerName;
@@ -19,7 +19,7 @@ class QuotationListItem {
     required this.subTotal,
     required this.taxTotal,
     required this.grandTotal,
-    required this.status,
+    required this.pdfPath,
     required this.customerId,
     required this.customerName,
     this.email,

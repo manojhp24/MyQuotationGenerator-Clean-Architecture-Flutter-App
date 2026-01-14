@@ -5,7 +5,6 @@ class QuotationCard extends StatelessWidget {
   final String customerName;
   final String amount;
   final String date;
-  final String status; // 'draft', 'sent', 'paid'
   final bool isRecent;
   final VoidCallback? onTap;
 
@@ -15,7 +14,6 @@ class QuotationCard extends StatelessWidget {
     required this.customerName,
     required this.amount,
     required this.date,
-    required this.status,
     this.isRecent = false,
     this.onTap,
   });
@@ -25,131 +23,82 @@ class QuotationCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    // Simple status handling
-    final Color statusColor = status == 'sent'
-        ? scheme.primaryContainer
-        : scheme.surfaceContainerHighest;
-    final Color statusTextColor = status == 'sent'
-        ? scheme.onPrimaryContainer
-        : scheme.onSurfaceVariant;
-
     return Card(
       elevation: 0,
       color: scheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(color: scheme.outlineVariant),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        splashColor: scheme.primary.withValues(alpha: 0.08),
-        highlightColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(18),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Status and number row
+              /// Top row: Quotation no + Date
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Status badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
+                  Text(
+                    quotationNumber,
+                    style: textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: scheme.primary,
                     ),
-                    decoration: BoxDecoration(
-                      color: statusColor,
-                      borderRadius: BorderRadius.circular(12),
+                  ),
+                  Text(
+                    date,
+                    style: textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
                     ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              /// Customer
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 18,
+                    backgroundColor: scheme.primaryContainer,
                     child: Text(
-                      status.toUpperCase(),
-                      style: textTheme.labelSmall?.copyWith(
-                        color: statusTextColor,
+                      customerName.isNotEmpty
+                          ? customerName[0].toUpperCase()
+                          : 'C',
+                      style: textTheme.labelLarge?.copyWith(
+                        color: scheme.onPrimaryContainer,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
-
-                  // Quotation number
-                  Text(
-                    quotationNumber,
-                    style: textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: scheme.onSurface,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 12),
-
-              // Customer info
-              Row(
-                children: [
-                  // Avatar
-                  Container(
-                    height: 36,
-                    width: 36,
-                    decoration: BoxDecoration(
-                      color: scheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        customerName.isNotEmpty ? customerName[0] : 'C',
-                        style: textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: scheme.onSurfaceVariant,
-                        ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      customerName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-
-                  const SizedBox(width: 12),
-
-                  // Name and date
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          customerName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: scheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          date,
-                          style: textTheme.bodySmall?.copyWith(
-                            color: scheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
 
-              // Amount
+              /// Amount box
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
-                  color: scheme.primary.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(10),
+                  color: scheme.primary.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,30 +120,30 @@ class QuotationCard extends StatelessWidget {
                 ),
               ),
 
-              // Recent indicator
-              if (isRecent)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 6,
-                        width: 6,
-                        decoration: BoxDecoration(
-                          color: scheme.primary,
-                          shape: BoxShape.circle,
-                        ),
+              /// Recent indicator
+              if (isRecent) ...[
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Container(
+                      height: 6,
+                      width: 6,
+                      decoration: BoxDecoration(
+                        color: scheme.primary,
+                        shape: BoxShape.circle,
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'New • Updated recently',
-                        style: textTheme.labelSmall?.copyWith(
-                          color: scheme.primary,
-                        ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Recently updated',
+                      style: textTheme.labelSmall?.copyWith(
+                        color: scheme.primary,
+                        fontWeight: FontWeight.w600,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ],
             ],
           ),
         ),

@@ -5,7 +5,7 @@
 
 
     <application
-        android:label="MyQuotations"
+        android:label="QuickQuotationMaker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -54,7 +54,7 @@ CREATE TABLE quotations(
   subTotal REAL NOT NULL,
   taxTotal REAL NOT NULL,
   grandTotal REAL NOT NULL,
-  status TEXT,
+  pdfPath TEXT,
   createdAt TEXT,
   FOREIGN KEY (customerId) REFERENCES customer(id)
 )
@@ -84,7 +84,7 @@ q.quoteDate,
 q.subTotal,
 q.taxTotal,
 q.grandTotal,
-q.status,
+q.pdfPath,
 
 c.id AS customerId,
 c.customerName,

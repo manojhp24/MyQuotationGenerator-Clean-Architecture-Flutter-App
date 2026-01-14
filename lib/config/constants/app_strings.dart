@@ -81,7 +81,8 @@ class AppStrings {
   static const String document = "Document";
   static const String documentSettingsSubtitle = "Manage your documents settings";
   static const String documentSettingsTitle = "PDF Settings";
-  static const String businessInfoTitle = "Business info";
+  static const String businessInfoTitle = "Add Business info";
+  static const String updateBusinessInfoTitle = "Update Business info";
   static const String business = "Business";
   static const String businessInfoSubtitle = "Update,Manage your business info";
   static const String backupAndRestore = "Backup & restore";

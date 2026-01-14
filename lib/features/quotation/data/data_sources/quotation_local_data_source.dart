@@ -39,4 +39,10 @@ class QuotationLocalDataSource {
     return db.rawQuery(getQuotationListQuery);
   }
 
+  Future<void> updateQuotation(int id, String path) async {
+    final db = await AppDatabase.database;
+    await db.update(
+        'quotations', {'pdfPath': path}, where: 'id= ?', whereArgs: [id]);
+  }
+
 }

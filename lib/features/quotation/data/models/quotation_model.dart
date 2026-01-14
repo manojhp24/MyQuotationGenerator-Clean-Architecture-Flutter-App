@@ -9,7 +9,7 @@ class QuotationModel extends QuotationEntity {
     required super.subTotal,
     required super.taxTotal,
     required super.grandTotal,
-    required super.status,
+    required super.pdfPath,
   });
 
   factory QuotationModel.fromEntity(QuotationEntity entity) {
@@ -20,7 +20,7 @@ class QuotationModel extends QuotationEntity {
       subTotal: entity.subTotal,
       taxTotal: entity.taxTotal,
       grandTotal: entity.grandTotal,
-      status: entity.status,
+      pdfPath: entity.pdfPath,
     );
   }
 
@@ -33,7 +33,7 @@ class QuotationModel extends QuotationEntity {
       subTotal: subTotal,
       taxTotal: taxTotal,
       grandTotal: grandTotal,
-      status: status,
+      pdfPath: pdfPath,
     );
   }
 
@@ -46,7 +46,7 @@ class QuotationModel extends QuotationEntity {
       'subTotal': subTotal,
       'taxTotal': taxTotal,
       'grandTotal': grandTotal,
-      'status': status,
+      'pdfPath': pdfPath,
     };
   }
 
@@ -59,7 +59,7 @@ class QuotationModel extends QuotationEntity {
       subTotal: map['subTotal'] ?? '',
       taxTotal: map['taxTotal'] ?? '',
       grandTotal: map['grandTotal'] ?? '',
-      status: map['status'] ?? '',
+      pdfPath: map['pdfPath'] ?? '',
     );
   }
 }

@@ -9,7 +9,7 @@ class QuotationEntity extends Equatable {
   final double subTotal;
   final double taxTotal;
   final double grandTotal;
-  final String status;
+  final String pdfPath;
 
   const QuotationEntity({
     this.id,
@@ -20,7 +20,7 @@ class QuotationEntity extends Equatable {
     required this.subTotal,
     required this.taxTotal,
     required this.grandTotal,
-    required this.status,
+    required this.pdfPath,
   });
 
   @override
@@ -34,6 +34,6 @@ class QuotationEntity extends Equatable {
     subTotal,
     taxTotal,
     grandTotal,
-    status,
+    pdfPath,
   ];
 }

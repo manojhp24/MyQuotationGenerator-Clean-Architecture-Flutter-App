@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/constants/app_strings.dart';
+import 'package:my_quotation_generator/features/quotation/presentation/provider/quotation_provider.dart';
 
+import '../../../../../core/helpers/date_formatter.dart';
 import '../quotation_card.dart';
 import '../section_title.dart';
 
-class RecentQuotationSection extends StatelessWidget {
+class RecentQuotationSection extends ConsumerWidget {
   const RecentQuotationSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final quotationState = ref.watch(quotationNotifierProvider);
+
+    final quotations = quotationState.quotations.take(3).toList();
+
     return SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,37 +26,35 @@ class RecentQuotationSection extends StatelessWidget {
             title: AppStrings.recentQuotations,
           ),
 
-          // Quotations list
-          Column(
-            children: [
-              QuotationCard(
-                quotationNumber: 'Q-1003',
-                customerName: 'Manoj Enterprises',
-                amount: '₹12,500',
-                date: 'Today, 2:30 PM',
-                status: 'sent',
-                isRecent: true,
+          // Quotations listf (quotations.isEmpty)
+          if (quotations.isEmpty)
+            SizedBox(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.3,
+              child: const Center(
+                child: Text("No quotations yet"),
               ),
-              const SizedBox(height: 12),
-              QuotationCard(
-                quotationNumber: 'Q-1002',
-                customerName: 'Sunil Traders',
-                amount: '₹8,750',
-                date: 'Yesterday',
-                status: 'draft',
-                isRecent: false,
-              ),
-              const SizedBox(height: 12),
-              QuotationCard(
-                quotationNumber: 'Q-1001',
-                customerName: 'Rajesh Hardware',
-                amount: '₹15,200',
-                date: '2 days ago',
-                status: 'paid',
-                isRecent: false,
-              ),
-            ],
-          ),
+            )
+
+
+          else
+            Column(
+              children: quotations.map((q) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: QuotationCard(
+                    quotationNumber: q.quoteNo,
+                    customerName: q.customerName,
+                    amount: q.grandTotal.toString(),
+                    date: DateFormatter.toReadableDate(q.quoteDate.toString()),
+                    onTap: () =>
+                        context.push('/quotation-pdf-view', extra: q.pdfPath),
+                  ),
+                );
+              }).toList(),
+            ),
         ],
       ),
     );

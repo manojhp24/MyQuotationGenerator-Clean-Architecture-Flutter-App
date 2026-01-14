@@ -41,6 +41,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         ? businessState.businesses.first
         : null;
 
+
     return Scaffold(
       appBar: CustomAppBar(
         title: AppStrings.settingsAppBarTitle,
@@ -60,30 +61,36 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
             // BUSINESS
             const SettingsHeading(title: AppStrings.business),
-            SettingsList(
-              leadingIcon: Icons.business_center_outlined,
-              title: AppStrings.businessInfoTitle,
-              subTitle: AppStrings.businessInfoSubtitle,
-              onTap: () async {
-                final isUpdate = business != null;
-                final result = await context.push(
-                  isUpdate ? '/update-business' : '/add-business',
-                  extra: isUpdate ? business : null,
-                );
-                if (result == true) {
-                  ref.read(businessNotifyProvider.notifier).fetchBusiness();
+          SettingsList(
+            leadingIcon: Icons.business_center_outlined,
+            title: business == null
+                ? "Add Business Details"
+                : "Update Business Details",
+            subTitle: business == null
+                ? "Tap to add your business information"
+                : "Tap to modify your business information",
+            onTap: () async {
+              final isUpdate = business != null;
 
-                  if (context.mounted) {
-                    showCustomSnackBar(
-                      context,
-                      message: isUpdate
-                          ? "Business updated successfully"
-                          : "Business added successfully",
-                    );
-                  }
+              final result = await context.push(
+                isUpdate ? '/update-business' : '/add-business',
+                extra: isUpdate ? business : null,
+              );
+
+              if (result == true) {
+                ref.read(businessNotifyProvider.notifier).fetchBusiness();
+
+                if (context.mounted) {
+                  showCustomSnackBar(
+                    context,
+                    message: isUpdate
+                        ? "Business updated successfully"
+                        : "Business added successfully",
+                  );
                 }
-              },
-            ),
+              }
+            },
+          ),
 
             // BACKUP & RESTORE
             const SettingsHeading(title: AppStrings.backupAndRestore),

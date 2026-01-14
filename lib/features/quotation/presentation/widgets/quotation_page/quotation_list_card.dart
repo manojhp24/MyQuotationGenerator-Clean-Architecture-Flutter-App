@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_quotation_generator/config/utils/app_sizes.dart';
 import 'package:my_quotation_generator/core/helpers/date_formatter.dart';
 
@@ -100,7 +101,9 @@ class QuotationListCard extends StatelessWidget {
               _ActionButton(
                 icon: Icons.remove_red_eye,
                 text: 'View',
-                onTap: () {},
+                onTap: () =>
+                    context.push(
+                        '/quotation-pdf-view', extra: quotation.pdfPath),
               ),
               const SizedBox(width: 8),
               _ActionButton(

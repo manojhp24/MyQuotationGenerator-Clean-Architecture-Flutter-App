@@ -90,7 +90,15 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                         icon: Icons.inbox_outlined,
                         message: AppStrings.noProductsFound,
                         actionText: 'Add First Product',
-                        onAction: () => context.push('/add-products'),
+                        onAction: () async {
+                          final result = await context.push('/add-products');
+                          if (result == true) {
+                            ref
+                                .read(
+                                productNotifierProvider.notifier)
+                                .fetchProduct();
+                          }
+                        },
                       );
                     }
 

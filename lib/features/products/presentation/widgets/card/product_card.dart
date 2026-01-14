@@ -132,27 +132,6 @@ class ProductCard extends ConsumerWidget {
 
 
 
-class _MetaText extends StatelessWidget {
-  const _MetaText({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: textTheme.bodySmall?.copyWith(
-        color: scheme.onSurfaceVariant,
-      ),
-    );
-  }
-}
-
 class _MetaChip extends StatelessWidget {
   const _MetaChip({required this.text});
 
