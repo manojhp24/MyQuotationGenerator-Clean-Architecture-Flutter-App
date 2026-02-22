@@ -1,5 +1,13 @@
 # **MyQuotationGenerator – Clean Architecture Flutter App**
 
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
+![Riverpod](https://img.shields.io/badge/Riverpod-State%20Management-0A84FF?style=for-the-badge)
+![GoRouter](https://img.shields.io/badge/GoRouter-Routing-4285F4?style=for-the-badge)
+![Sqflite](https://img.shields.io/badge/Sqflite-Local%20Database-3DDC84?style=for-the-badge)
+![get_it](https://img.shields.io/badge/get_it-Dependency%20Injection-purple?style=for-the-badge)
+![Clean Architecture](https://img.shields.io/badge/Clean%20Architecture-Design%20Pattern-darkgreen?style=for-the-badge)
+
 A Flutter-based quotation management application that allows businesses to manage customers, products, and create quotations.  
 Built using **Clean Architecture**, with **Sqflite** as the local database, **Riverpod** for state management, **GoRouter** for routing, and **get_it** for dependency injection.
 
